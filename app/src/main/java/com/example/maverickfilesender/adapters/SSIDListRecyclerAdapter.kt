@@ -19,7 +19,13 @@ class SSIDListRecyclerAdapter(val context: Context,val scanResults:ArrayList<Sca
 if(holder is SSIDViewHolder){
 
     holder.itemView.tv_item_ssid.text=scanResults[position].SSID
+holder.itemView.tv_item_ssid.setOnClickListener {
 
+
+
+
+
+}
 
 }
 

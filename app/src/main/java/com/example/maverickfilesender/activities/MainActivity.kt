@@ -22,8 +22,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.adapters.AppPackageRecyclerAdapter
+import com.example.maverickfilesender.adapters.SSIDListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import kotlinx.android.synthetic.main.dialog_hotspot_sender.*
 import java.io.File
 
@@ -168,20 +170,27 @@ val receiversResult=ArrayList<ScanResult>()
                 for(i in scanResult){
 
                     Log.i("WIFII",i.SSID)
-if(i.SSID.contains("AndroidShare_")){
+
+//if(i.SSID.contains("AndroidShare_")){
 receiversResult.add(i)
-}
+//}
 
 
                 }
 
 
-                if(receiversResult.isNotEmpty()){
+    if(receiversResult.isNotEmpty()){
+
+val dialog=Dialog(this)
+dialog.setContentView(R.layout.dialog_hotspot_receiver)
+                    val adapter=SSIDListRecyclerAdapter(this,receiversResult)
+
+dialog.rv_receiver_ssid.layoutManager=LinearLayoutManager(this)
+                    dialog.rv_receiver_ssid.adapter=adapter
+                    dialog.show()
 
 
-
-
-                }
+               }
 
 
             }

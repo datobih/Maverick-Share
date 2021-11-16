@@ -11,67 +11,26 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="The Login details for this network is:"
+        android:text="List of Networks available"
         android:textColor="#2C2C2C"
-        android:textSize="14dp"
+
+        android:textSize="17dp"
         android:textStyle="bold"></TextView>
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp">
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="#EDEDED"
+        ></View>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="SSID: "
-            android:textColor="#2C2C2C"
-            android:textSize="14dp"
-            android:textStyle="bold"></TextView>
+ <androidx.recyclerview.widget.RecyclerView
+     android:id="@+id/rv_receiver_ssid"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+android:layout_marginTop="5dp"
+     ></androidx.recyclerview.widget.RecyclerView>
 
-
-        <TextView
-            android:id="@+id/tv_hotspot_SSID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="MyWIFI"
-
-            android:textColor="#2C2C2C"
-            android:textSize="14dp"></TextView>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Password: "
-            android:textColor="#2C2C2C"
-            android:textSize="14dp"
-            android:textStyle="bold"></TextView>
-
-
-        <TextView
-            android:id="@+id/tv_hotspot_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="f9u49u940"
-
-            android:textColor="#2C2C2C"
-            android:textSize="14dp"></TextView>
-
-    </LinearLayout>
-
-</LinearLayout>
