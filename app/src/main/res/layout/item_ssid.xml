@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 app:cardUseCompatPadding="true"
-
+        xmlns:tools="http://schemas.android.com/tools"
         >
 
         <RelativeLayout
@@ -28,6 +29,14 @@ app:cardUseCompatPadding="true"
                 ></TextView>
 
 
+            <ImageButton
+                android:id="@+id/imb_item_ssid_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+android:layout_alignParentEnd="true"
+                android:background="@drawable/ic_cancel"
+                android:visibility="gone"
+                ></ImageButton>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_item_connect"
                 android:layout_width="wrap_content"
@@ -37,7 +46,50 @@ app:cardUseCompatPadding="true"
                 android:text="Connect"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
+
                 ></androidx.appcompat.widget.AppCompatButton>
+
+
+            <View
+                android:id="@+id/view_item_ssid_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CFCFCF"
+                android:layout_below="@id/tv_item_ssid"
+                android:layout_marginTop="15dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+            ></View>
+
+
+       <androidx.appcompat.widget.AppCompatEditText
+           android:id="@+id/et_wifi_password"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_below="@id/view_item_ssid_divider"
+           android:hint="Password:"
+           android:visibility="gone"
+           tools:visibility="visible"
+
+           ></androidx.appcompat.widget.AppCompatEditText>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_itemPassword_connect"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+               android:layout_centerInParent="true"
+                android:background="@drawable/ssid_drawable"
+                android:text="Connect"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:layout_below="@id/et_wifi_password"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+
+                ></androidx.appcompat.widget.AppCompatButton>
+
+
 
 
         </RelativeLayout>

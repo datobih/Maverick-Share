@@ -130,6 +130,10 @@ ActivityCompat.shouldShowRequestPermissionRationale(this,android.Manifest.permis
                         }, null)
                     }
 
+
+
+                    
+
                 }
 
                 else{
@@ -186,7 +190,9 @@ dialog.setContentView(R.layout.dialog_hotspot_receiver)
                     val adapter=SSIDListRecyclerAdapter(this,receiversResult)
 
 dialog.rv_receiver_ssid.layoutManager=LinearLayoutManager(this)
-                    dialog.rv_receiver_ssid.adapter=adapter
+        dialog.rv_receiver_ssid.setHasFixedSize(true)
+
+        dialog.rv_receiver_ssid.adapter=adapter
                     dialog.show()
 
 
