@@ -2,8 +2,7 @@ package com.example.maverickfilesender.adapters
 
 import android.content.Context
 import android.net.*
-import android.net.wifi.ScanResult
-import android.net.wifi.WifiNetworkSpecifier
+import android.net.wifi.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.activities.MainActivity
+import com.example.maverickfilesender.constants.Constants
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_ssid.view.*
 
 class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<ScanResult>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -85,6 +87,13 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
                         super.onAvailable(network)
                         connectivityManager.bindProcessToNetwork(network)
 
+                        if(context is MainActivity){
+                            context.btn_receive.visibility=View.GONE
+                            context.btn_send.visibility=View.GONE
+
+                            context.btn_connect_status.visibility=View.VISIBLE
+                            context.connectionType=Constants.CONNECTION_TYPE_WIFI
+                        }
                     }
 
                     override fun onLost(network: Network) {
@@ -102,9 +111,50 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
 
                 connectivityManager.requestNetwork(networkRequest, networkCallback)
 
+
             } else {
-                TODO("VERSION.SDK_INT < Q")
+                val wifiConfiguration=WifiConfiguration()
+                wifiConfiguration.SSID="\"${networkSSID}\""
+                wifiConfiguration.preSharedKey="\"${networkPassword}\""
+
+                wifiConfiguration.status=WifiConfiguration.Status.ENABLED
+                wifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP)
+                wifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP)
+                wifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.KeyMgmt.WPA_PSK)
+                wifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.PairwiseCipher.TKIP)
+                wifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.PairwiseCipher.CCMP)
+
+                Log.i("WIFII Connecting",wifiConfiguration.SSID+" "+wifiConfiguration.preSharedKey)
+
+                val wifiManager=context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                val netID=wifiManager.addNetwork(wifiConfiguration)
+
+
+//wifiManager.dhcpInfo.ipAddress IMPORTANT
+
+                wifiManager.disconnect()
+                wifiManager.enableNetwork(netID,true)
+                wifiManager.reconnect()
+
+
+
+                if(wifiManager.isWifiEnabled){
+
+                    val wifiInfo=wifiManager.connectionInfo
+                    if(wifiInfo.ssid==networkSSID){
+                        if(context is MainActivity){
+                            context.btn_receive.visibility=View.GONE
+                            context.btn_send.visibility=View.GONE
+
+                            context.btn_connect_status.visibility=View.VISIBLE
+                            context.connectionType=Constants.CONNECTION_TYPE_WIFI
+                        }
+                    }
+
+                }
+
             }
+
         } catch (e: Exception) {
 
         }

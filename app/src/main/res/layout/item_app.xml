@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    >
+
+ >
+
 
     <ImageView
 android:id="@+id/imv"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
 android:layout_marginTop="10dp"
        android:layout_centerHorizontal="true"
         android:src="@color/black"
         android:scaleType="fitXY"
+
         ></ImageView>
 
 
@@ -24,7 +28,7 @@ android:layout_marginTop="10dp"
         android:layout_below="@id/imv"
         android:layout_marginTop="5dp"
 android:layout_centerHorizontal="true"
-        android:textSize="14dp"
+        android:textSize="13dp"
 android:ellipsize="end"
         android:maxLines="1"
 android:gravity="center"
@@ -38,13 +42,12 @@ android:gravity="center"
         android:text="App Name"
         android:layout_below="@id/tv_appName"
         android:layout_centerHorizontal="true"
-        android:textSize="14dp"
+        android:textSize="13dp"
         android:maxLines="1"
         android:gravity="center"
-        android:textColor="@color/white"
-        ></TextView>
+        android:textColor="@color/white">
 
-
+    </TextView>
 
 
 </RelativeLayout>
