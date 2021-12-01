@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity"
 android:theme="@style/Theme.MaterialComponents.NoActionBar"
-    android:background="@drawable/app_background"
+    android:background="#151515"
     >
 
 
@@ -14,8 +14,10 @@ android:theme="@style/Theme.MaterialComponents.NoActionBar"
         android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#151515"
-        android:orientation="horizontal">
+        android:background="@drawable/app_background"
+        android:orientation="horizontal"
+
+        >
 
 
         <ImageView
@@ -57,8 +59,8 @@ android:theme="@style/Theme.MaterialComponents.NoActionBar"
             android:layout_alignParentRight="true"
             android:layout_marginTop="22dp"
             android:layout_marginRight="10dp"
-            android:text="Connected to miga"
-            android:textColor="#00FF00"
+            android:text="Not Connected"
+            android:textColor="#41FF41"
             android:textSize="17dp"
             android:textStyle="bold"
 
@@ -67,26 +69,24 @@ android:theme="@style/Theme.MaterialComponents.NoActionBar"
     </RelativeLayout>
 
 
-<com.google.android.material.tabs.TabLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-android:id="@+id/tab_main"
-    android:background="#151515"
-android:layout_below="@id/toolbar_main"
-    app:tabIndicatorColor="@color/white"
-    app:tabTextColor="@color/white"
-    app:tabIndicatorFullWidth="false"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar_main"
+        android:layout_marginTop="-2dp"
+        android:background="@drawable/app_background"
+        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorFullWidth="false"
+android:elevation="1dp"
+        app:tabTextColor="@color/white"></com.google.android.material.tabs.TabLayout>
 
-    ></com.google.android.material.tabs.TabLayout>
-
-
-
- <androidx.viewpager2.widget.ViewPager2
+    <androidx.viewpager2.widget.ViewPager2
      android:id="@+id/vp_main"
      android:layout_width="match_parent"
      android:layout_height="match_parent"
 android:layout_below="@id/tab_main"
-
+android:background="@color/black"
      ></androidx.viewpager2.widget.ViewPager2>
 
 

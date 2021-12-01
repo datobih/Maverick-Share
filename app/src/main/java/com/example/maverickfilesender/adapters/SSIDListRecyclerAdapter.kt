@@ -3,6 +3,8 @@ package com.example.maverickfilesender.adapters
 import android.content.Context
 import android.net.*
 import android.net.wifi.*
+import android.os.Looper
+import android.text.format.Formatter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_ssid.view.*
+import java.util.logging.Handler
 
 class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<ScanResult>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -62,7 +65,7 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
     }
 
     fun connectToNetwork(networkSSID: String, networkBSSID: String, networkPassword: String) {
-
+        (context as MainActivity).mNetworkSSID=networkSSID
         try {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 val wifiNetworkSpecifier = WifiNetworkSpecifier.Builder()
@@ -83,17 +86,26 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
                     override fun onAvailable(network: Network) {
 
                         Log.i("WIFII", "onAvailable" + network)
-
+                        (context as MainActivity).isClientConnected=true
+                        (context as MainActivity).onNetworkAvailable=true
                         super.onAvailable(network)
+
                         connectivityManager.bindProcessToNetwork(network)
 
-                        if(context is MainActivity){
-                            context.btn_receive.visibility=View.GONE
-                            context.btn_send.visibility=View.GONE
 
-                            context.btn_connect_status.visibility=View.VISIBLE
-                            context.connectionType=Constants.CONNECTION_TYPE_WIFI
-                        }
+context.runOnUiThread {
+
+    context.btn_receive.visibility=View.GONE
+    context.btn_send.visibility=View.GONE
+
+    context.btn_connect_status.visibility=View.VISIBLE
+    context.connectionType=Constants.CONNECTION_TYPE_WIFI
+
+
+}
+
+
+
                     }
 
                     override fun onLost(network: Network) {
@@ -132,6 +144,9 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
 
 //wifiManager.dhcpInfo.ipAddress IMPORTANT
 
+
+
+
                 wifiManager.disconnect()
                 wifiManager.enableNetwork(netID,true)
                 wifiManager.reconnect()
@@ -141,8 +156,11 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
                 if(wifiManager.isWifiEnabled){
 
                     val wifiInfo=wifiManager.connectionInfo
-                    if(wifiInfo.ssid==networkSSID){
+                    if(wifiInfo.ssid=="\"${networkSSID}\""){
                         if(context is MainActivity){
+                            (context as MainActivity).isClientConnected=true
+                            context.mIpAddress= Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
+
                             context.btn_receive.visibility=View.GONE
                             context.btn_send.visibility=View.GONE
 
@@ -153,6 +171,14 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
 
                 }
 
+            }
+            if(context is MainActivity) {
+                if (context.isClientConnected == true) {
+
+                    context.initClientThread()
+
+
+                }
             }
 
         } catch (e: Exception) {

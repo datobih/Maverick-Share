@@ -5,11 +5,14 @@
     >
 
 
-    <gradient
+   <gradient
 android:startColor="@color/black"
-        android:endColor="#191919"
+        android:endColor="#121212"
       android:useLevel="true"
         ></gradient>
+
+
+
 
 
 </shape>

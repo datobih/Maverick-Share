@@ -1,4 +1,4 @@
-package com.example.maverickfilesender
+package com.example.maverickfilesender.fragment
 
 import android.content.Intent
 import android.content.pm.ApplicationInfo
@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.maverickfilesender.R
 import com.example.maverickfilesender.adapters.AppPackageRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import kotlinx.android.synthetic.main.fragment_apps.*

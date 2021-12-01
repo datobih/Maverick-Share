@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -15,7 +16,10 @@ import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
+import android.text.format.Formatter
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -30,31 +34,49 @@ import com.example.maverickfilesender.adapters.AppPackageRecyclerAdapter
 import com.example.maverickfilesender.adapters.MainPagerFragmentAdapter
 import com.example.maverickfilesender.adapters.SSIDListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.receivers.WifiAPReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import kotlinx.android.synthetic.main.dialog_hotspot_sender.*
 import java.io.File
+import java.net.InetSocketAddress
+import java.net.ServerSocket
+import java.net.Socket
 
 class MainActivity : AppCompatActivity() {
     var ssid:String=""
     var password:String=""
     var mReservation:WifiManager.LocalOnlyHotspotReservation?=null
     var connectionType:String=""
+var mIpAddress:String=""
+    var clientSocketThread:Thread?=null
+    var serverSocketThread:Thread?=null
+var isClientConnected=false
+var mDialog:Dialog?=null
+var mHandler:Handler?=null
+    var mNetworkSSID=""
+    var onNetworkAvailable=false
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+mHandler=Handler(Looper.getMainLooper())
 
 
+var receiver=WifiAPReceiver()
+
+
+
+        registerReceiver(receiver,  IntentFilter("android.net.wifi.WIFI_AP_STATE_CHANGED"))
 
 val adapter=MainPagerFragmentAdapter(supportFragmentManager,lifecycle)
         vp_main.adapter=adapter
         vp_main.isUserInputEnabled=false
 
-
+        tab_main.addTab(tab_main.newTab().setText("History"))
 tab_main.addTab(tab_main.newTab().setText("Apps"))
         tab_main.addTab(tab_main.newTab().setText("Media"))
         tab_main.addTab(tab_main.newTab().setText("Files"))
@@ -125,9 +147,12 @@ btn_connect_status.setOnClickListener {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
 
             val connectivityManager=getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            connectivityManager.unregisterNetworkCallback(object:ConnectivityManager.NetworkCallback(){
+/*     connectivityManager.unregisterNetworkCallback(object:ConnectivityManager.NetworkCallback(){
 
             })
+
+
+ */
         }
 
 
@@ -159,12 +184,14 @@ btn_connect_status.setOnClickListener {
 
 
                     val wifimanager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                         wifimanager.startLocalOnlyHotspot(object : WifiManager.LocalOnlyHotspotCallback() {
 
                             override fun onStarted(reservation: WifiManager.LocalOnlyHotspotReservation?) {
                                 super.onStarted(reservation)
 connectionType=Constants.CONNECTION_TYPE_HOTSPOT
+                                initServerThread()
                                 mReservation = reservation
                                 ssid = reservation!!.wifiConfiguration!!.SSID
                                 password = reservation!!.wifiConfiguration!!.preSharedKey
@@ -177,22 +204,31 @@ connectionType=Constants.CONNECTION_TYPE_HOTSPOT
                                 dialog.tv_hotspot_password.text = password
                                 dialog.show()
 
-                                dialog.setOnDismissListener {
 
-                                    mReservation?.close()
-
-                                }
                             }
 
                         }, null)
 
                     }
 
+          else {
+
+                        val intent = Intent()
+                        intent.setClassName("com.android.settings", "com.android.settings.TetherSettings")
+                        startActivityForResult(intent, 0)
+                    }
 
 
-                    
 
-                }
+
+
+
+                       }
+
+
+
+
+
 
                 else{
 
@@ -244,6 +280,7 @@ receiversResult.add(i)
     if(receiversResult.isNotEmpty()){
 
 val dialog=Dialog(this)
+        mDialog=dialog
 dialog.setContentView(R.layout.dialog_hotspot_receiver)
                     val adapter=SSIDListRecyclerAdapter(this,receiversResult)
 
@@ -280,6 +317,54 @@ dialog.rv_receiver_ssid.layoutManager=LinearLayoutManager(this)
 
 
     }
+
+
+    fun initClientThread(){
+        clientSocketThread=Thread(object:Runnable{
+            override fun run() {
+                var socketAddress=InetSocketAddress(mIpAddress,9999)
+                var socket=Socket()
+socket.connect(socketAddress,100000)
+                Log.i("SOCKETT","Client Connected")
+                if(socket.isConnected){
+                   mHandler!!.post {
+                       tv_connection_status.text="Connected"
+                   }
+
+                }
+
+            }
+
+
+        })
+
+        clientSocketThread!!.start()
+
+
+
+    }
+
+    fun initServerThread(){
+
+serverSocketThread=Thread(object :Runnable {
+    override fun run() {
+        val serverSocket=ServerSocket(9999)
+
+        val socket=serverSocket.accept()
+
+
+
+        Log.i("SOCKETT","Server Connected")
+
+    }
+
+
+})
+
+        serverSocketThread!!.start()
+
+    }
+
 
 
     fun isLocationEnabled():Boolean{
@@ -324,6 +409,48 @@ return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)||loca
 
 
     }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+if(onNetworkAvailable) {
+    onNetworkAvailable=false
+    var wifiManager = getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
+    if (wifiManager.isWifiEnabled) {
+
+        val wifiInfo = wifiManager.connectionInfo
+        if (wifiInfo.ssid == "\"${mNetworkSSID}\"") {
+            isClientConnected = true
+            mIpAddress = Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
+initClientThread()
+            btn_receive.visibility = View.GONE
+            btn_send.visibility = View.GONE
+
+            btn_connect_status.visibility = View.VISIBLE
+            connectionType = Constants.CONNECTION_TYPE_WIFI
+
+        }
+
+    }
+
+}
+
 
     }
 
