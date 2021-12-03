@@ -2,13 +2,12 @@ package com.example.maverickfilesender.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -21,71 +20,69 @@ import android.os.Looper
 import android.provider.Settings
 import android.text.format.Formatter
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.maverickfilesender.R
-import com.example.maverickfilesender.adapters.AppPackageRecyclerAdapter
 import com.example.maverickfilesender.adapters.MainPagerFragmentAdapter
 import com.example.maverickfilesender.adapters.SSIDListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.receivers.WifiAPReceiver
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import kotlinx.android.synthetic.main.dialog_hotspot_sender.*
-import java.io.File
+import java.io.DataInputStream
+import java.io.DataOutputStream
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
 
 class MainActivity : AppCompatActivity() {
-    var ssid:String=""
-    var password:String=""
-    var mReservation:WifiManager.LocalOnlyHotspotReservation?=null
-    var connectionType:String=""
-var mIpAddress:String=""
-    var clientSocketThread:Thread?=null
-    var serverSocketThread:Thread?=null
-var isClientConnected=false
-var mDialog:Dialog?=null
-var mHandler:Handler?=null
-    var mNetworkSSID=""
-    var onNetworkAvailable=false
+    var ssid: String = ""
+    var password: String = ""
+    var mReservation: WifiManager.LocalOnlyHotspotReservation? = null
+    var connectionType: String = ""
+    var mIpAddress: String = ""
+    var clientSocketThread: Thread? = null
+    var serverSocketThread: Thread? = null
+    var isClientConnected = false
+    var mDialog: Dialog? = null
+    var mHandler: Handler? = null
+    var mNetworkSSID = ""
+    var onNetworkAvailable = false
+
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-mHandler=Handler(Looper.getMainLooper())
-
-
-var receiver=WifiAPReceiver()
+        mHandler = Handler(Looper.getMainLooper())
+        var receiver = WifiAPReceiver()
 
 
 
-        registerReceiver(receiver,  IntentFilter("android.net.wifi.WIFI_AP_STATE_CHANGED"))
+        registerReceiver(receiver, IntentFilter("android.net.wifi.WIFI_AP_STATE_CHANGED"))
 
-val adapter=MainPagerFragmentAdapter(supportFragmentManager,lifecycle)
-        vp_main.adapter=adapter
-        vp_main.isUserInputEnabled=false
+        val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
+        vp_main.adapter = adapter
+        vp_main.isUserInputEnabled = false
 
+        val appTab = tab_main.newTab().setText("Apps")
         tab_main.addTab(tab_main.newTab().setText("History"))
-tab_main.addTab(tab_main.newTab().setText("Apps"))
+        tab_main.addTab(appTab)
         tab_main.addTab(tab_main.newTab().setText("Media"))
         tab_main.addTab(tab_main.newTab().setText("Files"))
 
+        tab_main.selectTab(appTab)
+        vp_main.currentItem=1
 
-
-        tab_main.addOnTabSelectedListener(object :TabLayout.OnTabSelectedListener{
+        tab_main.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                vp_main.currentItem=tab!!.position
+                vp_main.currentItem = tab!!.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -130,72 +127,67 @@ return true
 
          */
 
-btn_connect_status.setOnClickListener {
+        btn_connect_status.setOnClickListener {
 
 
-    if(connectionType==Constants.CONNECTION_TYPE_HOTSPOT){
-        mReservation?.close()
+            if (connectionType == Constants.CONNECTION_TYPE_HOTSPOT) {
+                mReservation?.close()
 
 
-        btn_connect_status.visibility= View.GONE
-        btn_send.visibility=View.VISIBLE
-        btn_receive.visibility=View.VISIBLE
-    }
+                btn_connect_status.visibility = View.GONE
+                btn_send.visibility = View.VISIBLE
+                btn_receive.visibility = View.VISIBLE
+            } else if (connectionType == Constants.CONNECTION_TYPE_WIFI) {
 
-    else if(connectionType==Constants.CONNECTION_TYPE_WIFI){
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-
-            val connectivityManager=getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                    val connectivityManager =
+                        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 /*     connectivityManager.unregisterNetworkCallback(object:ConnectivityManager.NetworkCallback(){
 
             })
 
 
  */
+                } else {
+                    val wifiManager =
+                        applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+
+                    wifiManager.setWifiEnabled(false)
+
+                    btn_connect_status.visibility = View.GONE
+                    btn_send.visibility = View.VISIBLE
+                    btn_receive.visibility = View.VISIBLE
+                }
+
+
+            }
+
         }
-
-
-        else{
-            val wifiManager= applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-
-            wifiManager.setWifiEnabled(false)
-
-            btn_connect_status.visibility= View.GONE
-            btn_send.visibility=View.VISIBLE
-            btn_receive.visibility=View.VISIBLE
-        }
-
-
-
-
-
-    }
-
-}
 
 
         btn_send.setOnClickListener {
 
-            if(verifyLocation()){
+            if (verifyLocation()) {
 
-                if(isLocationEnabled()) {
+                if (isLocationEnabled()) {
 
 
-                    val wifimanager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+                    val wifimanager =
+                        applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
 
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        wifimanager.startLocalOnlyHotspot(object : WifiManager.LocalOnlyHotspotCallback() {
+                        wifimanager.startLocalOnlyHotspot(object :
+                            WifiManager.LocalOnlyHotspotCallback() {
 
                             override fun onStarted(reservation: WifiManager.LocalOnlyHotspotReservation?) {
                                 super.onStarted(reservation)
-connectionType=Constants.CONNECTION_TYPE_HOTSPOT
+                                connectionType = Constants.CONNECTION_TYPE_HOTSPOT
                                 initServerThread()
                                 mReservation = reservation
                                 ssid = reservation!!.wifiConfiguration!!.SSID
                                 password = reservation!!.wifiConfiguration!!.preSharedKey
-
 
 
                                 val dialog = Dialog(this@MainActivity)
@@ -209,46 +201,43 @@ connectionType=Constants.CONNECTION_TYPE_HOTSPOT
 
                         }, null)
 
-                    }
-
-          else {
+                    } else {
 
                         val intent = Intent()
-                        intent.setClassName("com.android.settings", "com.android.settings.TetherSettings")
+                        intent.setClassName(
+                            "com.android.settings",
+                            "com.android.settings.TetherSettings"
+                        )
                         startActivityForResult(intent, 0)
                     }
 
 
+                } else {
 
-
-
-
-                       }
-
-
-
-
-
-
-                else{
-
-                    Toast.makeText(this,"Your location needs to be turned on",Toast.LENGTH_SHORT).show()
-                    var intent=Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    Toast.makeText(this, "Your location needs to be turned on", Toast.LENGTH_SHORT)
+                        .show()
+                    var intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     startActivity(intent)
 
                 }
-            }
-            else{
-                if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    )
+                ) {
 
-                    var intent= Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    var uri= Uri.fromParts("package",packageName,null)
+                    var intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    var uri = Uri.fromParts("package", packageName, null)
                     intent.setData(uri)
                     startActivity(intent)
 
-                }
-else{
-    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),Constants.RQ_LOCATION_PERMISSION)
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        Constants.RQ_LOCATION_PERMISSION
+                    )
                 }
 
 
@@ -260,57 +249,62 @@ else{
 
         btn_receive.setOnClickListener {
 
-            if(verifyLocation()){
+            if (verifyLocation()) {
 
-val wifiManager=getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
-val scanResult=wifiManager.scanResults
-val receiversResult=ArrayList<ScanResult>()
-                for(i in scanResult){
+                val wifiManager =
+                    getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
+                val scanResult = wifiManager.scanResults
+                val receiversResult = ArrayList<ScanResult>()
+                for (i in scanResult) {
 
-                    Log.i("WIFII",i.SSID)
+                    Log.i("WIFII", i.SSID)
 
 //if(i.SSID.contains("AndroidShare_")){
-receiversResult.add(i)
+                    receiversResult.add(i)
 //}
 
 
                 }
 
 
-    if(receiversResult.isNotEmpty()){
+                if (receiversResult.isNotEmpty()) {
 
-val dialog=Dialog(this)
-        mDialog=dialog
-dialog.setContentView(R.layout.dialog_hotspot_receiver)
-                    val adapter=SSIDListRecyclerAdapter(this,receiversResult)
+                    val dialog = Dialog(this)
+                    mDialog = dialog
+                    dialog.setContentView(R.layout.dialog_hotspot_receiver)
+                    val adapter = SSIDListRecyclerAdapter(this, receiversResult)
 
-dialog.rv_receiver_ssid.layoutManager=LinearLayoutManager(this)
-        dialog.rv_receiver_ssid.setHasFixedSize(true)
+                    dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(this)
+                    dialog.rv_receiver_ssid.setHasFixedSize(true)
 
-        dialog.rv_receiver_ssid.adapter=adapter
+                    dialog.rv_receiver_ssid.adapter = adapter
                     dialog.show()
 
 
-               }
+                }
 
 
-            }
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    )
+                ) {
 
-            else{
-                if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
-
-                    var intent= Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    var uri= Uri.fromParts("package",packageName,null)
+                    var intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    var uri = Uri.fromParts("package", packageName, null)
                     intent.setData(uri)
                     startActivity(intent)
 
-                }
-                else{
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),Constants.RQ_LOCATION_PERMISSION)
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        Constants.RQ_LOCATION_PERMISSION
+                    )
                 }
 
             }
-
 
 
         }
@@ -318,18 +312,34 @@ dialog.rv_receiver_ssid.layoutManager=LinearLayoutManager(this)
 
     }
 
+//    fun setupFont() {
+//
+//
+//        tv_connection_status.typeface = gilroyTypeface
+//        tv_toolbar_userName.typeface = gilroyTypeface
+//        btn_receive.typeface=gilroyLightTypeface
+//        btn_send.typeface=gilroyLightTypeface
+//
+//    }
 
-    fun initClientThread(){
-        clientSocketThread=Thread(object:Runnable{
+
+    fun initClientThread() {
+        clientSocketThread = Thread(object : Runnable {
             override fun run() {
-                var socketAddress=InetSocketAddress(mIpAddress,9999)
-                var socket=Socket()
-socket.connect(socketAddress,100000)
-                Log.i("SOCKETT","Client Connected")
-                if(socket.isConnected){
-                   mHandler!!.post {
-                       tv_connection_status.text="Connected"
-                   }
+                var socketAddress = InetSocketAddress(mIpAddress, 9999)
+                var socket = Socket()
+                socket.connect(socketAddress, 100000)
+                Log.i("SOCKETT", "Client Connected")
+                if (socket.isConnected) {
+                    val outputStream = DataOutputStream(socket.getOutputStream())
+                    val inputStream = DataInputStream(socket.getInputStream())
+                    outputStream.writeUTF("Migaaac")
+
+                    val userName = inputStream.readUTF()
+                    mHandler!!.post {
+                        tv_connection_status.text = "Connected to $userName"
+
+                    }
 
                 }
 
@@ -341,42 +351,61 @@ socket.connect(socketAddress,100000)
         clientSocketThread!!.start()
 
 
-
     }
 
-    fun initServerThread(){
+    fun initServerThread() {
 
-serverSocketThread=Thread(object :Runnable {
-    override fun run() {
-        val serverSocket=ServerSocket(9999)
+        serverSocketThread = Thread(object : Runnable {
+            override fun run() {
+                val serverSocket = ServerSocket(9999)
 
-        val socket=serverSocket.accept()
+                val socket = serverSocket.accept()
+
+                if (socket.isConnected) {
+
+                    val inputStream = DataInputStream(socket.getInputStream())
+                    val outputStream = DataOutputStream(socket.getOutputStream())
+
+                    val userName = inputStream.readUTF()
+                    mHandler!!.post {
+                        tv_connection_status.text = "Connected to $userName"
+
+                    }
+
+                    outputStream.writeUTF("David")
 
 
-
-        Log.i("SOCKETT","Server Connected")
-
-    }
+                }
 
 
-})
+                Log.i("SOCKETT", "Server Connected")
+
+            }
+
+
+        })
 
         serverSocketThread!!.start()
 
     }
 
 
+    fun isLocationEnabled(): Boolean {
 
-    fun isLocationEnabled():Boolean{
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-val locationManager=getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)||locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.GPS_PROVIDER
+        )
     }
 
 
-    fun verifyLocation():Boolean{
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
+    fun verifyLocation(): Boolean {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
 
             return true
 
@@ -387,34 +416,35 @@ return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)||loca
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-    if(requestCode==Constants.RQ_READ_WRITE_PERMISSION){
+        if (requestCode == Constants.RQ_READ_WRITE_PERMISSION) {
 
-        if(grantResults[0]==PackageManager.PERMISSION_GRANTED &&grantResults[1]==PackageManager.PERMISSION_GRANTED){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
-            Toast.makeText(this,"Your permission is granted",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Your permission is granted", Toast.LENGTH_SHORT).show()
 
-        }
+            } else if (requestCode == Constants.RQ_LOCATION_PERMISSION) {
 
-        else if(requestCode==Constants.RQ_LOCATION_PERMISSION){
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-            if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "Your permission is granted", Toast.LENGTH_SHORT).show()
+                }
 
-                Toast.makeText(this,"Your permission is granted",Toast.LENGTH_SHORT).show()
             }
 
+
         }
-
-
-    }
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
 
 
     }
@@ -423,33 +453,33 @@ return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)||loca
         super.onPause()
 
 
-
     }
 
     override fun onResume() {
         super.onResume()
 
-if(onNetworkAvailable) {
-    onNetworkAvailable=false
-    var wifiManager = getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
-    if (wifiManager.isWifiEnabled) {
+        if (onNetworkAvailable) {
+            onNetworkAvailable = false
+            var wifiManager =
+                getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
+            if (wifiManager.isWifiEnabled) {
 
-        val wifiInfo = wifiManager.connectionInfo
-        if (wifiInfo.ssid == "\"${mNetworkSSID}\"") {
-            isClientConnected = true
-            mIpAddress = Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
-initClientThread()
-            btn_receive.visibility = View.GONE
-            btn_send.visibility = View.GONE
+                val wifiInfo = wifiManager.connectionInfo
+                if (wifiInfo.ssid == "\"${mNetworkSSID}\"") {
+                    isClientConnected = true
+                    mIpAddress = Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
+                    initClientThread()
+                    btn_receive.visibility = View.GONE
+                    btn_send.visibility = View.GONE
 
-            btn_connect_status.visibility = View.VISIBLE
-            connectionType = Constants.CONNECTION_TYPE_WIFI
+                    btn_connect_status.visibility = View.VISIBLE
+                    connectionType = Constants.CONNECTION_TYPE_WIFI
+
+                }
+
+            }
 
         }
-
-    }
-
-}
 
 
     }
