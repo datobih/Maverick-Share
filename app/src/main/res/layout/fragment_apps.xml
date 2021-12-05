@@ -12,6 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 android:paddingVertical="10dp"
-
+android:nestedScrollingEnabled="false"
         ></androidx.recyclerview.widget.RecyclerView>
+
+
+    <ProgressBar
+        android:id="@+id/progress_apps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+android:indeterminate="true"
+        android:indeterminateTint="#283593"
+android:layout_gravity="center"
+        ></ProgressBar>
+
+
 </FrameLayout>

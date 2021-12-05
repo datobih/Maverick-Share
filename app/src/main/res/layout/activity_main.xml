@@ -14,35 +14,23 @@ android:theme="@style/Theme.MaterialComponents.NoActionBar"
         android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#373737"
+        android:background="#283593"
         android:orientation="horizontal"
-
+android:elevation="5dp"
         >
 
 
         <ImageView
             android:id="@+id/imv_userProfile"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/outline_account_circle_24"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="19dp"
+            android:src="@drawable/ic_baseline_menu_24"
 
             ></ImageView>
 
 
-        <TextView
-            android:id="@+id/tv_toolbar_userName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="22dp"
-            android:layout_toRightOf="@id/imv_userProfile"
-            android:text="User1"
-            android:textColor="@color/white"
-            android:textSize="17dp"
-android:fontFamily="@font/gilroy"
-            android:textStyle="bold"></TextView>
 
         <TextView
             android:layout_width="wrap_content"
@@ -83,10 +71,13 @@ android:fontFamily="@font/gilroy_light"
 
         android:background="@drawable/tab_layout_background"
         app:tabIndicatorColor="@color/white"
-        app:tabIndicatorFullWidth="false"
-android:elevation="1dp"
+
+android:elevation="5dp"
 app:tabTextAppearance="@style/tab_text"
-        app:tabTextColor="@color/white"></com.google.android.material.tabs.TabLayout>
+        app:tabTextColor="@color/white"
+        app:tabIconTint="@color/white"
+
+        ></com.google.android.material.tabs.TabLayout>
 
 
     <androidx.viewpager2.widget.ViewPager2
@@ -136,15 +127,16 @@ android:layout_marginLeft="90dp"
 android:textColor="@color/black"
         android:layout_alignParentBottom="true"
         android:fontFamily="@font/gilroy_light"
+
         style="@style/Widget.Material3.Button.TonalButton"
         ></Button>
 
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/btn_connect_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#E6E6E6"
+
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="30dp"
 android:layout_alignParentBottom="true"
@@ -153,7 +145,9 @@ android:layout_alignParentBottom="true"
         android:textAllCaps="false"
       android:textColor="@color/black"
         android:visibility="gone"
-        ></androidx.appcompat.widget.AppCompatButton>
+
+        style="@style/Widget.Material3.Button.TonalButton"
+        ></Button>
 
 
 

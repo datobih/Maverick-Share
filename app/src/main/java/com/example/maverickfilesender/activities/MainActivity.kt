@@ -71,14 +71,15 @@ class MainActivity : AppCompatActivity() {
         vp_main.adapter = adapter
         vp_main.isUserInputEnabled = false
 
-        val appTab = tab_main.newTab().setText("Apps")
-        tab_main.addTab(tab_main.newTab().setText("History"))
+        val appTab = tab_main.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
+        tab_main.addTab(tab_main.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24))
         tab_main.addTab(appTab)
-        tab_main.addTab(tab_main.newTab().setText("Media"))
-        tab_main.addTab(tab_main.newTab().setText("Files"))
-
-        tab_main.selectTab(appTab)
-        vp_main.currentItem=1
+        tab_main.addTab(tab_main.newTab().setText("Images").setIcon(R.drawable.ic_outline_image_24))
+        tab_main.addTab(tab_main.newTab().setText("Videos").setIcon(R.drawable.ic_outline_video_library_24))
+        tab_main.addTab(tab_main.newTab().setText("Files").setIcon(R.drawable.ic_baseline_folder_24))
+//
+//        tab_main.selectTab(appTab)
+//        vp_main.currentItem=1
 
         tab_main.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {

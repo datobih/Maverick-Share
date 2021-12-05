@@ -9,10 +9,10 @@
 
 
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#575757"
+        android:background="#eeeeee"
 
 
         >
@@ -27,7 +27,7 @@
             android:textSize="15dp"
             ></TextView>
 
-    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_queue"
@@ -38,10 +38,10 @@
         ></androidx.recyclerview.widget.RecyclerView>
 
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#575757"
+        android:background="#eeeeee"
 
 
         >
@@ -56,7 +56,7 @@
             android:textSize="15dp"
             ></TextView>
 
-    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_history"

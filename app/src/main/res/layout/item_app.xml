@@ -14,7 +14,7 @@ android:id="@+id/imv"
         android:layout_height="35dp"
 android:layout_marginTop="10dp"
        android:layout_centerHorizontal="true"
-        android:src="@color/black"
+
         android:scaleType="fitXY"
 
         ></ImageView>
@@ -33,6 +33,7 @@ android:ellipsize="end"
         android:maxLines="1"
 android:gravity="center"
         android:textColor="@color/black"
+        android:fontFamily="@font/gilroy_light"
         ></TextView>
 
     <TextView
@@ -45,7 +46,8 @@ android:gravity="center"
         android:textSize="13dp"
         android:maxLines="1"
         android:gravity="center"
-        android:textColor="@color/black">
+        android:textColor="@color/black"
+        android:fontFamily="@font/gilroy_light">
 
     </TextView>
 

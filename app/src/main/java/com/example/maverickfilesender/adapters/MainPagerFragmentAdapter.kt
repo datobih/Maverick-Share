@@ -4,14 +4,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.maverickfilesender.fragment.AppsFragment
-import com.example.maverickfilesender.fragment.HistoryFragment
-import com.example.maverickfilesender.fragment.HolderFilesFragment
-import com.example.maverickfilesender.fragment.MediaFragment
+import com.example.maverickfilesender.fragment.*
 
 class MainPagerFragmentAdapter(fragmentManager: FragmentManager,lifecycle: Lifecycle):FragmentStateAdapter(fragmentManager,lifecycle) {
     override fun getItemCount(): Int {
-     return 3
+     return 4
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -24,7 +21,11 @@ if(position==1) {
 }
 
         if(position==2){
-            return MediaFragment()
+            return ImageFragment()
+        }
+
+        if(position==3){
+            return VideosFragment()
         }
 
 

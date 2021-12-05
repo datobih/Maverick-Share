@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.adapters.AppPackageRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import kotlinx.android.synthetic.main.fragment_apps.*
@@ -43,25 +44,46 @@ class AppsFragment : Fragment() {
 
 
             val pm=requireContext().packageManager
+progress_apps.visibility=View.VISIBLE
 
-            val packages=pm.getInstalledApplications(PackageManager.GET_META_DATA)
-            val nonSystemPackages=ArrayList<ApplicationInfo>()
-            for(i: ApplicationInfo in packages){
+            val fetchAppsThread=Thread(object :Runnable{
+                override fun run() {
 
-                if(i.sourceDir.startsWith("/data/app/")){
+                    val packages=pm.getInstalledApplications(PackageManager.GET_META_DATA)
+                    val nonSystemPackages=ArrayList<ApplicationInfo>()
+                    for(i: ApplicationInfo in packages){
 
-                    nonSystemPackages.add(i)
+                        if(i.sourceDir.startsWith("/data/app/")){
+
+                            nonSystemPackages.add(i)
+
+                        }
+
+
+                    }
+
+
+val handler=(requireContext() as MainActivity).mHandler
+                    handler!!.post {
+
+                        rv_apps.setHasFixedSize(true)
+                        rv_apps.setItemViewCacheSize(20)
+
+                        rv_apps.layoutManager= GridLayoutManager(requireContext(),4)
+                        val adapter= AppPackageRecyclerAdapter(requireContext(),nonSystemPackages)
+
+                        rv_apps.adapter=adapter
+
+progress_apps.visibility=View.GONE
+                    }
+
 
                 }
 
 
-            }
+            }).start()
 
-            rv_apps.layoutManager= GridLayoutManager(requireContext(),4)
 
-            val adapter= AppPackageRecyclerAdapter(requireContext(),nonSystemPackages)
-
-            rv_apps.adapter=adapter
 
         }
 

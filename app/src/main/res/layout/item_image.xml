@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="140dp"
+    android:layout_height="140dp"
+   android:paddingHorizontal="2dp"
+    android:paddingVertical="2dp"
+    >
+
+
+    <ImageView
+        android:id="@+id/imv_itemImage"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+
+        android:scaleType="centerCrop"
+        ></ImageView>
+</LinearLayout>
