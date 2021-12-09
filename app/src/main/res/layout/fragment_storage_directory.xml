@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.StorageDirectoryFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+
+        >
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardUseCompatPadding="true"
+
+            android:elevation="5dp"
+            >
+
+            <LinearLayout
+                android:id="@+id/ll_internalStorage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="horizontal"
+
+                >
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ic_twotone_smartphone_24"
+                    android:layout_margin="10dp"
+
+                    ></ImageView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Internal Storage"
+                        android:layout_marginTop="10dp"
+
+                        android:fontFamily="@font/gilroy"
+                        android:textSize="17dp"
+                        android:textColor="@color/black"
+                        ></TextView>
+
+
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginEnd="15dp"
+                        >
+
+
+                        <TextView
+                            android:id="@+id/tv_holder_internalUsed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Used:"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/gilroy_light"
+                            android:textSize="15dp"
+                            ></TextView>
+
+
+
+                        <TextView
+                            android:id="@+id/tv_intenalUsed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2.5GB"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/gilroy_light"
+                            android:textSize="15dp"
+                            android:layout_toRightOf="@id/tv_holder_internalUsed"
+                            ></TextView>
+
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total:"
+
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="5dp"
+                            android:fontFamily="@font/gilroy_light"
+                            android:textSize="15dp"
+                            android:layout_toLeftOf="@id/tv_internalTotalSize"
+                            ></TextView>
+
+
+                        <TextView
+                            android:id="@+id/tv_internalTotalSize"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="25GB"
+
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/gilroy_light"
+                            android:textSize="15dp"
+                            android:layout_alignParentEnd="true"
+                            ></TextView>
+
+
+                    </RelativeLayout>
+
+
+                    <ProgressBar
+                        android:id="@+id/progress_internalStorage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="false"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_marginEnd="15dp"
+                        android:progress="10"
+                        android:progressTint="#283593"
+                        ></ProgressBar>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardUseCompatPadding="true"
+
+            android:elevation="5dp"
+
+            >
+
+            <LinearLayout
+                android:id="@+id/ll_SD_storage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible"
+                >
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ic_twotone_sd_storage_24"
+                    android:layout_margin="10dp"
+
+                    ></ImageView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SD Storage"
+                        android:layout_marginTop="10dp"
+
+                        android:fontFamily="@font/gilroy"
+                        android:textSize="17dp"
+                        android:textColor="@color/black"
+                        ></TextView>
+
+
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginEnd="15dp"
+                        >
+
+
+                        <TextView
+                            android:id="@+id/tv_holder_SDused"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Used:"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/gilroy_light"
+                            android:textSize="15dp"
+                            ></TextView>
+
+
+
+                        <TextView
+                            android:id="@+id/tv_sdUsed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2.5GB"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/gilroy_light"
+                            android:textSize="15dp"
+                            android:layout_toRightOf="@id/tv_holder_SDused"
+                            ></TextView>
+
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total:"
+
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="5dp"
+                            android:fontFamily="@font/gilroy_light"
+                            android:textSize="15dp"
+                            android:layout_toLeftOf="@id/tv_SD_totalSize"
+                            ></TextView>
+
+
+                        <TextView
+                            android:id="@+id/tv_SD_totalSize"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="25GB"
+
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/gilroy_light"
+                            android:textSize="15dp"
+                            android:layout_alignParentEnd="true"
+                            ></TextView>
+
+
+                    </RelativeLayout>
+
+
+                    <ProgressBar
+                        android:id="@+id/progress_SD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="false"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_marginEnd="15dp"
+                        android:progress="10"
+                        android:progressTint="#283593"
+                        ></ProgressBar>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+
+</FrameLayout>

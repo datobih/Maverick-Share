@@ -1,10 +1,13 @@
 package com.example.maverickfilesender.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,17 +15,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.postDelayed
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.adapters.AppPackageRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import kotlinx.android.synthetic.main.fragment_apps.*
+import kotlinx.android.synthetic.main.fragment_apps.view.*
+import java.util.concurrent.TimeUnit
 
 
 class AppsFragment : Fragment() {
 
-
+var mContext:Context?=null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -32,11 +38,15 @@ class AppsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_apps, container, false)
     }
 
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext=context
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
 
         if(ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
@@ -46,7 +56,7 @@ class AppsFragment : Fragment() {
             val pm=requireContext().packageManager
 progress_apps.visibility=View.VISIBLE
 
-            val fetchAppsThread=Thread(object :Runnable{
+            val fetchAppsThread= Thread(object :Runnable{
                 override fun run() {
 
                     val packages=pm.getInstalledApplications(PackageManager.GET_META_DATA)
@@ -63,18 +73,18 @@ progress_apps.visibility=View.VISIBLE
                     }
 
 
-val handler=(requireContext() as MainActivity).mHandler
-                    handler!!.post {
 
-                        rv_apps.setHasFixedSize(true)
-                        rv_apps.setItemViewCacheSize(20)
 
-                        rv_apps.layoutManager= GridLayoutManager(requireContext(),4)
-                        val adapter= AppPackageRecyclerAdapter(requireContext(),nonSystemPackages)
 
-                        rv_apps.adapter=adapter
+                    (mContext as MainActivity).runOnUiThread{
 
-progress_apps.visibility=View.GONE
+                        val adapter= AppPackageRecyclerAdapter(mContext!!,nonSystemPackages)
+
+                        view.rv_apps.layoutManager= GridLayoutManager(mContext,4)
+                        view.rv_apps.adapter=adapter
+                        view.rv_apps.setHasFixedSize(true)
+                        view.rv_apps.setItemViewCacheSize(20)
+view.progress_apps.visibility=View.GONE
                     }
 
 

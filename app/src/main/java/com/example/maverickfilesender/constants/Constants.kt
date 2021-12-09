@@ -6,4 +6,7 @@ object Constants{
     val RQ_LOCATION_PERMISSION=2
     val CONNECTION_TYPE_HOTSPOT="Hotspot"
     val CONNECTION_TYPE_WIFI="Wifi"
+
+
+    val BUNDLE_STORAGE_DIRECTORY="storageDirectory"
 }
