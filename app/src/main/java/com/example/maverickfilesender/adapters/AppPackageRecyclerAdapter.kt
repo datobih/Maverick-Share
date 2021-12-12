@@ -1,19 +1,18 @@
 package com.example.maverickfilesender.adapters
 
 import android.content.Context
-import android.content.pm.ApplicationInfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.asynclayoutinflater.view.AsyncLayoutInflater
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.model.AppPackage
 import kotlinx.android.synthetic.main.item_app.view.*
 import java.io.File
 import java.text.DecimalFormat
 
-class AppPackageRecyclerAdapter(val context: Context,val appPackageList:MutableList<ApplicationInfo>):RecyclerView.Adapter<AppPackageRecyclerAdapter.MyViewHolder>() {
+class AppPackageRecyclerAdapter(val context: Context,val appPackagePackageList:MutableList<AppPackage>):RecyclerView.Adapter<AppPackageRecyclerAdapter.MyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app,parent,false))
     }
@@ -23,7 +22,7 @@ class AppPackageRecyclerAdapter(val context: Context,val appPackageList:MutableL
 
 
             Glide.with(context)
-                .load(appPackageList[position].loadIcon(context.packageManager))
+                .load(appPackagePackageList[position].drawable)
                 .centerCrop()
 
                 .into(holder.icon)
@@ -33,9 +32,9 @@ class AppPackageRecyclerAdapter(val context: Context,val appPackageList:MutableL
 //           holder.itemView.imv.setImageDrawable(drawable)
 
 
-val name=appPackageList[position].loadLabel(context.packageManager).toString()
+val name=appPackagePackageList[position].applicationInfo.loadLabel(context.packageManager).toString()
             holder.appName.text=name
-            val sizeKb= (File(appPackageList[position].sourceDir).length())/(1024)
+            val sizeKb= (File(appPackagePackageList[position].applicationInfo.sourceDir).length())/(1024)
             var sizeMb=sizeKb.toFloat()/1024f
             var sizeGb=sizeMb.toFloat()/1024f
 
@@ -60,7 +59,7 @@ val name=appPackageList[position].loadLabel(context.packageManager).toString()
         }
 
     override fun getItemCount(): Int {
-        return appPackageList.size
+        return appPackagePackageList.size
     }
 
 

@@ -15,6 +15,7 @@ import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
@@ -30,6 +31,7 @@ import com.example.maverickfilesender.R
 import com.example.maverickfilesender.adapters.MainPagerFragmentAdapter
 import com.example.maverickfilesender.adapters.SSIDListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.model.RelativePath
 import com.example.maverickfilesender.receivers.WifiAPReceiver
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
@@ -60,6 +62,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+var isTrue:Boolean?=null
+
+
+
         mHandler = Handler(Looper.getMainLooper())
         var receiver = WifiAPReceiver()
 

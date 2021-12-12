@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.FilesDirectoryFragment">
+    tools:context=".fragment.FilesDirectoryFragment"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/rv_relativePath"
+      android:layout_width="match_parent"
+      android:layout_height="30dp"
+
+
+      ></androidx.recyclerview.widget.RecyclerView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eeeeee"
+        android:layout_marginTop="5dp"
+        ></View>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_files"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+ android:layout_marginTop="10dp"
 
-</FrameLayout>
+        ></androidx.recyclerview.widget.RecyclerView>
+
+</LinearLayout>

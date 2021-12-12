@@ -6,8 +6,6 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,15 +13,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.os.postDelayed
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.adapters.AppPackageRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.model.AppPackage
 import kotlinx.android.synthetic.main.fragment_apps.*
 import kotlinx.android.synthetic.main.fragment_apps.view.*
-import java.util.concurrent.TimeUnit
 
 
 class AppsFragment : Fragment() {
@@ -60,12 +57,13 @@ progress_apps.visibility=View.VISIBLE
                 override fun run() {
 
                     val packages=pm.getInstalledApplications(PackageManager.GET_META_DATA)
-                    val nonSystemPackages=ArrayList<ApplicationInfo>()
+                    val nonSystemPackages=ArrayList<AppPackage>()
                     for(i: ApplicationInfo in packages){
 
                         if(i.sourceDir.startsWith("/data/app/")){
 
-                            nonSystemPackages.add(i)
+
+                            nonSystemPackages.add(AppPackage(i,i.loadIcon(mContext!!.packageManager)))
 
                         }
 

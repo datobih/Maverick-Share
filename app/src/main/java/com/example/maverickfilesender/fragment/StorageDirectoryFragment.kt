@@ -1,8 +1,12 @@
 package com.example.maverickfilesender.fragment
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.StatFs
+import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +41,19 @@ class StorageDirectoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.R){
+if(!Environment.isExternalStorageManager()){
+    val intent= Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+    val uri= Uri.fromParts("package",mContext!!.packageName,null)
+    intent.setData(uri)
+    startActivity(intent)
+
+}
+
+        }
+
+
 
 
 
@@ -130,7 +147,30 @@ class StorageDirectoryFragment : Fragment() {
 
         }
 
-        view.ll_SD_storage.setOnClickListener {  }
+        view.ll_SD_storage.setOnClickListener {
+
+            val bundle=Bundle()
+
+            bundle.putString(Constants.BUNDLE_STORAGE_DIRECTORY,sdPath)
+
+
+            val directoryFragment=FilesDirectoryFragment()
+            directoryFragment.arguments=bundle
+
+
+
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+
+                addToBackStack(null)
+                replace(R.id.holder_files_fragment,directoryFragment)
+
+
+                commit()
+
+            }
+
+
+        }
 
 
 
