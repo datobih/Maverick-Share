@@ -9,23 +9,23 @@
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/rv_relativePath"
       android:layout_width="match_parent"
-      android:layout_height="30dp"
+      android:layout_height="35dp"
 
-
+android:background="@color/white"
       ></androidx.recyclerview.widget.RecyclerView>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#eeeeee"
-        android:layout_marginTop="5dp"
+
         ></View>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_files"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
- android:layout_marginTop="10dp"
+
 
         ></androidx.recyclerview.widget.RecyclerView>
 

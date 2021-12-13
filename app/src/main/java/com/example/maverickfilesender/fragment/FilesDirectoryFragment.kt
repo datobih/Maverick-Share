@@ -13,9 +13,12 @@ import com.example.maverickfilesender.adapters.FilesRecyclerAdapter
 import com.example.maverickfilesender.adapters.RelativePathRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.listeners.FileOnClickListener
+import com.example.maverickfilesender.listeners.RelativePathOnClickListener
 import com.example.maverickfilesender.model.AppFile
 import com.example.maverickfilesender.model.RelativePath
+import kotlinx.android.synthetic.main.fragment_files_directory.*
 import kotlinx.android.synthetic.main.fragment_files_directory.view.*
+import kotlinx.android.synthetic.main.fragment_videos.*
 import java.io.File
 import java.nio.file.Files
 
@@ -29,8 +32,10 @@ class FilesDirectoryFragment : Fragment() {
         mContext=context
 
     }
-
-
+    val relativePathList=ArrayList<RelativePath>()
+    var mFileOnClickListener:FileOnClickListener?=null
+    var mRelativePathOnClickListener:RelativePathOnClickListener?=null
+    var filesAdapter:FilesRecyclerAdapter?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -56,23 +61,59 @@ val directory=bundle!!.getString(Constants.BUNDLE_STORAGE_DIRECTORY)
 
 
 
-        val relativePathList=ArrayList<RelativePath>()
+
         relativePathList.add(RelativePath("Home",file))
 
         var relativePathAdapter=RelativePathRecyclerAdapter(mContext!!,relativePathList)
 
 
+
+
 view.rv_relativePath.layoutManager=LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false)
+
+
+        mRelativePathOnClickListener=object :RelativePathOnClickListener{
+
+            override fun onClick(file: File,position:Int) {
+var list=((view.rv_relativePath.adapter) as RelativePathRecyclerAdapter).relativePathList
+
+if(position!=(list.lastIndex)){
+
+list=removeElementsFrom(list,position)
+   view.rv_relativePath.adapter!!.notifyDataSetChanged()
+
+    filesAdapter= FilesRecyclerAdapter(mContext!!,generateAppFile(list[position].file.listFiles()))
+    filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
+rv_files.adapter=filesAdapter
+
+}
+
+
+            }
+        }
+        relativePathAdapter.setOnClickListener(mRelativePathOnClickListener!!)
+
 view.rv_relativePath.adapter=relativePathAdapter
 
 
-        var filesAdapter=FilesRecyclerAdapter(mContext!!,generateAppFile(files))
+         filesAdapter=FilesRecyclerAdapter(mContext!!,generateAppFile(files))
 
-        val mFileOnClickListener=object : FileOnClickListener{
+
+
+         mFileOnClickListener=object : FileOnClickListener{
             override fun onClick(file: File) {
+
+
+
                 relativePathList.add(RelativePath(file.name,file))
+Constants.mRelativePath=relativePathList
+
 
                 relativePathAdapter=RelativePathRecyclerAdapter(mContext!!,relativePathList)
+
+
+relativePathAdapter.setOnClickListener(mRelativePathOnClickListener!!)
+
                 view.rv_relativePath.adapter=relativePathAdapter
 
 
@@ -81,7 +122,7 @@ view.rv_relativePath.adapter=relativePathAdapter
 
 
                 filesAdapter=FilesRecyclerAdapter(mContext!!,generateAppFile(mFiles))
-                filesAdapter.setOnClickListener(this)
+                filesAdapter!!.setOnClickListener(this)
 
 
 
@@ -90,7 +131,9 @@ view.rv_relativePath.adapter=relativePathAdapter
 
 
         }
-        filesAdapter.setOnClickListener(mFileOnClickListener)
+
+
+        filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
 
         view.rv_files.layoutManager=LinearLayoutManager(mContext)
         view.rv_files.adapter=filesAdapter
@@ -98,6 +141,8 @@ view.rv_relativePath.adapter=relativePathAdapter
 
 
     }
+
+
 
     fun generateAppFile(fileList:Array<File>): ArrayList<AppFile>{
 
@@ -119,5 +164,39 @@ view.rv_relativePath.adapter=relativePathAdapter
         }
         return appFiles
     }
+
+
+
+
+    fun removeElementsFrom(list:ArrayList<RelativePath>,position:Int):ArrayList<RelativePath>{
+val i=position+1
+        var remainder=list.lastIndex-i
+        while(true){
+list.removeAt(i)
+            if(remainder==0){
+                break
+            }
+
+remainder--
+        }
+
+return list
+    }
+
+
+    fun onFragmentBackPressed(){
+        relativePathList.removeAt(relativePathList.lastIndex)
+        rv_relativePath.adapter!!.notifyItemRemoved(relativePathList.lastIndex+1)
+
+
+        val file=relativePathList[relativePathList.lastIndex].file
+
+        val appFile=generateAppFile(file.listFiles())
+
+filesAdapter=FilesRecyclerAdapter(mContext!!,appFile)
+        filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
+rv_files.adapter=filesAdapter
+    }
+
 
 }

@@ -1,5 +1,7 @@
 package com.example.maverickfilesender.constants
 
+import com.example.maverickfilesender.model.RelativePath
+
 object Constants{
 
     val RQ_READ_WRITE_PERMISSION=1
@@ -9,4 +11,7 @@ object Constants{
 
 
     val BUNDLE_STORAGE_DIRECTORY="storageDirectory"
+
+
+    var mRelativePath=ArrayList<RelativePath>()
 }

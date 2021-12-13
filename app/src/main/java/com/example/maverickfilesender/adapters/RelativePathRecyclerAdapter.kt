@@ -6,10 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.listeners.RelativePathOnClickListener
 import com.example.maverickfilesender.model.RelativePath
 import kotlinx.android.synthetic.main.item_relative_path.view.*
 
 class RelativePathRecyclerAdapter(val context: Context,val relativePathList:ArrayList<RelativePath>) :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+
+var mRelativePathOnClickListener:RelativePathOnClickListener?=null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 return RelativePathViewHolder(LayoutInflater.from(context).inflate(R.layout.item_relative_path,parent,false))
     }
@@ -28,6 +32,12 @@ return RelativePathViewHolder(LayoutInflater.from(context).inflate(R.layout.item
 
             }
 
+holder.itemView.ll_relative_path.setOnClickListener {
+
+    mRelativePathOnClickListener!!.onClick(relativePathList[position].file,position)
+
+}
+
 
         }
 
@@ -36,6 +46,12 @@ return RelativePathViewHolder(LayoutInflater.from(context).inflate(R.layout.item
 
 
 
+
+    }
+
+    fun setOnClickListener(mRelativePathOnClickListener: RelativePathOnClickListener){
+
+        this.mRelativePathOnClickListener=mRelativePathOnClickListener
 
     }
 

@@ -42,9 +42,9 @@ class HolderFilesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        requireActivity().supportFragmentManager.beginTransaction().apply {
+        activity!!.supportFragmentManager.beginTransaction().apply {
 
-            replace(R.id.holder_files_fragment,StorageDirectoryFragment())
+            replace(view.holder_files_fragment.id,StorageDirectoryFragment())
 commit()
 
         }

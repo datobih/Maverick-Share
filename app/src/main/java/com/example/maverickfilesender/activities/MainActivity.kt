@@ -22,15 +22,18 @@ import android.provider.Settings
 import android.text.format.Formatter
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.adapters.MainPagerFragmentAdapter
 import com.example.maverickfilesender.adapters.SSIDListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.fragment.FilesDirectoryFragment
 import com.example.maverickfilesender.model.RelativePath
 import com.example.maverickfilesender.receivers.WifiAPReceiver
 import com.google.android.material.tabs.TabLayout
@@ -42,6 +45,7 @@ import java.io.DataOutputStream
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     var ssid: String = ""
@@ -88,9 +92,23 @@ var isTrue:Boolean?=null
 //        tab_main.selectTab(appTab)
 //        vp_main.currentItem=1
 
+
+        val receiveAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_recieve)
+        val sendAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_send)
+        val fadeOutAnimation=AnimationUtils.loadAnimation(this,R.anim.fadeout)
+
+
+        mHandler!!.postDelayed(Runnable {      btn_receive.startAnimation(receiveAnimation)
+            btn_send.startAnimation(sendAnimation)
+
+        },400)
+
         tab_main.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+
                 vp_main.currentItem = tab!!.position
+
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -103,6 +121,9 @@ var isTrue:Boolean?=null
 
 
         })
+
+
+
 
         /*
 bottomNavigation_main.setOnNavigationItemSelectedListener(object:BottomNavigationView.OnNavigationItemSelectedListener {
@@ -488,6 +509,30 @@ return true
             }
 
         }
+
+
+    }
+
+    override fun onBackPressed() {
+
+if(Constants.mRelativePath.size>1 && vp_main.currentItem==4){
+
+val f=supportFragmentManager.findFragmentById(R.id.holder_files_fragment)
+
+    if(f is FilesDirectoryFragment){
+
+
+        f.onFragmentBackPressed()
+
+    }
+
+
+
+}
+        else {
+
+    super.onBackPressed()
+}
 
 
     }

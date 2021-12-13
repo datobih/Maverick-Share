@@ -92,11 +92,11 @@ app:tabTextAppearance="@style/tab_text"
 
     </androidx.viewpager2.widget.ViewPager2>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#E6E6E6"
+        android:background="@drawable/btn_bg"
 
         android:layout_centerHorizontal="true"
         android:layout_alignParentRight="true"
@@ -104,19 +104,19 @@ app:tabTextAppearance="@style/tab_text"
         android:layout_marginBottom="30dp"
         android:text="Send"
         android:textAllCaps="false"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_alignParentBottom="true"
-        android:fontFamily="@font/gilroy_light"
-        style="@style/Widget.Material3.Button.TonalButton"
-        ></Button>
+        android:fontFamily="@font/gilroy"
+
+        ></androidx.appcompat.widget.AppCompatButton>
 
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_receive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#E6E6E6"
+        android:background="@drawable/btn_bg"
 
         android:layout_centerHorizontal="true"
 android:layout_marginLeft="90dp"
@@ -124,12 +124,12 @@ android:layout_marginLeft="90dp"
         android:layout_marginBottom="30dp"
         android:text="Recieve"
         android:textAllCaps="false"
-android:textColor="@color/black"
+android:textColor="@color/white"
         android:layout_alignParentBottom="true"
-        android:fontFamily="@font/gilroy_light"
+        android:fontFamily="@font/gilroy"
 
-        style="@style/Widget.Material3.Button.TonalButton"
-        ></Button>
+
+        ></androidx.appcompat.widget.AppCompatButton>
 
 
     <Button

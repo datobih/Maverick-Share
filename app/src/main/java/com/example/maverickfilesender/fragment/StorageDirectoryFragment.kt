@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.constants.Constants
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_holder_files.view.*
 import kotlinx.android.synthetic.main.fragment_storage_directory.view.*
 import java.io.File
 import java.text.DecimalFormat
+import java.util.concurrent.TimeUnit
 
 
 class StorageDirectoryFragment : Fragment() {
@@ -41,6 +43,8 @@ class StorageDirectoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         if(android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.R){
 if(!Environment.isExternalStorageManager()){
@@ -93,7 +97,8 @@ if(!Environment.isExternalStorageManager()){
 
 
         view.progress_internalStorage.progress=((internalUsedSpace/internalTotalSize)*100).toInt()
-
+        val animation=AnimationUtils.loadAnimation(mContext!!,R.anim.bounce)
+        view.ll_internalStorage.startAnimation(animation)
 
         if(sdPath.isNotEmpty()){
             view.ll_SD_storage.visibility=View.VISIBLE
@@ -108,6 +113,7 @@ if(!Environment.isExternalStorageManager()){
 
                 view.tv_SD_totalSize.text=roundToTwoDecimals(sdTotalSizeTB).toString()+"TB"
 
+
             }
 
             else{
@@ -118,7 +124,8 @@ if(!Environment.isExternalStorageManager()){
 
 
             view.progress_SD.progress=((sdUsedSpace/sdTotalSize)*100).toInt()
-
+            val animation=AnimationUtils.loadAnimation(mContext!!,R.anim.bounce)
+            view.ll_SD_storage.startAnimation(animation)
         }
 
 

@@ -2,7 +2,9 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+android:id="@+id/ll_relative_path"
+  >
 
     <TextView
         android:id="@+id/tv_item_pathName"
@@ -13,6 +15,7 @@
         android:textColor="@color/black"
         android:textSize="17dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
         ></TextView>
 
     <ImageView
@@ -20,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_baseline_chevron_right_24"
-
+android:layout_marginTop="5dp"
         ></ImageView>
 
 
