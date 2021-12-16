@@ -12,6 +12,7 @@ import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.Image
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_image.view.*
+import java.io.File
 
 class ImageFileRecyclerAdapter(val context: Context,val imageList:ArrayList<Image>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -46,7 +47,7 @@ Glide.with(context)
 imageList[position].onSelect=!imageList[position].onSelect
 
                 if(imageList[position].onSelect){
-
+Constants.selectedFiles.add(File(imageList[position].uri.path))
                     Constants.sendCount++
                     if((context as MainActivity).ll_main_send.visibility!=View.VISIBLE) {
                         (context as MainActivity).ll_main_send.visibility = View.VISIBLE
@@ -54,6 +55,8 @@ imageList[position].onSelect=!imageList[position].onSelect
                     }
                 }
                 else{
+
+                    Constants.selectedFiles.remove(File(imageList[position].uri.path))
                     Constants.sendCount--
 
                     if(Constants.sendCount==0){

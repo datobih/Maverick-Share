@@ -1,6 +1,7 @@
 package com.example.maverickfilesender.constants
 
 import com.example.maverickfilesender.model.RelativePath
+import java.io.File
 
 object Constants{
 
@@ -16,5 +17,10 @@ object Constants{
     var mRelativePath=ArrayList<RelativePath>()
     var sendCount=0
     var countList=ArrayList<Int>()
+
+    var heirarchyFiles=ArrayList<ArrayList<File>>()
+var parentFiles=ArrayList<File>()
+var selectedFiles=ArrayList<File>()
+
 
 }

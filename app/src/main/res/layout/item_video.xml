@@ -71,8 +71,13 @@ android:textColor="@color/white"
         android:textSize="17dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:ellipsize="end"
-        android:maxLines="1"
+
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:focusable="true"
+
+        android:scrollHorizontally="true"
 android:textColor="@color/black"
         ></TextView>
 

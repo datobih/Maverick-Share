@@ -22,7 +22,7 @@ return VideoViewHolder(LayoutInflater.from(context).inflate(R.layout.item_video,
 
         if(holder is VideoViewHolder) {
 
-
+holder.itemView.tv_ItemVideoName.isSelected=true
 
             Glide.with(context)
 

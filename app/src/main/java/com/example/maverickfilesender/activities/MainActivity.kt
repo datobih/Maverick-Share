@@ -80,6 +80,7 @@ var isTrue:Boolean?=null
         registerReceiver(receiver, IntentFilter("android.net.wifi.WIFI_AP_STATE_CHANGED"))
 
         val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
+        vp_main.offscreenPageLimit=5
         vp_main.adapter = adapter
         vp_main.isUserInputEnabled = false
 
@@ -524,22 +525,32 @@ return true
     }
 
     override fun onBackPressed() {
-
+        val f=supportFragmentManager.findFragmentById(R.id.holder_files_fragment)
 if(Constants.mRelativePath.size>1 && vp_main.currentItem==4){
 
-val f=supportFragmentManager.findFragmentById(R.id.holder_files_fragment)
+
 
     if(f is FilesDirectoryFragment){
 
 
-        f.onFragmentBackPressed()
+        f.onFragmentBackPressed(this)
 
     }
 
 
 
 }
+
         else {
+
+     if(Constants.mRelativePath.size==1 && vp_main.currentItem==4){
+
+if( f is FilesDirectoryFragment)
+f.onFinalStack(this)
+
+
+    }
+
 
     super.onBackPressed()
 }

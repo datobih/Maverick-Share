@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_holder_files.*
 import kotlinx.android.synthetic.main.fragment_holder_files.view.*
 import java.io.File
@@ -42,6 +44,7 @@ class HolderFilesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+
         activity!!.supportFragmentManager.beginTransaction().apply {
 
             replace(view.holder_files_fragment.id,StorageDirectoryFragment())
@@ -53,5 +56,46 @@ commit()
 
     }
 
+    fun onFinalStack(context: Context){
+        var i=0
+        while(true){
+            if(Constants.heirarchyFiles.isNotEmpty()) {
+                if (i != Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
+                    Constants.selectedFiles.remove(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i])
+                    i++
+                } else {
+                    i = 0
+                    Constants.heirarchyFiles.removeAt(Constants.heirarchyFiles.lastIndex)
+                }
 
+                if (Constants.heirarchyFiles.isEmpty()) {
+                    break
+                }
+            }
+
+            else{
+                break
+            }
+
+        }
+
+        while(Constants.parentFiles.isNotEmpty()){
+
+
+            Constants.selectedFiles.remove(Constants.parentFiles[Constants.parentFiles.lastIndex])
+            Constants.parentFiles.removeAt(Constants.parentFiles.lastIndex)
+        }
+
+
+        if(Constants.selectedFiles.isEmpty()){
+
+            Constants.sendCount=0
+            if( (context as MainActivity).ll_main_send.visibility==View.VISIBLE) {
+                (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
+                (context as MainActivity).ll_main_send.visibility = View.INVISIBLE
+
+            }
+        }
+
+    }
 }

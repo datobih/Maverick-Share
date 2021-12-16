@@ -48,10 +48,13 @@ holder.itemView.ll_appItem.setOnClickListener {
 appPackagePackageList[position].onSelect=!appPackagePackageList[position].onSelect
 
 if(appPackagePackageList[position].onSelect){
+   Constants.selectedFiles.add(File(appPackagePackageList[position].applicationInfo.sourceDir))
     Constants.sendCount++
 }
 
     else{
+  Constants.selectedFiles.remove(File(appPackagePackageList[position].applicationInfo.sourceDir))
+
     Constants.sendCount--
     }
 

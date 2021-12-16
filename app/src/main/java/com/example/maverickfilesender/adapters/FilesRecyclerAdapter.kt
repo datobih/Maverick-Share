@@ -60,17 +60,30 @@ appFileList[position].onSelect = !appFileList[position].onSelect
 
         if(appFileList[position].onSelect){
             Constants.sendCount++
-            if(Constants.countList.isNotEmpty()) {
+            Constants.selectedFiles.add(appFileList[position].file)
+
+            if(Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1
+                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].add(appFileList[position].file)
+            }
+
+            else{
+               Constants.parentFiles.add(appFileList[position].file)
             }
 
         }
         else{
             Constants.sendCount--
+            Constants.selectedFiles.remove(appFileList[position].file)
 
-            if(Constants.countList.isNotEmpty()) {
+            if(Constants.countList.isNotEmpty()&& Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] - 1
+                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].remove(appFileList[position].file)
             }
+            else{
+                Constants.parentFiles.remove(appFileList[position].file)
+            }
+
             if(Constants.sendCount==0){
                 (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
                 (context as MainActivity).ll_main_send.visibility=View.INVISIBLE

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
@@ -16,6 +17,7 @@ import com.example.maverickfilesender.listeners.FileOnClickListener
 import com.example.maverickfilesender.listeners.RelativePathOnClickListener
 import com.example.maverickfilesender.model.AppFile
 import com.example.maverickfilesender.model.RelativePath
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_files_directory.*
 import kotlinx.android.synthetic.main.fragment_files_directory.view.*
 import kotlinx.android.synthetic.main.fragment_videos.*
@@ -63,7 +65,7 @@ val directory=bundle!!.getString(Constants.BUNDLE_STORAGE_DIRECTORY)
 
 
         relativePathList.add(RelativePath("Home",file,generateAppFile(files)))
-
+Constants.mRelativePath=relativePathList
         var relativePathAdapter=RelativePathRecyclerAdapter(mContext!!,relativePathList)
 
 
@@ -91,6 +93,8 @@ while(true){
         if(Constants.countList.lastIndex>=position){
         Constants.sendCount=Constants.sendCount-Constants.countList[Constants.countList.lastIndex]
         Constants.countList.removeAt(Constants.countList.lastIndex)
+
+
         }
 
         else{
@@ -98,6 +102,29 @@ while(true){
         }
     }
 
+    //IMPORTANT
+    var i=0
+while(true){
+    if(i!=Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
+        Constants.selectedFiles.remove(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i])
+        i++
+    }
+
+
+   else{
+       i=0
+       Constants.heirarchyFiles.removeAt(Constants.heirarchyFiles.lastIndex)
+   }
+
+    if((Constants.heirarchyFiles.isEmpty())||(Constants.heirarchyFiles.lastIndex==position-1)){
+        if(Constants.selectedFiles.isEmpty()){
+            (mContext as MainActivity).ll_main_send.startAnimation((mContext as MainActivity).transitionDown)
+            (mContext as MainActivity).ll_main_send.visibility=View.INVISIBLE
+        }
+        break
+    }
+
+}
 
 }
 
@@ -139,6 +166,7 @@ relativePathAdapter.setOnClickListener(mRelativePathOnClickListener!!)
 
 
 Constants.countList.add(0)
+                Constants.heirarchyFiles.add(ArrayList<File>())
                 view.rv_files.adapter=filesAdapter
             }
 
@@ -197,8 +225,10 @@ return list
     }
 
 
-    fun onFragmentBackPressed(){
+    fun onFragmentBackPressed(context: Context){
         relativePathList.removeAt(relativePathList.lastIndex)
+        Constants.mRelativePath=relativePathList
+
         rv_relativePath.adapter!!.notifyItemRemoved(relativePathList.lastIndex+1)
 
 
@@ -209,11 +239,81 @@ return list
         Constants.sendCount=Constants.sendCount-Constants.countList[Constants.countList.lastIndex]
         Constants.countList.removeAt(Constants.countList.lastIndex)
 
+
+        //IMPORTANT
+        var i=0
+        val exitIndex=Constants.heirarchyFiles.lastIndex-1
+        while(true){
+            if(i!=Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
+                Constants.selectedFiles.remove(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i])
+                i++
+            }
+
+
+            else{
+                i=0
+                Constants.heirarchyFiles.removeAt(Constants.heirarchyFiles.lastIndex)
+            }
+
+            if(Constants.heirarchyFiles.lastIndex==exitIndex){
+                break
+            }
+
+        }
+
+
+        if(Constants.selectedFiles.isEmpty() && (context as MainActivity).ll_main_send.visibility==View.VISIBLE){
+
+            (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
+            (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
+        }
 filesAdapter=FilesRecyclerAdapter(mContext!!,appFileList)
         filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
 rv_files.adapter=filesAdapter
 
     }
 
+
+   fun onFinalStack(context: Context){
+var i=0
+       while(true){
+           if(Constants.heirarchyFiles.isNotEmpty()) {
+               if (i != Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
+                   Constants.selectedFiles.remove(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i])
+                   i++
+               } else {
+                   i = 0
+                   Constants.heirarchyFiles.removeAt(Constants.heirarchyFiles.lastIndex)
+               }
+
+               if (Constants.heirarchyFiles.isEmpty()) {
+                   break
+               }
+           }
+
+else{
+    break
+           }
+
+       }
+
+       while(Constants.parentFiles.isNotEmpty()){
+
+
+           Constants.selectedFiles.remove(Constants.parentFiles[Constants.parentFiles.lastIndex])
+Constants.parentFiles.removeAt(Constants.parentFiles.lastIndex)
+       }
+
+
+       if(Constants.selectedFiles.isEmpty()){
+
+           Constants.sendCount=0
+
+           (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
+           (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
+
+       }
+
+   }
 
 }
