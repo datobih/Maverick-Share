@@ -62,7 +62,7 @@ val directory=bundle!!.getString(Constants.BUNDLE_STORAGE_DIRECTORY)
 
 
 
-        relativePathList.add(RelativePath("Home",file))
+        relativePathList.add(RelativePath("Home",file,generateAppFile(files)))
 
         var relativePathAdapter=RelativePathRecyclerAdapter(mContext!!,relativePathList)
 
@@ -74,7 +74,7 @@ view.rv_relativePath.layoutManager=LinearLayoutManager(mContext,LinearLayoutMana
 
         mRelativePathOnClickListener=object :RelativePathOnClickListener{
 
-            override fun onClick(file: File,position:Int) {
+            override fun onClick(appFileList:ArrayList<AppFile>,position:Int) {
 var list=((view.rv_relativePath.adapter) as RelativePathRecyclerAdapter).relativePathList
 
 if(position!=(list.lastIndex)){
@@ -82,7 +82,7 @@ if(position!=(list.lastIndex)){
 list=removeElementsFrom(list,position)
    view.rv_relativePath.adapter!!.notifyDataSetChanged()
 
-    filesAdapter= FilesRecyclerAdapter(mContext!!,generateAppFile(list[position].file.listFiles()))
+    filesAdapter= FilesRecyclerAdapter(mContext!!,appFileList)
     filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
 rv_files.adapter=filesAdapter
 
@@ -96,7 +96,7 @@ rv_files.adapter=filesAdapter
 view.rv_relativePath.adapter=relativePathAdapter
 
 
-         filesAdapter=FilesRecyclerAdapter(mContext!!,generateAppFile(files))
+         filesAdapter=FilesRecyclerAdapter(mContext!!,relativePathList[0].appFileList)
 
 
 
@@ -104,8 +104,8 @@ view.rv_relativePath.adapter=relativePathAdapter
             override fun onClick(file: File) {
 
 
-
-                relativePathList.add(RelativePath(file.name,file))
+val appFileList=generateAppFile(file.listFiles())
+                relativePathList.add(RelativePath(file.name,file,appFileList))
 Constants.mRelativePath=relativePathList
 
 
@@ -121,7 +121,7 @@ relativePathAdapter.setOnClickListener(mRelativePathOnClickListener!!)
 
 
 
-                filesAdapter=FilesRecyclerAdapter(mContext!!,generateAppFile(mFiles))
+                filesAdapter=FilesRecyclerAdapter(mContext!!,appFileList)
                 filesAdapter!!.setOnClickListener(this)
 
 
@@ -154,11 +154,11 @@ relativePathAdapter.setOnClickListener(mRelativePathOnClickListener!!)
                 val packageInfo=packageManager.getPackageArchiveInfo(i.path,0)
 
 
-                appFiles.add(AppFile(i,packageInfo!!.applicationInfo.loadIcon(packageManager)))
+                appFiles.add(AppFile(i,packageInfo!!.applicationInfo.loadIcon(packageManager),false))
 
             }
             else{
-                appFiles.add(AppFile(i))
+                appFiles.add(AppFile(i,onSelect = false))
             }
 
         }
@@ -189,11 +189,11 @@ return list
         rv_relativePath.adapter!!.notifyItemRemoved(relativePathList.lastIndex+1)
 
 
-        val file=relativePathList[relativePathList.lastIndex].file
+        val appFileList=relativePathList[relativePathList.lastIndex].appFileList
 
-        val appFile=generateAppFile(file.listFiles())
 
-filesAdapter=FilesRecyclerAdapter(mContext!!,appFile)
+
+filesAdapter=FilesRecyclerAdapter(mContext!!,appFileList)
         filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
 rv_files.adapter=filesAdapter
     }

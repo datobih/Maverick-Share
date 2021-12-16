@@ -95,10 +95,10 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
 
 context.runOnUiThread {
 
-    context.btn_receive.visibility=View.GONE
+    context.btn_receiver.visibility=View.GONE
     context.btn_send.visibility=View.GONE
 
-    context.btn_connect_status.visibility=View.VISIBLE
+//    context.btn_connect_status.visibility=View.VISIBLE
     context.connectionType=Constants.CONNECTION_TYPE_WIFI
 
 
@@ -161,10 +161,10 @@ context.runOnUiThread {
                             (context as MainActivity).isClientConnected=true
                             context.mIpAddress= Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
 
-                            context.btn_receive.visibility=View.GONE
+                            context.btn_receiver.visibility=View.GONE
                             context.btn_send.visibility=View.GONE
 
-                            context.btn_connect_status.visibility=View.VISIBLE
+//                            context.btn_connect_status.visibility=View.VISIBLE
                             context.connectionType=Constants.CONNECTION_TYPE_WIFI
                         }
                     }

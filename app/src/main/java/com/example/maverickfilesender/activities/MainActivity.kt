@@ -22,6 +22,7 @@ import android.provider.Settings
 import android.text.format.Formatter
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -60,8 +61,8 @@ class MainActivity : AppCompatActivity() {
     var mHandler: Handler? = null
     var mNetworkSSID = ""
     var onNetworkAvailable = false
-
-
+    var animationMoveUp:Animation?=null
+    var transitionDown:Animation?=null
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,13 +96,21 @@ var isTrue:Boolean?=null
 
         val receiveAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_recieve)
         val sendAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_send)
-        val fadeOutAnimation=AnimationUtils.loadAnimation(this,R.anim.fadeout)
+         transitionDown=AnimationUtils.loadAnimation(this,R.anim.transition_down)
+        animationMoveUp = AnimationUtils.loadAnimation(this,R.anim.transition_up)
 
-
-        mHandler!!.postDelayed(Runnable {      btn_receive.startAnimation(receiveAnimation)
+        mHandler!!.postDelayed(Runnable {      btn_receiver.startAnimation(receiveAnimation)
             btn_send.startAnimation(sendAnimation)
 
         },400)
+
+
+        btn_send_close.setOnClickListener {
+ll_main_send.startAnimation(transitionDown)
+            ll_main_send.visibility=View.INVISIBLE
+
+
+        }
 
         tab_main.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -156,47 +165,47 @@ return true
 
          */
 
-        btn_connect_status.setOnClickListener {
+//        btn_connect_status.setOnClickListener {
+//
+//
+//            if (connectionType == Constants.CONNECTION_TYPE_HOTSPOT) {
+//                mReservation?.close()
+//
+//
+//                btn_connect_status.visibility = View.GONE
+//                btn_send.visibility = View.VISIBLE
+//                btn_receive.visibility = View.VISIBLE
+//            } else if (connectionType == Constants.CONNECTION_TYPE_WIFI) {
+//
+//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+//
+//                    val connectivityManager =
+//                        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+///*     connectivityManager.unregisterNetworkCallback(object:ConnectivityManager.NetworkCallback(){
+//
+//            })
+//
+//
+// */
+//                } else {
+//                    val wifiManager =
+//                        applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+//
+//
+//                    wifiManager.setWifiEnabled(false)
+//
+//                    btn_connect_status.visibility = View.GONE
+//                    btn_send.visibility = View.VISIBLE
+//                    btn_receive.visibility = View.VISIBLE
+//                }
+//
+//
+//            }
+//
+//        }
 
 
-            if (connectionType == Constants.CONNECTION_TYPE_HOTSPOT) {
-                mReservation?.close()
-
-
-                btn_connect_status.visibility = View.GONE
-                btn_send.visibility = View.VISIBLE
-                btn_receive.visibility = View.VISIBLE
-            } else if (connectionType == Constants.CONNECTION_TYPE_WIFI) {
-
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-
-                    val connectivityManager =
-                        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-/*     connectivityManager.unregisterNetworkCallback(object:ConnectivityManager.NetworkCallback(){
-
-            })
-
-
- */
-                } else {
-                    val wifiManager =
-                        applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-
-                    wifiManager.setWifiEnabled(false)
-
-                    btn_connect_status.visibility = View.GONE
-                    btn_send.visibility = View.VISIBLE
-                    btn_receive.visibility = View.VISIBLE
-                }
-
-
-            }
-
-        }
-
-
-        btn_send.setOnClickListener {
+        btn_sender.setOnClickListener {
 
             if (verifyLocation()) {
 
@@ -276,12 +285,13 @@ return true
         }
 
 
-        btn_receive.setOnClickListener {
+        btn_receiver.setOnClickListener {
 
             if (verifyLocation()) {
 
                 val wifiManager =
-                    getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
+                    applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
                 val scanResult = wifiManager.scanResults
                 val receiversResult = ArrayList<ScanResult>()
                 for (i in scanResult) {
@@ -498,10 +508,10 @@ return true
                     isClientConnected = true
                     mIpAddress = Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
                     initClientThread()
-                    btn_receive.visibility = View.GONE
+                    btn_receiver.visibility = View.GONE
                     btn_send.visibility = View.GONE
 
-                    btn_connect_status.visibility = View.VISIBLE
+//                    btn_connect_status.visibility = View.VISIBLE
                     connectionType = Constants.CONNECTION_TYPE_WIFI
 
                 }

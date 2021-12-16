@@ -4,24 +4,61 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.listeners.FileOnClickListener
 import com.example.maverickfilesender.model.AppFile
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_file.view.*
 
 class FilesRecyclerAdapter(val context: Context,val appFileList:ArrayList<AppFile>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var mFileOnClickListener:FileOnClickListener?=null
-
+val animation=AnimationUtils.loadAnimation(context,R.anim.bounce)
+   val animationMoveUp=AnimationUtils.loadAnimation(context,R.anim.transition_up)
+    var position=-1
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
         return FilesViewHolder(LayoutInflater.from(context).inflate(R.layout.item_file,parent,false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
 if(holder is FilesViewHolder){
+
+
+if(appFileList[position].onSelect){
+
+    holder.itemView.imb_file_onSelect.background=ContextCompat.getDrawable(context,R.drawable.circle_selected)
+    if(this.position!=-1 && position==this.position) {
+        holder.itemView.imb_file_onSelect.startAnimation(animation)
+        this.position=-1
+    }
+}
+    else{
+    holder.itemView.imb_file_onSelect.background=ContextCompat.getDrawable(context,R.drawable.circle_selector)
+    }
+
+    holder.itemView.imb_file_onSelect.setOnClickListener {
+val mainContext=context as MainActivity
+        if(mainContext.ll_main_send.visibility==View.INVISIBLE){
+
+            mainContext.ll_main_send.visibility=View.VISIBLE
+mainContext.ll_main_send.startAnimation(animationMoveUp)
+        }
+
+
+appFileList[position].onSelect = !appFileList[position].onSelect
+
+        this.notifyItemChanged(position)
+
+
+    }
+
 
     holder.itemView.tv_item_fileName.text = appFileList[position].file.name
     if(appFileList[position].file.isDirectory) {

@@ -34,7 +34,7 @@ return RelativePathViewHolder(LayoutInflater.from(context).inflate(R.layout.item
 
 holder.itemView.ll_relative_path.setOnClickListener {
 
-    mRelativePathOnClickListener!!.onClick(relativePathList[position].file,position)
+    mRelativePathOnClickListener!!.onClick(relativePathList[position].appFileList,position)
 
 }
 

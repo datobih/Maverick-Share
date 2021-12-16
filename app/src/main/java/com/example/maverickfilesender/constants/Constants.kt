@@ -14,4 +14,5 @@ object Constants{
 
 
     var mRelativePath=ArrayList<RelativePath>()
+    var sendCount=0
 }

@@ -34,8 +34,8 @@ android:layout_toLeftOf="@id/imb_file_onSelect"
 
     <ImageButton
         android:id="@+id/imb_file_onSelect"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:background="@drawable/circle_selector"

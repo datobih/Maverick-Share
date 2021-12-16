@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.activities.MainActivity
+import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.AppPackage
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_app.view.*
 import java.io.File
 import java.text.DecimalFormat
@@ -19,6 +22,45 @@ class AppPackageRecyclerAdapter(val context: Context,val appPackagePackageList:M
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
+
+
+        if(appPackagePackageList[position].onSelect){
+
+            holder.itemView.imv_appPackage.visibility=View.VISIBLE
+            if((context as MainActivity).ll_main_send.visibility!=View.VISIBLE) {
+                (context as MainActivity).ll_main_send.visibility = View.VISIBLE
+                (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
+            }
+            }
+        else{
+
+            holder.itemView.imv_appPackage.visibility=View.GONE
+
+            if(Constants.sendCount==0){
+                (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
+                (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
+            }
+        }
+
+
+holder.itemView.ll_appItem.setOnClickListener {
+
+appPackagePackageList[position].onSelect=!appPackagePackageList[position].onSelect
+
+if(appPackagePackageList[position].onSelect){
+    Constants.sendCount++
+}
+
+    else{
+    Constants.sendCount--
+    }
+
+
+    notifyItemChanged(position)
+
+
+
+}
 
 
             Glide.with(context)
