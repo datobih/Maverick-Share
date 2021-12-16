@@ -116,7 +116,7 @@ val contentUri=ContentUris.withAppendedId( MediaStore.Images.Media.getContentUri
 //
 // }
 
-imageList.add(Image(id,name,size,date,contentUri,null))
+imageList.add(Image(id,name,size,date,contentUri,null,false))
 
 
  }

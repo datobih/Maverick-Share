@@ -6,6 +6,14 @@
     android:paddingVertical="2dp"
     >
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        >
+
+
 
     <ImageView
         android:id="@+id/imv_itemImage"
@@ -14,4 +22,17 @@
 
         android:scaleType="centerCrop"
         ></ImageView>
+
+        <ImageButton
+            android:id="@+id/imv_imgSelect"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+
+            android:background="@drawable/circle_selected"
+            android:layout_gravity="end"
+            android:layout_margin="5dp"
+            ></ImageButton>
+
+    </FrameLayout>
+
 </LinearLayout>

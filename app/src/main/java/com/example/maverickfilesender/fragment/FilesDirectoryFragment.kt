@@ -86,6 +86,19 @@ list=removeElementsFrom(list,position)
     filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
 rv_files.adapter=filesAdapter
 
+
+while(true){
+        if(Constants.countList.lastIndex>=position){
+        Constants.sendCount=Constants.sendCount-Constants.countList[Constants.countList.lastIndex]
+        Constants.countList.removeAt(Constants.countList.lastIndex)
+        }
+
+        else{
+            break
+        }
+    }
+
+
 }
 
 
@@ -125,7 +138,7 @@ relativePathAdapter.setOnClickListener(mRelativePathOnClickListener!!)
                 filesAdapter!!.setOnClickListener(this)
 
 
-
+Constants.countList.add(0)
                 view.rv_files.adapter=filesAdapter
             }
 
@@ -193,9 +206,13 @@ return list
 
 
 
+        Constants.sendCount=Constants.sendCount-Constants.countList[Constants.countList.lastIndex]
+        Constants.countList.removeAt(Constants.countList.lastIndex)
+
 filesAdapter=FilesRecyclerAdapter(mContext!!,appFileList)
         filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
 rv_files.adapter=filesAdapter
+
     }
 
 

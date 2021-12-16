@@ -33,7 +33,7 @@
             ></ImageView>
 
         <ImageView
-            android:id="@+id/imv_appPackage"
+            android:id="@+id/imv_appPackageSelect"
         android:layout_width="15dp"
         android:layout_height="15dp"
 

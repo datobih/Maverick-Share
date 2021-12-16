@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
+import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.listeners.FileOnClickListener
 import com.example.maverickfilesender.model.AppFile
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,6 +22,9 @@ class FilesRecyclerAdapter(val context: Context,val appFileList:ArrayList<AppFil
 val animation=AnimationUtils.loadAnimation(context,R.anim.bounce)
    val animationMoveUp=AnimationUtils.loadAnimation(context,R.anim.transition_up)
     var position=-1
+
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         return FilesViewHolder(LayoutInflater.from(context).inflate(R.layout.item_file,parent,false))
@@ -53,6 +57,26 @@ mainContext.ll_main_send.startAnimation(animationMoveUp)
 
 
 appFileList[position].onSelect = !appFileList[position].onSelect
+
+        if(appFileList[position].onSelect){
+            Constants.sendCount++
+            if(Constants.countList.isNotEmpty()) {
+                Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1
+            }
+
+        }
+        else{
+            Constants.sendCount--
+
+            if(Constants.countList.isNotEmpty()) {
+                Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] - 1
+            }
+            if(Constants.sendCount==0){
+                (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
+                (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
+            }
+
+        }
 
         this.notifyItemChanged(position)
 

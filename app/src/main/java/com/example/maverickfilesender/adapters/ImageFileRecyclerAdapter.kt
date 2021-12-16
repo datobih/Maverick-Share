@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.activities.MainActivity
+import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.Image
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_image.view.*
 
 class ImageFileRecyclerAdapter(val context: Context,val imageList:ArrayList<Image>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -26,6 +29,41 @@ class ImageFileRecyclerAdapter(val context: Context,val imageList:ArrayList<Imag
 Glide.with(context)
         .load(imageList[position].uri)
         .into(holder.itemView.imv_itemImage)
+
+
+            if(imageList[position].onSelect){
+
+                holder.itemView.imv_imgSelect.visibility=View.VISIBLE
+
+            }
+            else{
+                holder.itemView.imv_imgSelect.visibility=View.GONE
+            }
+
+
+            holder.itemView.imv_itemImage.setOnClickListener {
+
+imageList[position].onSelect=!imageList[position].onSelect
+
+                if(imageList[position].onSelect){
+
+                    Constants.sendCount++
+                    if((context as MainActivity).ll_main_send.visibility!=View.VISIBLE) {
+                        (context as MainActivity).ll_main_send.visibility = View.VISIBLE
+                        (context as MainActivity).ll_main_send.startAnimation( (context as MainActivity).animationMoveUp)
+                    }
+                }
+                else{
+                    Constants.sendCount--
+
+                    if(Constants.sendCount==0){
+                        (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
+                        (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
+                    }
+                }
+
+notifyItemChanged(position)
+            }
 
         }
     }
