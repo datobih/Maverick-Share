@@ -60,7 +60,7 @@ Constants.selectedFiles.add(File(imageList[position].uri.path))
                     Constants.selectedFiles.remove(File(imageList[position].uri.path))
                     Constants.sendCount--
 
-                    if(Constants.sendCount==0){
+                    if(Constants.selectedFiles.isEmpty()){
                         (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
                         (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
                     }

@@ -84,7 +84,7 @@ appFileList[position].onSelect = !appFileList[position].onSelect
                 Constants.parentFiles.remove(appFileList[position].file)
             }
 
-            if(Constants.sendCount==0){
+            if(Constants.selectedFiles.isEmpty()){
                 (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
                 (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
             }

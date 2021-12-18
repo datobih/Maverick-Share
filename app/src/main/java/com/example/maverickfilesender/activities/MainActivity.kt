@@ -111,7 +111,12 @@ var isTrue:Boolean?=null
 
 
         btn_send.setOnClickListener {
+
+
+            for(i in Constants.selectedFiles)   Log.i("SendingFiles",i.name)
+
 Constants.selectedFiles.clear()
+Constants.heirarchyFiles.clear()
 Constants.sendCount=0
 
 
