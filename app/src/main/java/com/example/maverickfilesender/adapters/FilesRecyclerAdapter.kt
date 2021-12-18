@@ -115,14 +115,23 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
 
      if(appFileList[position].file.name.endsWith(".PNG")||
              appFileList[position].file.name.endsWith(".jpg")||
-             appFileList[position].file.name.endsWith(".mp4")||
-             appFileList[position].file.name.endsWith(".avi")||
-             appFileList[position].file.name.endsWith(".mkv")||
-             appFileList[position].file.name.endsWith(".mov")
+             appFileList[position].file.name.endsWith(".mp4")
+
      ){
 
          Glide.with(context)
                  .load(appFileList[position].file)
+                 .centerCrop()
+                 .into(holder.itemView.imv_fileIcon)
+
+
+
+     }
+
+        else if(appFileList[position].file.name.endsWith(".avi")||
+             appFileList[position].file.name.endsWith(".mkv")){
+         Glide.with(context)
+                 .load(R.drawable.video_icon)
                  .centerCrop()
                  .into(holder.itemView.imv_fileIcon)
 
@@ -203,7 +212,7 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
 
 
          Glide.with(context)
-                 .load(R.drawable.unknown_file_icon)
+                 .load(R.drawable.ic_twotone_file_24)
                  .centerCrop()
                  .into(holder.itemView.imv_fileIcon)
 

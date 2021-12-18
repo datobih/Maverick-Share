@@ -305,7 +305,7 @@ Constants.parentFiles.removeAt(Constants.parentFiles.lastIndex)
        }
 
 
-       if(Constants.selectedFiles.isEmpty()){
+       if(Constants.selectedFiles.isEmpty() && (context as MainActivity).ll_main_send.visibility==View.VISIBLE){
 
            Constants.sendCount=0
 

@@ -33,11 +33,12 @@ Glide.with(context)
 
 
             if(imageList[position].onSelect){
-
+Constants.imagesSelected.add(position)
                 holder.itemView.imv_imgSelect.visibility=View.VISIBLE
 
             }
             else{
+                Constants.imagesSelected.remove(position)
                 holder.itemView.imv_imgSelect.visibility=View.GONE
             }
 

@@ -25,7 +25,7 @@ class AppPackageRecyclerAdapter(val context: Context,val appPackagePackageList:M
 
 
         if(appPackagePackageList[position].onSelect){
-
+Constants.appSelected.add(position)
             holder.itemView.imv_appPackageSelect.visibility=View.VISIBLE
             if((context as MainActivity).ll_main_send.visibility!=View.VISIBLE) {
                 (context as MainActivity).ll_main_send.visibility = View.VISIBLE
@@ -33,7 +33,7 @@ class AppPackageRecyclerAdapter(val context: Context,val appPackagePackageList:M
             }
             }
         else{
-
+            Constants.appSelected.remove(position)
             holder.itemView.imv_appPackageSelect.visibility=View.GONE
 
             if(Constants.sendCount==0){

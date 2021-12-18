@@ -34,7 +34,7 @@ import com.example.maverickfilesender.R
 import com.example.maverickfilesender.adapters.MainPagerFragmentAdapter
 import com.example.maverickfilesender.adapters.SSIDListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
-import com.example.maverickfilesender.fragment.FilesDirectoryFragment
+import com.example.maverickfilesender.fragment.*
 import com.example.maverickfilesender.model.RelativePath
 import com.example.maverickfilesender.receivers.WifiAPReceiver
 import com.google.android.material.tabs.TabLayout
@@ -63,6 +63,9 @@ class MainActivity : AppCompatActivity() {
     var onNetworkAvailable = false
     var animationMoveUp:Animation?=null
     var transitionDown:Animation?=null
+    var imageFragment:ImageFragment?=null
+    var appsFragment:AppsFragment?=null
+    var videosFragment:VideosFragment?=null
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +88,8 @@ var isTrue:Boolean?=null
         vp_main.isUserInputEnabled = false
 
         val appTab = tab_main.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
-        tab_main.addTab(tab_main.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24))
+        val historyTab=tab_main.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24)
+        tab_main.addTab(historyTab)
         tab_main.addTab(appTab)
         tab_main.addTab(tab_main.newTab().setText("Images").setIcon(R.drawable.ic_outline_image_24))
         tab_main.addTab(tab_main.newTab().setText("Videos").setIcon(R.drawable.ic_outline_video_library_24))
@@ -104,6 +108,63 @@ var isTrue:Boolean?=null
             btn_send.startAnimation(sendAnimation)
 
         },400)
+
+
+        btn_send.setOnClickListener {
+Constants.selectedFiles.clear()
+Constants.sendCount=0
+
+
+
+
+                    while (Constants.imagesSelected.isNotEmpty()) {
+
+                        imageFragment!!.adapter!!.imageList[Constants.imagesSelected[0]].onSelect=false
+                        imageFragment!!.adapter!!.notifyItemChanged(Constants.imagesSelected[0])
+                        Constants.imagesSelected.removeAt(0)
+                    }
+
+
+
+
+            while (Constants.appSelected.isNotEmpty()){
+
+                appsFragment!!.adapter!!.appPackagePackageList[Constants.appSelected[0]].onSelect=false
+                appsFragment!!.adapter!!.notifyItemChanged(Constants.appSelected[0])
+                Constants.appSelected.removeAt(0)
+
+
+            }
+
+            while(Constants.videosSelected.isNotEmpty()){
+
+
+
+                videosFragment!!.adapter!!.videoList[Constants.videosSelected[0]].onSelect=false
+                videosFragment!!.adapter!!.notifyItemChanged(Constants.videosSelected[0])
+                Constants.videosSelected.removeAt(0)
+
+            }
+
+
+            supportFragmentManager.beginTransaction().apply {
+
+                replace(R.id.holder_files_fragment,StorageDirectoryFragment())
+                    .commit()
+
+
+
+            }
+
+
+if(ll_main_send.visibility==View.VISIBLE){
+
+    ll_main_send.startAnimation(transitionDown)
+    ll_main_send.visibility=View.INVISIBLE
+
+}
+tab_main.selectTab(historyTab)
+        }
 
 
         btn_send_close.setOnClickListener {

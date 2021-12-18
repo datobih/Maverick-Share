@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@drawable/white_rect_bg"
+        ></item>
+
+    <item
+android:drawable="@drawable/video_icon"
+        android:start="10dp"
+        android:end="10dp"
+        android:top="10dp"
+        android:bottom="10dp"
+        ></item>
+
+
+</layer-list>

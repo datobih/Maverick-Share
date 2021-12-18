@@ -29,7 +29,7 @@ var mContext:Context?=null
 
     }
 
-
+var adapter:ImageFileRecyclerAdapter?=null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,7 +40,7 @@ var mContext:Context?=null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (mContext as MainActivity).imageFragment=this
 var images=ArrayList<Image>()
         var handler=(requireContext() as MainActivity).mHandler
 val imageThread=Thread(object :Runnable{
@@ -49,7 +49,7 @@ val imageThread=Thread(object :Runnable{
 
         images=MediaHandler(mContext!!).fetchImageFiles()
 
-        val adapter=ImageFileRecyclerAdapter(mContext!!,images)
+         adapter=ImageFileRecyclerAdapter(mContext!!,images)
 
 
         (mContext as MainActivity).runOnUiThread {

@@ -40,10 +40,10 @@ var mContext:Context?=null
         mContext=context
     }
 
-
+    var adapter:AppPackageRecyclerAdapter?=null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (mContext as MainActivity).appsFragment=this
 
 
         if(ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
@@ -76,7 +76,7 @@ progress_apps.visibility=View.VISIBLE
 
                     (mContext as MainActivity).runOnUiThread{
 
-                        val adapter= AppPackageRecyclerAdapter(mContext!!,nonSystemPackages)
+                         adapter= AppPackageRecyclerAdapter(mContext!!,nonSystemPackages)
 
                         view.rv_apps.layoutManager= GridLayoutManager(mContext,4)
                         view.rv_apps.adapter=adapter

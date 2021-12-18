@@ -39,10 +39,10 @@ class VideosFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_videos, container, false)
     }
 
-
+var adapter:VideoFileRecyclerAdapter?=null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (mContext as MainActivity).videosFragment=this
         var videos=ArrayList<Video>()
         var handler=Handler(Looper.getMainLooper())
         val videoThread=Thread(object :Runnable{
@@ -51,7 +51,7 @@ class VideosFragment : Fragment() {
 
                 videos= MediaHandler(requireContext()).fetchVideoFiles()
 
-                val adapter= VideoFileRecyclerAdapter(requireContext(),videos)
+                adapter= VideoFileRecyclerAdapter(requireContext(),videos)
 
 
                 (mContext as MainActivity).runOnUiThread{

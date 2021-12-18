@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.activities.MainActivity
+import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.Image
 import com.example.maverickfilesender.model.Video
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_video.view.*
 import java.io.File
 import java.text.DecimalFormat
@@ -23,12 +26,17 @@ return VideoViewHolder(LayoutInflater.from(context).inflate(R.layout.item_video,
         if(holder is VideoViewHolder) {
 
 holder.itemView.tv_ItemVideoName.isSelected=true
+if(videoList[position].path.endsWith(".mp4")) {
+    Glide.with(context)
 
-            Glide.with(context)
+            .load(File(videoList[position].path))
+            .centerCrop()
+            .into(holder.itemView.imv_itemVideo)
 
-                    .load(File(videoList[position].path))
-                    .centerCrop()
-                    .into(holder.itemView.imv_itemVideo)
+}
+            else{
+                holder.itemView.imv_itemVideo.setImageResource(R.drawable.video_placeholder_bg)
+            }
 
             holder.itemView.tv_ItemVideoName.text=videoList[position].name
             holder.itemView.tv_itemVideo_duration.text=videoList[position].durationStr
@@ -53,6 +61,49 @@ holder.itemView.tv_ItemVideoName.isSelected=true
                 holder.itemView.tv_ItemVideoSize.text=sizeGb.toString()+"GB"
             }
 
+if(videoList[position].onSelect){
+    Constants.videosSelected.add(position)
+    holder.itemView.imv_itemVideoSelect.visibility=View.VISIBLE
+
+}
+            else{
+                Constants.videosSelected.remove(position)
+    holder.itemView.imv_itemVideoSelect.visibility=View.INVISIBLE
+            }
+
+
+
+            holder.itemView.ll_itemVideo.setOnClickListener {
+
+
+                videoList[position].onSelect=!videoList[position].onSelect
+                if(videoList[position].onSelect){
+                    Constants.sendCount++
+                    Constants.selectedFiles.add(File(videoList[position].path))
+
+                    if((context as MainActivity).ll_main_send.visibility!=View.VISIBLE){
+
+                        (context as MainActivity).ll_main_send.visibility = View.VISIBLE
+                        (context as MainActivity).ll_main_send.startAnimation( (context as MainActivity).animationMoveUp)
+
+
+                    }
+
+                }
+                else{
+                    Constants.sendCount--
+                    Constants.selectedFiles.remove(File(videoList[position].path))
+
+
+                    if(Constants.selectedFiles.isEmpty()){
+                        (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
+                        (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
+                    }
+
+                }
+
+notifyItemChanged(position)
+            }
 
 
         }
