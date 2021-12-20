@@ -52,8 +52,8 @@ android:width="1dp"
                     ></corners>
 
             <gradient
-android:startColor="#C97E2A2A"
-                android:endColor="#D33535"
+android:startColor="#560027"
+                android:endColor="#bc477b"
 
             android:angle="360"
                 ></gradient>

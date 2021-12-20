@@ -27,4 +27,6 @@ var selectedFiles=ArrayList<File>()
     var imagesSelected=ArrayList<Int>()
     var videosSelected=ArrayList<Int>()
 var appSelected=ArrayList<Int>()
+
+    val inStoragePath="/storage/emulated/0"
 }

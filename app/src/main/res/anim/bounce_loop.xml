@@ -11,7 +11,8 @@
         android:fromYScale="0.0"
         android:toXScale="1.0"
         android:toYScale="1.0"
-
+        android:repeatCount="infinite"
+        android:repeatMode="restart"
         />
 
 </set>

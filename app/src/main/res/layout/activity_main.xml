@@ -97,101 +97,155 @@ app:tabTextAppearance="@style/tab_text"
 
     </androidx.viewpager2.widget.ViewPager2>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_sender"
+
+<!--    <ImageView-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:src="@drawable/transfer_drawble"-->
+<!--        android:layout_below="@id/tab_main"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--android:layout_marginRight="5dp"-->
+<!--        android:layout_marginTop="40dp"-->
+<!--        -->
+<!--        ></ImageView>-->
+
+
+    <FrameLayout
+        android:id="@+id/ll_transfering"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_bg"
-
-        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tab_main"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="90dp"
-        android:layout_marginBottom="15dp"
-        android:text="Sender"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-      android:layout_above="@id/ll_main_send"
-        android:fontFamily="@font/gilroy"
-
-        ></androidx.appcompat.widget.AppCompatButton>
-
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_receiver"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_bg"
-
-        android:layout_centerHorizontal="true"
-android:layout_marginLeft="90dp"
-      android:layout_alignParentLeft="true"
-        android:layout_marginBottom="15dp"
-        android:text="Reciever"
-        android:textAllCaps="false"
-android:textColor="@color/white"
-        android:layout_above="@id/ll_main_send"
-        android:fontFamily="@font/gilroy"
-
-
-        ></androidx.appcompat.widget.AppCompatButton>
-
-
-
-
-
-
-    <RelativeLayout
-        android:id="@+id/ll_main_send"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-android:background="@color/white"
-        android:layout_alignParentBottom="true"
-      android:visibility="invisible"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="5dp"
+        android:visibility="gone"
         tools:visibility="visible"
-        >
+            >
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/transfer_bg"
+                android:layout_below="@id/tab_main"
+
+android:layout_gravity="center"
+
+
+                ></ImageView>
+
+
+
+        <ImageView
+            android:id="@+id/imv_downloading"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_round_download_24"
+            android:layout_below="@id/tab_main"
+
+            android:layout_gravity="center"
+android:elevation="5dp"
+            ></ImageView>
+
+
+    </FrameLayout>
+
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_send"
+            android:id="@+id/btn_sender"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-
-android:background="#283593"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_bg"
 
             android:layout_centerHorizontal="true"
-            android:text="Send"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="90dp"
+            android:layout_marginBottom="15dp"
+            android:text="Sender"
             android:textAllCaps="false"
             android:textColor="@color/white"
+          android:layout_above="@id/ll_main_send"
             android:fontFamily="@font/gilroy"
-      android:layout_marginTop="5dp"
-android:layout_marginBottom="5dp"
 
             ></androidx.appcompat.widget.AppCompatButton>
 
 
-        <ImageButton
-            android:id="@+id/btn_send_close"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-android:layout_marginRight="15dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_baseline_close_24"
 
-            ></ImageButton>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_receiver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_bg"
+
+            android:layout_centerHorizontal="true"
+    android:layout_marginLeft="90dp"
+          android:layout_alignParentLeft="true"
+            android:layout_marginBottom="15dp"
+            android:text="Reciever"
+            android:textAllCaps="false"
+    android:textColor="@color/white"
+            android:layout_above="@id/ll_main_send"
+            android:fontFamily="@font/gilroy"
 
 
-    </RelativeLayout>
+            ></androidx.appcompat.widget.AppCompatButton>
 
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView
-    android:id="@+id/bottomNavigation_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-  android:layout_alignParentBottom="true"
-app:menu="@menu/navigation_menu"
-        ></com.google.android.material.bottomnavigation.BottomNavigationView>
 
--->
+
+
+
+
+        <RelativeLayout
+            android:id="@+id/ll_main_send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+    android:background="@color/white"
+            android:layout_alignParentBottom="true"
+          android:visibility="invisible"
+            tools:visibility="visible"
+            >
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_send"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+
+    android:background="#283593"
+
+                android:layout_centerHorizontal="true"
+                android:text="Send"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:fontFamily="@font/gilroy"
+          android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+
+                ></androidx.appcompat.widget.AppCompatButton>
+
+
+            <ImageButton
+                android:id="@+id/btn_send_close"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+    android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_baseline_close_24"
+
+                ></ImageButton>
+
+
+        </RelativeLayout>
+
+    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+    app:menu="@menu/navigation_menu"
+            ></com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    -->
 
 </RelativeLayout>

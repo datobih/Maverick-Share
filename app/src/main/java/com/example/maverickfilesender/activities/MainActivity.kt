@@ -43,6 +43,7 @@ import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import kotlinx.android.synthetic.main.dialog_hotspot_sender.*
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.io.File
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
@@ -71,8 +72,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-var isTrue:Boolean?=null
-
+//
+//
+//val fileDir=Constants.inStoragePath
+//        val Testdir=File(fileDir+"/DCIM/Test")
+//       val valid= Testdir!!.mkdirs()
+//
 
 
         mHandler = Handler(Looper.getMainLooper())
@@ -103,6 +108,10 @@ var isTrue:Boolean?=null
         val sendAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_send)
          transitionDown=AnimationUtils.loadAnimation(this,R.anim.transition_down)
         animationMoveUp = AnimationUtils.loadAnimation(this,R.anim.transition_up)
+        val bounceAnimation=AnimationUtils.loadAnimation(this,R.anim.bounce_loop)
+        val transferAnimation=AnimationUtils.loadAnimation(this,R.anim.righttoleft)
+
+
 
         mHandler!!.postDelayed(Runnable {      btn_receiver.startAnimation(receiveAnimation)
             btn_send.startAnimation(sendAnimation)
@@ -110,8 +119,18 @@ var isTrue:Boolean?=null
         },400)
 
 
-        btn_send.setOnClickListener {
 
+        ll_transfering.setOnClickListener {
+
+            startActivity(Intent(this,TransferActivity::class.java))
+
+        }
+
+
+        btn_send.setOnClickListener {
+ll_transfering.visibility=View.VISIBLE
+            ll_transfering.startAnimation(transferAnimation)
+            imv_downloading.startAnimation(bounceAnimation)
 
             for(i in Constants.selectedFiles)   Log.i("SendingFiles",i.name)
 
