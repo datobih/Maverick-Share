@@ -7,15 +7,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.graphics.Typeface
 import android.location.LocationManager
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
@@ -27,27 +24,24 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.adapters.MainPagerFragmentAdapter
 import com.example.maverickfilesender.adapters.SSIDListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.fragment.*
-import com.example.maverickfilesender.model.RelativePath
-import com.example.maverickfilesender.receivers.WifiAPReceiver
+import com.example.maverickfilesender.handlers.ClientThread
+import com.example.maverickfilesender.handlers.ServerThread
+import com.example.maverickfilesender.receivers.WifiReceiver
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import kotlinx.android.synthetic.main.dialog_hotspot_sender.*
 import java.io.DataInputStream
 import java.io.DataOutputStream
-import java.io.File
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
-import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     var ssid: String = ""
@@ -61,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     var mDialog: Dialog? = null
     var mHandler: Handler? = null
     var mNetworkSSID = ""
-    var onNetworkAvailable = false
+
     var animationMoveUp:Animation?=null
     var transitionDown:Animation?=null
     var imageFragment:ImageFragment?=null
@@ -79,13 +73,13 @@ class MainActivity : AppCompatActivity() {
 //       val valid= Testdir!!.mkdirs()
 //
 
-
+Constants.mainActivity=this
         mHandler = Handler(Looper.getMainLooper())
-        var receiver = WifiAPReceiver()
+        var receiver = WifiReceiver()
 
 
 
-        registerReceiver(receiver, IntentFilter("android.net.wifi.WIFI_AP_STATE_CHANGED"))
+        registerReceiver(receiver, IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION))
 
         val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
         vp_main.offscreenPageLimit=5
@@ -121,20 +115,23 @@ class MainActivity : AppCompatActivity() {
 
 
         ll_transfering.setOnClickListener {
+var intent=Intent(this,TransferActivity::class.java)
+            intent.putExtra(Constants.TRANSFER_EXTRA,connectionType)
 
-            startActivity(Intent(this,TransferActivity::class.java))
+            startActivity(intent)
 
         }
 
 
         btn_send.setOnClickListener {
+            Constants.shouldSend=true
 ll_transfering.visibility=View.VISIBLE
             ll_transfering.startAnimation(transferAnimation)
             imv_downloading.startAnimation(bounceAnimation)
 
-            for(i in Constants.selectedFiles)   Log.i("SendingFiles",i.name)
+            for(i in Constants.selectedFiles)   Log.i("SendingFiles",i.file.name)
 
-Constants.selectedFiles.clear()
+//Constants.selectedFiles.clear()
 Constants.heirarchyFiles.clear()
 Constants.sendCount=0
 
@@ -308,7 +305,10 @@ return true
                             override fun onStarted(reservation: WifiManager.LocalOnlyHotspotReservation?) {
                                 super.onStarted(reservation)
                                 connectionType = Constants.CONNECTION_TYPE_HOTSPOT
-                                initServerThread()
+                                Constants.serverThread = ServerThread(this@MainActivity)
+                                Constants.serverThread!!.start()
+
+
                                 mReservation = reservation
                                 ssid = reservation!!.wifiConfiguration!!.SSID
                                 password = reservation!!.wifiConfiguration!!.preSharedKey
@@ -581,32 +581,35 @@ return true
     }
 
     override fun onResume() {
+
+
+//        if (Constants.onNetworkAvailable) {
+//         mHandler!!.postDelayed({
+//             Constants.onNetworkAvailable = false
+//             var wifiManager =
+//                     getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
+//             if (wifiManager.isWifiEnabled) {
+//
+//                 val wifiInfo = wifiManager.connectionInfo
+//
+//                     if (wifiInfo.ssid == "\"${Constants.mNetworkSSID}\"") {
+//                         isClientConnected = true
+//                         mIpAddress = Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
+//                         Constants.clientThread = ClientThread(this)
+//                         Constants.clientThread!!.start()
+//                         btn_receiver.visibility = View.GONE
+//                         btn_send.visibility = View.GONE
+//
+////                    btn_connect_status.visibility = View.VISIBLE
+//                         connectionType = Constants.CONNECTION_TYPE_WIFI
+//                     }
+//
+//
+//             }},1000)
+//
+//        }
+
         super.onResume()
-
-        if (onNetworkAvailable) {
-            onNetworkAvailable = false
-            var wifiManager =
-                getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
-            if (wifiManager.isWifiEnabled) {
-
-                val wifiInfo = wifiManager.connectionInfo
-                if (wifiInfo.ssid == "\"${mNetworkSSID}\"") {
-                    isClientConnected = true
-                    mIpAddress = Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
-                    initClientThread()
-                    btn_receiver.visibility = View.GONE
-                    btn_send.visibility = View.GONE
-
-//                    btn_connect_status.visibility = View.VISIBLE
-                    connectionType = Constants.CONNECTION_TYPE_WIFI
-
-                }
-
-            }
-
-        }
-
-
     }
 
     override fun onBackPressed() {

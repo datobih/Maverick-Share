@@ -213,7 +213,7 @@ var durationStr=""
 //bitmap=ThumbnailUtils.createVideoThumbnail(data,MediaStore.Video.Thumbnails.MICRO_KIND)
 
 
-                videoList.add(Video(id,name,size,date,contentUri,data,duration,durationStr,false))
+                videoList.add(Video(id,name,size,date,contentUri,data,duration,durationStr,null,false))
 
 
             }

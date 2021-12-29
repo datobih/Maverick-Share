@@ -1,6 +1,9 @@
 package com.example.maverickfilesender.adapters
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +11,19 @@ import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.listeners.FileOnClickListener
 import com.example.maverickfilesender.model.AppFile
+import com.example.maverickfilesender.model.ParseFile
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_file.view.*
+import java.io.ByteArrayOutputStream
 
 class FilesRecyclerAdapter(val context: Context,val appFileList:ArrayList<AppFile>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -60,7 +69,21 @@ appFileList[position].onSelect = !appFileList[position].onSelect
 
         if(appFileList[position].onSelect){
             Constants.sendCount++
-            Constants.selectedFiles.add(appFileList[position].file)
+
+            var data:ByteArray?=null
+
+if(appFileList[position].drawable!=null){
+
+    val bitmap=getBitmapFromDrawable(appFileList[position].drawable!!)
+    val stream= ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
+    data=stream.toByteArray()
+
+
+
+}
+
+            Constants.selectedFiles.add(ParseFile( appFileList[position].file,data))
 
             if(Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1
@@ -122,6 +145,20 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
          Glide.with(context)
                  .load(appFileList[position].file)
                  .centerCrop()
+                 .listener(object:RequestListener<Drawable>{
+                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                         return true
+                     }
+
+                     override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+
+appFileList[position].drawable=resource
+holder.itemView.imv_fileIcon.setImageDrawable(resource)
+                         return true
+                     }
+
+
+                 })
                  .into(holder.itemView.imv_fileIcon)
 
 
@@ -224,6 +261,15 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
 
 
 }
+    }
+
+    fun getBitmapFromDrawable(drawable: Drawable): Bitmap {
+        val bitmap= Bitmap.createBitmap(drawable.intrinsicWidth,drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas= Canvas(bitmap)
+        drawable.setBounds(0,0,canvas.width,canvas.height)
+        drawable.draw(canvas)
+        return bitmap
+
     }
 
     fun setOnClickListener( mFilesOnClickListener: FileOnClickListener){

@@ -1,6 +1,11 @@
 package com.example.maverickfilesender.adapters
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +15,12 @@ import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.AppPackage
+import com.example.maverickfilesender.model.ParseFile
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_app.view.*
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.ObjectOutputStream
 import java.text.DecimalFormat
 
 class AppPackageRecyclerAdapter(val context: Context,val appPackagePackageList:MutableList<AppPackage>):RecyclerView.Adapter<AppPackageRecyclerAdapter.MyViewHolder>() {
@@ -48,7 +56,20 @@ holder.itemView.ll_appItem.setOnClickListener {
 appPackagePackageList[position].onSelect=!appPackagePackageList[position].onSelect
 
 if(appPackagePackageList[position].onSelect){
-   Constants.selectedFiles.add(File(appPackagePackageList[position].applicationInfo.sourceDir))
+
+    var data:ByteArray?=null
+    if (appPackagePackageList[position].drawable != null) {
+        val bitmap = getBitmapFromDrawable(appPackagePackageList[position].drawable)
+
+
+        val stream=ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
+         data=stream.toByteArray()
+
+
+    }
+
+   Constants.selectedFiles.add(ParseFile( File(appPackagePackageList[position].applicationInfo.sourceDir),data))
     Constants.sendCount++
 }
 
@@ -116,6 +137,16 @@ val df=DecimalFormat("#.##")
 
 
 return df.format(value).toFloat()
+    }
+
+
+    fun getBitmapFromDrawable(drawable: Drawable):Bitmap{
+val bitmap=Bitmap.createBitmap(drawable.intrinsicWidth,drawable.intrinsicHeight,Bitmap.Config.ARGB_8888)
+val canvas=Canvas(bitmap)
+        drawable.setBounds(0,0,canvas.width,canvas.height)
+   drawable.draw(canvas)
+        return bitmap
+
     }
 
 

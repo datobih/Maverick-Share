@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.handlers.ClientThread
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_ssid.view.*
 import java.util.logging.Handler
@@ -47,7 +48,7 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
 
                 if (inputtedPassword.isNotEmpty()) {
 
-                    connectToNetwork(scanResults[position].SSID, scanResults[position].BSSID, inputtedPassword)
+                    connectThread(scanResults[position].SSID, scanResults[position].BSSID, inputtedPassword)
 
                 } else {
 
@@ -64,10 +65,25 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
 
     }
 
+    fun connectThread(networkSSID: String, networkBSSID: String, networkPassword: String){
+
+        val connectThread=Thread(object :Runnable{
+            override fun run() {
+                connectToNetwork(networkSSID,networkBSSID,networkPassword)
+            }
+
+
+        }).start()
+
+
+    }
+
     fun connectToNetwork(networkSSID: String, networkBSSID: String, networkPassword: String) {
-        (context as MainActivity).mNetworkSSID=networkSSID
+       Constants.mNetworkSSID=networkSSID
         try {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                (context as MainActivity).isClientConnected=true
+                Constants.onNetworkAvailable=true
                 val wifiNetworkSpecifier = WifiNetworkSpecifier.Builder()
                         .setSsid(networkSSID)
 
@@ -86,11 +102,14 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
                     override fun onAvailable(network: Network) {
 
                         Log.i("WIFII", "onAvailable" + network)
-                        (context as MainActivity).isClientConnected=true
-                        (context as MainActivity).onNetworkAvailable=true
+
                         super.onAvailable(network)
 
                         connectivityManager.bindProcessToNetwork(network)
+
+
+
+
 
 
 context.runOnUiThread {
@@ -139,6 +158,7 @@ context.runOnUiThread {
                 Log.i("WIFII Connecting",wifiConfiguration.SSID+" "+wifiConfiguration.preSharedKey)
 
                 val wifiManager=context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                Constants.onNetworkAvailable=true
                 val netID=wifiManager.addNetwork(wifiConfiguration)
 
 
@@ -151,35 +171,40 @@ context.runOnUiThread {
                 wifiManager.enableNetwork(netID,true)
                 wifiManager.reconnect()
 
-
-
-                if(wifiManager.isWifiEnabled){
-
-                    val wifiInfo=wifiManager.connectionInfo
-                    if(wifiInfo.ssid=="\"${networkSSID}\""){
-                        if(context is MainActivity){
-                            (context as MainActivity).isClientConnected=true
-                            context.mIpAddress= Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
-
-                            context.btn_receiver.visibility=View.GONE
-                            context.btn_send.visibility=View.GONE
-
-//                            context.btn_connect_status.visibility=View.VISIBLE
-                            context.connectionType=Constants.CONNECTION_TYPE_WIFI
-                        }
-                    }
-
-                }
+//
+//
+//                if(wifiManager.isWifiEnabled){
+//
+//                    val wifiInfo=wifiManager.connectionInfo
+//                    if(wifiInfo.ssid=="\"${networkSSID}\""){
+//                        if(context is MainActivity){
+//                            (context as MainActivity).isClientConnected=true
+//                            context.mIpAddress= Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
+//
+//                            Constants.clientThread= ClientThread(context)
+//                    Constants.clientThread!!.start()
+//
+//
+//                            context.btn_receiver.visibility=View.GONE
+//                            context.btn_send.visibility=View.GONE
+//
+////                            context.btn_connect_status.visibility=View.VISIBLE
+//                            context.connectionType=Constants.CONNECTION_TYPE_WIFI
+//                        }
+//                    }
+//
+//                }
 
             }
-            if(context is MainActivity) {
-                if (context.isClientConnected == true) {
-
-                    context.initClientThread()
-
-
-                }
-            }
+//            if(context is MainActivity) {
+//                if (context.isClientConnected == true) {
+//
+//                  Constants.clientThread= ClientThread(context)
+//                    Constants.clientThread!!.start()
+//
+//
+//                }
+//            }
 
         } catch (e: Exception) {
 
