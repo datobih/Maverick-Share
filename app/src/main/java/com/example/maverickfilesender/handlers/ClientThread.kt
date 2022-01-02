@@ -72,7 +72,7 @@ while(fileName=="") {
         fileName= "$fileName.apk"
     }
 }
-     outputStream.writeUTF("response")
+
                         fileSize = inputStream.readUTF()
 
 
@@ -82,23 +82,25 @@ while(fileName=="") {
                         if(thumbnailSize!="null"){
                             var tempRead=0
 
-                            val byteData=ByteArray(1024*1000)
+                            val byteData=ByteArray(thumbnailSize.toInt())
                             var offset=0
                             Log.d("TESTOS","Size $thumbnailSize")
-while(tempRead<thumbnailSize.toInt()){
-    val byteBlob=ByteArray(1024*1000)
-    val count=bufferedInputStream.read(byteBlob)
+//while(tempRead<thumbnailSize.toInt()){
+//    val byteBlob=ByteArray(1024*1000)
+//    val count=bufferedInputStream.read(byteBlob)
+//
+//tempRead=tempRead+count
+//
+//    Log.d("TESTOS","thumbnail bytes $tempRead")
+//    for(i in 0..count){
+//        byteData[offset]=byteBlob[i]
+//        offset++
+//    }
+//
+//
+//}
 
-tempRead=tempRead+count
-
-    Log.d("TESTOS","thumbnail bytes $tempRead")
-    for(i in 0..count){
-        byteData[offset]=byteBlob[i]
-        offset++
-    }
-
-
-}
+                            inputStream.readFully(byteData,0,byteData.size)
                             outputStream.writeUTF("done")
                         bufferedInputStream =BufferedInputStream(socket.getInputStream())
 

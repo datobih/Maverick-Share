@@ -73,17 +73,18 @@ class ServerThread(val context: Context) : Thread() {
                             }
 
                             outputStream.writeUTF(fileName)
-                            inputStream.readUTF()
+
                             outputStream.writeUTF(transferFile!!.file.length().toString())
 
                             if (transferFile!!.data != null) {
                             outputStream.writeUTF(transferFile!!.data!!.size.toString())
+                                outputStream.flush()
 
 
 
-   bufferedOutputStream.write(transferFile!!.data,0,transferFile!!.data!!.size)
+                              outputStream.write(transferFile!!.data,0,transferFile!!.data!!.size)
 
-bufferedOutputStream.flush()
+
                                 val response=inputStream.readUTF()
 
 

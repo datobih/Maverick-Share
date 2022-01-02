@@ -65,6 +65,9 @@ if(appPackagePackageList[position].onSelect){
         val stream=ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
          data=stream.toByteArray()
+
+        val temp=BitmapFactory.decodeByteArray(data,0,data.size)
+
 this.appPackagePackageList[position].data=data
 
     }
