@@ -1,6 +1,7 @@
 package com.example.maverickfilesender.handlers
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
 import android.os.Looper
@@ -22,6 +23,7 @@ class ClientThread(val context: Context) : Thread() {
     var fileTotalSize:Int=0
     var bytesReceived:Int = 0
     var fileName=""
+    var bitmap:Bitmap?=null
     override fun run() {
         var socketAddress = InetSocketAddress(mainContext.mIpAddress, 9999)
 
@@ -50,7 +52,7 @@ class ClientThread(val context: Context) : Thread() {
 
             val userName = inputStream.readUTF()
 
-            val bufferedInputStream = DataInputStream(BufferedInputStream(socket.getInputStream()))
+            var bufferedInputStream = BufferedInputStream(socket.getInputStream())
             val handler = android.os.Handler(Looper.getMainLooper())
             handler!!.post {
                 mainContext.tv_connection_status.text = "Connected to $userName"
@@ -63,26 +65,53 @@ class ClientThread(val context: Context) : Thread() {
             if (socket.isConnected) {
                 while (true) {
                     var fileSize=""
-                    try {
 
-                        fileName = inputStream.readUTF()
-
+while(fileName=="") {
+    fileName = inputStream.readUTF()
+    if(!fileName.contains(".apk")){
+        fileName= "$fileName.apk"
+    }
+}
+     outputStream.writeUTF("response")
                         fileSize = inputStream.readUTF()
 
 
                         val thumbnailSize=inputStream.readUTF()
 
+                        Log.d("TESTOS","Thumbnail  $thumbnailSize bytes")
                         if(thumbnailSize!="null"){
-                            val tempRead=0
-                            val byteBlob=ByteArray(1024*500)
-while(tempRead<thumbnailSize.toInt()){
+                            var tempRead=0
 
-    bufferedInputStream.read(byteBlob)
+                            val byteData=ByteArray(1024*1000)
+                            var offset=0
+                            Log.d("TESTOS","Size $thumbnailSize")
+while(tempRead<thumbnailSize.toInt()){
+    val byteBlob=ByteArray(1024*1000)
+    val count=bufferedInputStream.read(byteBlob)
+
+tempRead=tempRead+count
+
+    Log.d("TESTOS","thumbnail bytes $tempRead")
+    for(i in 0..count){
+        byteData[offset]=byteBlob[i]
+        offset++
+    }
 
 
 }
-               val bitmap=BitmapFactory.decodeByteArray(byteBlob,0,byteBlob.size)
+                            outputStream.writeUTF("done")
+                        bufferedInputStream =BufferedInputStream(socket.getInputStream())
 
+
+                            Log.d("TESTOS","Init bitmap")
+               bitmap=BitmapFactory.decodeByteArray(byteData,0,byteData.size)
+                            Log.d("TESTOS","Setup bitmap")
+if(Constants.transferActivity!=null){
+handler.post {
+    Constants.transferActivity!!.imv_incoming_file.setImageBitmap(bitmap)
+}
+
+}
                         }
 
 
@@ -94,8 +123,10 @@ while(tempRead<thumbnailSize.toInt()){
                             fileDir.mkdirs()
                         }
 
-                        if (fileName.endsWith("apk")) fileOutputStream =
+
+                        fileOutputStream =
                             FileOutputStream(context.getExternalFilesDir(null)!!.path + "/Received"+"/$fileName")
+
 
 val byteBuffer=ByteArray((1024*500)+1)
 
@@ -109,6 +140,7 @@ val byteBuffer=ByteArray((1024*500)+1)
 
                         }
 var timer=0
+
                         while ((bytesReceived) < fileTotalSize){
 var count=0
                             bufferedInputStream.read(byteBuffer).also { count=it }
@@ -117,16 +149,22 @@ var count=0
                             bytesReceived += count
 
 
+
+
+                            fileOutputStream!!.write(byteBuffer,0,count)
+
                             if(Constants.transferActivity!=null){
-                             handler.post {
-                                    Constants.transferActivity!!.tv_incomingFile_name.text=fileName
-                                    Constants.transferActivity!!.tv_item_incomingFile_totalSize.text="$fileSizeUnit"
-                                    Constants.transferActivity!!.tv_item_incomingFile_currentSize.text=deriveUnits(bytesReceived)
-if(timer%10==0) {
-    Constants.transferActivity!!.pb_incoming_file.max = fileTotalSize
-    Constants.transferActivity!!.pb_incoming_file.progress = bytesReceived
-}
-timer++
+                                (context as MainActivity).runOnUiThread {
+                                    Constants.transferActivity!!.tv_incomingFile_name!!.text=fileName
+                                    Constants.transferActivity!!.tv_item_incomingFile_totalSize!!.text="$fileSizeUnit"
+                                    Constants.transferActivity!!.tv_item_incomingFile_currentSize!!.text=deriveUnits(bytesReceived)
+                                Constants.transferActivity!!.imv_incoming_file.setImageBitmap(bitmap)
+
+                                    if(timer%10==0) {
+                                        Constants.transferActivity!!.pb_incoming_file.max = fileTotalSize
+                                        Constants.transferActivity!!.pb_incoming_file.progress = bytesReceived
+                                    }
+                                    timer++
                                 }
 
 
@@ -135,18 +173,16 @@ timer++
 
                             }
 
-                            fileOutputStream!!.write(byteBuffer,0,count)
-
 
                             Log.i("${fileName}", "$count bytes")
 
                         }
                         if(bytesReceived==fileSize.toInt()){
-                            (context as MainActivity).runOnUiThread {
+                         handler.post {
 
                                 Constants.transferActivity!!.pb_incoming_file.max=fileTotalSize
                                 Constants.transferActivity!!.pb_incoming_file.progress=bytesReceived
-
+                               Constants.transferActivity!!.imv_incoming_file.setImageBitmap(bitmap)
 
                             }
 fileName=""
@@ -156,9 +192,7 @@ fileName=""
                         }
 
 
-                    } catch (e: Exception) {
 
-                   }
 
 
                 }

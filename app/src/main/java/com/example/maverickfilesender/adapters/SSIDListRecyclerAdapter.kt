@@ -67,13 +67,12 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
 
     fun connectThread(networkSSID: String, networkBSSID: String, networkPassword: String){
 
-        val connectThread=Thread(object :Runnable{
-            override fun run() {
+
                 connectToNetwork(networkSSID,networkBSSID,networkPassword)
-            }
 
 
-        }).start()
+
+
 
 
     }

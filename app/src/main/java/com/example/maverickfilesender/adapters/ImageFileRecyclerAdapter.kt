@@ -82,7 +82,7 @@ class ImageFileRecyclerAdapter(val context: Context, val imageList: ArrayList<Im
 
 
 
-                    Constants.selectedFiles.add(ParseFile(File(imageList[position].uri.path), imageList[position].data))
+                    Constants.tempSelectedFiles.add(ParseFile(File(imageList[position].uri.path), imageList[position].data))
                     Constants.sendCount++
                     if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
                         (context as MainActivity).ll_main_send.visibility = View.VISIBLE
@@ -90,10 +90,10 @@ class ImageFileRecyclerAdapter(val context: Context, val imageList: ArrayList<Im
                     }
                 } else {
 
-                    Constants.selectedFiles.remove(File(imageList[position].uri.path))
+                    Constants.tempSelectedFiles.remove(File(imageList[position].uri.path))
                     Constants.sendCount--
 
-                    if (Constants.selectedFiles.isEmpty()) {
+                    if (Constants.tempSelectedFiles.isEmpty()) {
                         (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
                         (context as MainActivity).ll_main_send.visibility = View.INVISIBLE
                     }

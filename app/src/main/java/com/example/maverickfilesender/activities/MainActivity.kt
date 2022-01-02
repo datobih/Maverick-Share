@@ -124,7 +124,9 @@ var intent=Intent(this,TransferActivity::class.java)
 
 
         btn_send.setOnClickListener {
-            Constants.shouldSend=true
+            Constants.selectedFiles.addAll(Constants.tempSelectedFiles)
+            Constants.tempSelectedFiles.clear()
+
 ll_transfering.visibility=View.VISIBLE
             ll_transfering.startAnimation(transferAnimation)
             imv_downloading.startAnimation(bounceAnimation)

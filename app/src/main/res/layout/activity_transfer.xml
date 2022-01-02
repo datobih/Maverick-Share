@@ -93,6 +93,15 @@ app:cardUseCompatPadding="true"
             >
 
 
+            <ImageView
+                android:id="@+id/imv_incoming_file"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+
+                android:layout_marginLeft="10dp"
+                ></ImageView>
+
+
             <TextView
                 android:id="@+id/tv_incomingFile_name"
                 android:layout_width="wrap_content"
@@ -101,6 +110,8 @@ app:cardUseCompatPadding="true"
                 android:textColor="@color/black"
                 android:padding="10dp"
                 android:fontFamily="@font/gilroy_light"
+                android:layout_toRightOf="@id/imv_incoming_file"
+
                 ></TextView>
 
 
@@ -118,6 +129,7 @@ app:cardUseCompatPadding="true"
                 android:layout_below="@id/tv_incomingFile_name"
                 android:indeterminate="false"
                 android:max="100"
+                android:layout_marginTop="10dp"
                 ></ProgressBar>
 
 

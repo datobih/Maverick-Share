@@ -31,14 +31,14 @@ var onNetworkAvailable=false
     var heirarchyFiles=ArrayList<ArrayList<File>>()
 var parentFiles=ArrayList<File>()
 var selectedFiles=ArrayList<ParseFile>()
-
+    var tempSelectedFiles=ArrayList<ParseFile>()
 
 
     var imagesSelected=ArrayList<Int>()
     var videosSelected=ArrayList<Int>()
 var appSelected=ArrayList<Int>()
 
-    var shouldSend=false
+
 
 
     var serverThread:ServerThread?=null

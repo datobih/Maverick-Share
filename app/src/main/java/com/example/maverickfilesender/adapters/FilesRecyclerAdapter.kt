@@ -83,7 +83,7 @@ if(appFileList[position].drawable!=null){
 
 }
 
-            Constants.selectedFiles.add(ParseFile( appFileList[position].file,data))
+            Constants.tempSelectedFiles.add(ParseFile( appFileList[position].file,data))
 
             if(Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1
@@ -97,7 +97,7 @@ if(appFileList[position].drawable!=null){
         }
         else{
             Constants.sendCount--
-            Constants.selectedFiles.remove(appFileList[position].file)
+            Constants.tempSelectedFiles.remove(appFileList[position].file)
 
             if(Constants.countList.isNotEmpty()&& Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] - 1
@@ -107,7 +107,7 @@ if(appFileList[position].drawable!=null){
                 Constants.parentFiles.remove(appFileList[position].file)
             }
 
-            if(Constants.selectedFiles.isEmpty()){
+            if(Constants.tempSelectedFiles.isEmpty()){
                 (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
                 (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
             }

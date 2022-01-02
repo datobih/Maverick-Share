@@ -63,7 +63,7 @@ progress_apps.visibility=View.VISIBLE
                         if(i.sourceDir.startsWith("/data/app/")){
 
 
-                            nonSystemPackages.add(AppPackage(i,i.loadIcon(mContext!!.packageManager),false))
+                            nonSystemPackages.add(AppPackage(i,i.loadIcon(mContext!!.packageManager),false,null))
 
                         }
 

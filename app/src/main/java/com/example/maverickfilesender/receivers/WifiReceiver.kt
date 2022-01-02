@@ -31,7 +31,7 @@ val action=intent.action
 
 
             if(Constants.onNetworkAvailable) {
-
+                Constants.onNetworkAvailable = false
                 Thread(object :Runnable{
 
                     override fun run() {
@@ -50,7 +50,7 @@ val action=intent.action
 
                             if (wifiInfo.ssid == "\"${Constants.mNetworkSSID}\"") {
                                 Log.d("TESTOS","Insidee")
-                                Constants.onNetworkAvailable = false
+
                                 val handler=Handler(Looper.getMainLooper())
 
                                 Constants.mainActivity!!.mIpAddress = InetAddress.getByAddress(ByteBuffer
@@ -68,7 +68,7 @@ val action=intent.action
                                             .putInt(wifiManager.dhcpInfo.gateway)
                                             .array()).hostAddress
                                 }
-                                Thread.sleep(4000)
+                                Thread.sleep(5000)
                                 Constants.clientThread = ClientThread(Constants.mainActivity!!)
                                 Constants.clientThread!!.start()
                                 (context as MainActivity).runOnUiThread {

@@ -51,7 +51,7 @@ class ServerThread(val context: Context) : Thread() {
                 try {
                     if (socket.isConnected) {
 
-                        if (Constants.selectedFiles.isNotEmpty() && Constants.shouldSend) {
+                        if (Constants.selectedFiles.isNotEmpty()) {
 
                             var dir = ""
                             transferFile = Constants.selectedFiles[0]
@@ -63,16 +63,17 @@ class ServerThread(val context: Context) : Thread() {
                             val fileInputStream =
                                     BufferedInputStream(FileInputStream(transferFile!!.file.path))
                             val bufferedOutputStream =
-                                    DataOutputStream(BufferedOutputStream(socket.getOutputStream()))
+                              BufferedOutputStream(socket.getOutputStream())
 
                             var fileName = transferFile!!.file.name
                             if (transferFile!!.file.name.endsWith(".apk")) {
                                 val packageManager = context!!.packageManager
                                 val packageInfo = packageManager.getPackageArchiveInfo(transferFile!!.file.path, 0)
-                                fileName = packageInfo!!.packageName
+                                fileName = packageInfo!!.applicationInfo.loadLabel(packageManager).toString()
                             }
 
                             outputStream.writeUTF(fileName)
+                            inputStream.readUTF()
                             outputStream.writeUTF(transferFile!!.file.length().toString())
 
                             if (transferFile!!.data != null) {
@@ -81,6 +82,9 @@ class ServerThread(val context: Context) : Thread() {
 
 
    bufferedOutputStream.write(transferFile!!.data,0,transferFile!!.data!!.size)
+
+bufferedOutputStream.flush()
+                                val response=inputStream.readUTF()
 
 
 
@@ -107,7 +111,7 @@ class ServerThread(val context: Context) : Thread() {
                                 bytesTransferred = bytesTransferred + read
 
                                 if (Constants.transferActivity != null) {
-                                    (context as MainActivity).runOnUiThread {
+                                  handler.post {
                                         Constants.transferActivity!!.tv_incomingFile_name.text = transferFile!!.file.name
                                         Constants.transferActivity!!.tv_item_incomingFile_totalSize.text = "/$fileSize"
                                         Constants.transferActivity!!.tv_item_incomingFile_currentSize.text = deriveUnits(bytesTransferred)
@@ -121,6 +125,7 @@ class ServerThread(val context: Context) : Thread() {
 
                             }
                             if (read < 0) {
+                                Thread.sleep(300)
                                 bytesTransferred = 0
                                 Log.i("TransferComplete", "Successful")
                             }
@@ -141,20 +146,21 @@ class ServerThread(val context: Context) : Thread() {
                         }
 
 
+
                     } else {
-                        fileSize = -1
-                        bytesTransferred = -1
-                        Constants.shouldSend = false
+                        fileSize = 0
+                        bytesTransferred = 0
+
                         return
                     }
                 } catch (e: Exception) {
-                    Constants.shouldSend = false
+
                     return
                 }
 
 
             }
-            Constants.shouldSend = false
+
         }
 
 

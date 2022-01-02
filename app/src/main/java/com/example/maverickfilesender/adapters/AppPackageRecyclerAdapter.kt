@@ -63,18 +63,18 @@ if(appPackagePackageList[position].onSelect){
 
 
         val stream=ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
          data=stream.toByteArray()
-
+this.appPackagePackageList[position].data=data
 
     }
 
-   Constants.selectedFiles.add(ParseFile( File(appPackagePackageList[position].applicationInfo.sourceDir),data))
+   Constants.tempSelectedFiles.add(ParseFile( File(appPackagePackageList[position].applicationInfo.sourceDir),data))
     Constants.sendCount++
 }
 
     else{
-  Constants.selectedFiles.remove(File(appPackagePackageList[position].applicationInfo.sourceDir))
+  Constants.tempSelectedFiles.remove(ParseFile(File(appPackagePackageList[position].applicationInfo.sourceDir),appPackagePackageList[position].data))
 
     Constants.sendCount--
     }
