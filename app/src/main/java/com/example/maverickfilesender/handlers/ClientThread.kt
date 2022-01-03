@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.model.FileMetaData
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_transfer.*
 import java.io.*
@@ -180,11 +181,18 @@ var count=0
 
                         }
                         if(bytesReceived==fileSize.toInt()){
-                         handler.post {
 
-                                Constants.transferActivity!!.pb_incoming_file.max=fileTotalSize
-                                Constants.transferActivity!!.pb_incoming_file.progress=bytesReceived
-                               Constants.transferActivity!!.imv_incoming_file.setImageBitmap(bitmap)
+                            if(Constants.transferActivity!=null) {
+                                handler.post {
+
+                                    Constants.transferActivity!!.pb_incoming_file.max = fileTotalSize
+                                    Constants.transferActivity!!.pb_incoming_file.progress = bytesReceived
+                                    Constants.transferActivity!!.imv_incoming_file.setImageBitmap(bitmap)
+
+
+                                }
+Constants.transferActivity!!.adapter!!.fileMetaDataList!!.add(FileMetaData(fileName,fileTotalSize.toLong(),bitmap))
+Constants.transferActivity!!.adapter!!.notifyDataSetChanged()
 
                             }
 fileName=""

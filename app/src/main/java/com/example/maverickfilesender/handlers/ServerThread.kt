@@ -65,6 +65,9 @@ class ServerThread(val context: Context) : Thread() {
                             val bufferedOutputStream =
                               BufferedOutputStream(socket.getOutputStream())
 
+
+
+
                             var fileName = transferFile!!.file.name
                             if (transferFile!!.file.name.endsWith(".apk")) {
                                 val packageManager = context!!.packageManager

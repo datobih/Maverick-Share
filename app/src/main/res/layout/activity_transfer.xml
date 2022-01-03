@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/imv_transfer_back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginLeft="15dp"
  android:layout_centerVertical="true"
             android:src="@drawable/ic_round_arrow_back_ios_24"
@@ -36,7 +36,7 @@ android:foreground="?attr/selectableItemBackground"
     android:textColor="@color/white"
     android:layout_toRightOf="@id/imv_transfer_back"
     android:layout_centerVertical="true"
-    android:textSize="20dp"
+    android:textSize="17dp"
     android:fontFamily="@font/gilroy"
 android:layout_marginLeft="50dp"
     ></TextView>
@@ -119,7 +119,7 @@ app:cardUseCompatPadding="true"
             <ProgressBar
                 android:id="@+id/pb_incoming_file"
                 android:layout_width="match_parent"
-                android:layout_height="12dp"
+                android:layout_height="7dp"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:progressDrawable="@drawable/incoming_progress_bg"
                 android:progress="50"

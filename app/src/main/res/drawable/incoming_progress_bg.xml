@@ -51,13 +51,9 @@ android:width="1dp"
 
                     ></corners>
 
-            <gradient
-android:startColor="#560027"
-                android:endColor="#bc477b"
+      <solid android:color="#1F2973">
 
-            android:angle="360"
-                ></gradient>
-
+      </solid>
 
             </shape>
 
