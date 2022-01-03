@@ -27,6 +27,15 @@ app:cardUseCompatPadding="true"
             >
 
 
+            <ImageView
+                android:id="@+id/imv_queue_file"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+
+
+                ></ImageView>
+
+
             <TextView
                 android:id="@+id/tv_item_queueFile_name"
                 android:layout_width="wrap_content"
@@ -34,9 +43,23 @@ app:cardUseCompatPadding="true"
                 android:text="Hiii"
 android:textColor="@color/black"
                 android:padding="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@id/imv_queue_file"
                 ></TextView>
 
 
+
+            <TextView
+                android:id="@+id/tv_item_queueFile_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Received"
+                android:textColor="#FF0000"
+                android:padding="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@id/tv_item_queueFile_name"
+
+                ></TextView>
 
 
 
