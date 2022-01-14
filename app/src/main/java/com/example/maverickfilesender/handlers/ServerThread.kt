@@ -1,10 +1,13 @@
 package com.example.maverickfilesender.handlers
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Looper
 import android.util.Log
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.model.ParseFile
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_transfer.*
@@ -58,7 +61,7 @@ class ServerThread(val context: Context) : Thread() {
                             fileSize = transferFile!!.file.length().toInt()
                             Constants.selectedFiles.remove(Constants.selectedFiles[0])
 
-                            val fileSize = deriveUnits(transferFile!!.file.length().toInt()).toString()
+                            val fileSizeUnit = deriveUnits(transferFile!!.file.length().toInt()).toString()
 
                             val fileInputStream =
                                     BufferedInputStream(FileInputStream(transferFile!!.file.path))
@@ -69,13 +72,17 @@ class ServerThread(val context: Context) : Thread() {
 
 
                             var fileName = transferFile!!.file.name
+
                             if (transferFile!!.file.name.endsWith(".apk")) {
+
                                 val packageManager = context!!.packageManager
                                 val packageInfo = packageManager.getPackageArchiveInfo(transferFile!!.file.path, 0)
-                                fileName = packageInfo!!.applicationInfo.loadLabel(packageManager).toString()
+                                fileName = packageInfo!!.applicationInfo.loadLabel(packageManager).toString()+".apk"
                             }
 
                             outputStream.writeUTF(fileName)
+
+
 
                             outputStream.writeUTF(transferFile!!.file.length().toString())
 
@@ -105,6 +112,7 @@ class ServerThread(val context: Context) : Thread() {
                             val byteBuffer = ByteArray(1024 * 500)
 
                             var read = 0
+                            var timer=0
                             while (fileInputStream.read(byteBuffer).also { read = it } > 0) {
 
                                 Log.i("${transferFile!!.file.name}", "$read bytes")
@@ -113,14 +121,20 @@ class ServerThread(val context: Context) : Thread() {
 
                                 bufferedOutputStream.write(byteBuffer, 0, read)
                                 bytesTransferred = bytesTransferred + read
+                                timer++
 
                                 if (Constants.transferActivity != null) {
                                   handler.post {
                                         Constants.transferActivity!!.tv_incomingFile_name.text = transferFile!!.file.name
-                                        Constants.transferActivity!!.tv_item_incomingFile_totalSize.text = "/$fileSize"
+                                        Constants.transferActivity!!.tv_item_incomingFile_totalSize.text = "/$fileSizeUnit"
                                         Constants.transferActivity!!.tv_item_incomingFile_currentSize.text = deriveUnits(bytesTransferred)
-                                        Constants.transferActivity!!.pb_incoming_file.max = transferFile!!.file.length().toInt()
-                                        Constants.transferActivity!!.pb_incoming_file.progress = bytesTransferred
+
+
+                                      if(timer%10==0){
+                                          Constants.transferActivity!!.pb_incoming_file.max = transferFile!!.file.length().toInt()
+                                          Constants.transferActivity!!.pb_incoming_file.progress = bytesTransferred
+
+                                      }
 
                                     }
 
@@ -128,10 +142,28 @@ class ServerThread(val context: Context) : Thread() {
                                 }
 
                             }
-                            if (read < 0) {
-                                Thread.sleep(300)
+                            if (read <= 0) {
+
+                                handler.post {
+                                    Constants.transferActivity!!.pb_incoming_file.max = transferFile!!.file.length().toInt()
+                                    Constants.transferActivity!!.pb_incoming_file.progress = bytesTransferred
+
+                                }
+
+                                Thread.sleep(1000)
+                                var bitmap:Bitmap?=null
+                                if(transferFile!!.data!=null) {
+                                    bitmap = BitmapFactory.decodeByteArray(transferFile!!.data, 0, transferFile!!.data!!.size)
+                                }
+                                FileMetaData(fileName,fileSize.toLong(),bitmap)
+
+
                                 bytesTransferred = 0
                                 Log.i("TransferComplete", "Successful")
+                                fileSize = 0
+                                bytesTransferred = 0
+
+
                             }
 
                             read = 0

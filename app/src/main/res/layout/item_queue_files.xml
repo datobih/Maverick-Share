@@ -45,6 +45,7 @@ android:textColor="@color/black"
                 android:padding="10dp"
                 android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@id/imv_queue_file"
+                android:fontFamily="@font/gilroy_light"
                 ></TextView>
 
 
@@ -58,7 +59,7 @@ android:textColor="@color/black"
                 android:padding="10dp"
                 android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@id/tv_item_queueFile_name"
-
+android:fontFamily="@font/gilroy_light"
                 ></TextView>
 
 
@@ -74,7 +75,7 @@ android:textColor="@color/black"
                 android:text="10MB"
                 android:textColor="@color/black"
                 android:layout_marginTop="10dp"
-
+android:fontFamily="@font/gilroy_light"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 ></TextView>

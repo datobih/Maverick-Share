@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -71,6 +72,16 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
 
             } else {
                 holder.itemView.imv_itemVideo.setImageResource(R.drawable.video_placeholder_bg)
+
+
+                val bitmap = (ContextCompat.getDrawable(context,R.drawable.video_placeholder_bg) as BitmapDrawable).bitmap
+                val stream=ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
+                val data=stream.toByteArray()
+                videoList[position].data=data
+
+
+
             }
 
             holder.itemView.tv_ItemVideoName.text = videoList[position].name

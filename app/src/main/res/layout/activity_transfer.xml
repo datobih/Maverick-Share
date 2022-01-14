@@ -67,7 +67,7 @@ android:layout_marginLeft="50dp"
 
             android:layout_margin="6dp"
             android:textStyle="bold"
-            android:textSize="15dp"
+            android:textSize="13dp"
             ></TextView>
 
     </LinearLayout>
@@ -108,7 +108,7 @@ app:cardUseCompatPadding="true"
                 android:layout_height="wrap_content"
                 android:text="Hiii"
                 android:textColor="@color/black"
-                android:padding="10dp"
+                android:padding="9dp"
                 android:fontFamily="@font/gilroy_light"
                 android:layout_toRightOf="@id/imv_incoming_file"
 
@@ -139,7 +139,7 @@ app:cardUseCompatPadding="true"
                 android:layout_height="wrap_content"
                 android:text="10MB"
                 android:textColor="@color/black"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="9dp"
                 android:layout_below="@id/pb_incoming_file"
                 android:layout_toLeftOf="@id/tv_item_incomingFile_totalSize"
                 android:layout_marginLeft="10dp"
@@ -155,7 +155,7 @@ app:cardUseCompatPadding="true"
                 android:layout_height="wrap_content"
                 android:text="/10MB"
                 android:textColor="@color/black"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="9dp"
                 android:layout_below="@id/pb_incoming_file"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
@@ -193,13 +193,13 @@ app:cardUseCompatPadding="true"
             android:layout_margin="6dp"
             android:textStyle="bold"
             android:fontFamily="@font/gilroy_light"
-            android:textSize="15dp"
+            android:textSize="13dp"
             ></TextView>
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_history"
+        android:id="@+id/rv_queue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 

@@ -58,7 +58,7 @@ val directory=bundle!!.getString(Constants.BUNDLE_STORAGE_DIRECTORY)
 
         val files:Array<File> =file.listFiles()
 
-        val into=ArrayList<File>()
+
 
 
 
@@ -195,11 +195,11 @@ Constants.countList.add(0)
                 val packageInfo=packageManager.getPackageArchiveInfo(i.path,0)
 
 
-                appFiles.add(AppFile(i,packageInfo!!.applicationInfo.loadIcon(packageManager),false))
+                appFiles.add(AppFile(i,packageInfo!!.applicationInfo.loadIcon(packageManager),false,null))
 
             }
             else{
-                appFiles.add(AppFile(i,onSelect = false))
+                appFiles.add(AppFile(i,onSelect = false,data = null))
             }
 
         }

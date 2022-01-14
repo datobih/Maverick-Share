@@ -30,41 +30,13 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_queue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-
-        ></androidx.recyclerview.widget.RecyclerView>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#eeeeee"
-
-
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="History"
-            android:textColor="@color/black"
-            android:layout_margin="6dp"
-            android:textStyle="bold"
-            android:textSize="15dp"
-            ></TextView>
-
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
 
         ></androidx.recyclerview.widget.RecyclerView>
+
 
 
 </LinearLayout>

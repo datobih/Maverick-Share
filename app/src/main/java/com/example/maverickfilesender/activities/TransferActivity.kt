@@ -19,9 +19,12 @@ class TransferActivity : AppCompatActivity() {
         setContentView(R.layout.activity_transfer)
 
         Constants.transferActivity=this
-adapter= QueueFileRecyclerAdapter(this,ArrayList<FileMetaData>())
-rv_queue.layoutManager=LinearLayoutManager(this)
+        var isSender:Boolean = Constants.clientThread == null
+        adapter= QueueFileRecyclerAdapter(this,ArrayList<FileMetaData>(),isSender)
+        rv_queue.layoutManager=LinearLayoutManager(this)
         rv_queue.adapter=adapter
+
+
 
 
 

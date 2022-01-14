@@ -1,12 +1,15 @@
-package com.example.maverickfilesender.handlers
+    package com.example.maverickfilesender.handlers
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.Environment
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
+import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.FileMetaData
@@ -69,10 +72,12 @@ class ClientThread(val context: Context) : Thread() {
 
 while(fileName=="") {
     fileName = inputStream.readUTF()
-    if(!fileName.contains(".apk")){
-        fileName= "$fileName.apk"
-    }
+
 }
+
+
+
+
 
                         fileSize = inputStream.readUTF()
 
@@ -108,6 +113,9 @@ while(fileName=="") {
 
                             Log.d("TESTOS","Init bitmap")
                bitmap=BitmapFactory.decodeByteArray(byteData,0,byteData.size)
+
+
+
                             Log.d("TESTOS","Setup bitmap")
 if(Constants.transferActivity!=null){
 handler.post {
@@ -116,6 +124,8 @@ handler.post {
 
 }
                         }
+
+
 
 
 
@@ -189,12 +199,13 @@ var count=0
                                     Constants.transferActivity!!.pb_incoming_file.progress = bytesReceived
                                     Constants.transferActivity!!.imv_incoming_file.setImageBitmap(bitmap)
 
-
+                                    Constants.transferActivity!!.adapter!!.fileMetaDataList!!.add(FileMetaData(fileName,fileTotalSize.toLong(),bitmap))
+                                    Constants.transferActivity!!.adapter!!.notifyDataSetChanged()
                                 }
-Constants.transferActivity!!.adapter!!.fileMetaDataList!!.add(FileMetaData(fileName,fileTotalSize.toLong(),bitmap))
-Constants.transferActivity!!.adapter!!.notifyDataSetChanged()
+
 
                             }
+                            Thread.sleep(1000)
 fileName=""
                             bytesReceived=0
                             fileTotalSize=0
