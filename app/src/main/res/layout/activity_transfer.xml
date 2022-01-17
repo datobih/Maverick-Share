@@ -30,6 +30,7 @@ android:foreground="?attr/selectableItemBackground"
             ></ImageView>
 
 <TextView
+    android:id="@+id/tv_transfer_toolbar_status"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Receiving"
@@ -37,7 +38,8 @@ android:foreground="?attr/selectableItemBackground"
     android:layout_toRightOf="@id/imv_transfer_back"
     android:layout_centerVertical="true"
     android:textSize="17dp"
-    android:fontFamily="@font/gilroy"
+    android:fontFamily="@font/gilroy_light"
+    android:textStyle="bold"
 android:layout_marginLeft="50dp"
     ></TextView>
 

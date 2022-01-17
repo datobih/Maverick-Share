@@ -299,6 +299,12 @@ holder.itemView.imv_fileIcon.setImageDrawable(resource)
                  .centerCrop()
                  .into(holder.itemView.imv_fileIcon)
 
+         val bitmap = getBitmapFromDrawable(ContextCompat.getDrawable(context,R.drawable.ic_twotone_file_24)!!)
+         val stream=ByteArrayOutputStream()
+         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
+         val data=stream.toByteArray()
+         appFileList[position].data=data
+
 
      }
 

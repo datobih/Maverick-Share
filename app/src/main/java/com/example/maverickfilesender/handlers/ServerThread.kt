@@ -81,7 +81,7 @@ class ServerThread(val context: Context) : Thread() {
                             }
 
                             outputStream.writeUTF(fileName)
-
+                            outputStream.writeUTF(Constants.selectedFiles.lastIndex.toString())
 
 
                             outputStream.writeUTF(transferFile!!.file.length().toString())
