@@ -81,9 +81,10 @@ while(fileName=="") {
 val filesRemaining=inputStream.readUTF()
 
                     handler.post {
+if(Constants.transferActivity!=null) {
+    Constants.transferActivity!!.tv_transfer_toolbar_status.text = "Receiving $filesRemaining remaining files"
 
-                mainContext.tv_transfer_toolbar_status.text="Receiving $filesRemaining remaining files"
-
+}
                     }
 
                         fileSize = inputStream.readUTF()

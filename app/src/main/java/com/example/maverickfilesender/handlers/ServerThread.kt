@@ -82,7 +82,12 @@ class ServerThread(val context: Context) : Thread() {
 
                             outputStream.writeUTF(fileName)
                             outputStream.writeUTF(Constants.selectedFiles.lastIndex.toString())
+handler.post {
+    if(Constants.transferActivity!=null) {
+        Constants.transferActivity!!.tv_transfer_toolbar_status.text="Sending ${Constants.selectedFiles.lastIndex} remaining files"
 
+    }
+}
 
                             outputStream.writeUTF(transferFile!!.file.length().toString())
 
