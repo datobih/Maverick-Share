@@ -27,7 +27,7 @@ return MyQueueViewHolder(LayoutInflater.from(context).inflate(R.layout.item_queu
 
 
             if(isSender){
-                holder.itemView.tv_item_queueFile_status.text="Sent"
+                holder.itemView.tv_item_queueFile_status.text="Sending"
             }
             else{
                 holder.itemView.tv_item_queueFile_status.text="Received"

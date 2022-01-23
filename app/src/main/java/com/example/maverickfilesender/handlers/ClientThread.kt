@@ -37,7 +37,7 @@ class ClientThread(val context: Context) : Thread() {
 
 
                 Log.i("SOCKETT", "Client Connecting")
-                socket.connect(socketAddress, 1000000000)
+                socket.connect(socketAddress)
 
 
 
@@ -48,6 +48,7 @@ class ClientThread(val context: Context) : Thread() {
         if (socket.isConnected) {
 
             val inputStream = DataInputStream(socket.getInputStream())
+
             val outputStream = DataOutputStream(socket.getOutputStream())
 
 
@@ -70,27 +71,36 @@ class ClientThread(val context: Context) : Thread() {
                 while (true) {
                     var fileSize=""
 
+
 while(fileName=="") {
+
+
     fileName = inputStream.readUTF()
 
 }
 
 
-
+outputStream.writeUTF("done")
+                    Log.d("VERIFY","fileNameDone")
 
 val filesRemaining=inputStream.readUTF()
-
+                    outputStream.writeUTF("done")
+                    Log.d("VERIFY","FileRemaining")
                     handler.post {
 if(Constants.transferActivity!=null) {
     Constants.transferActivity!!.tv_transfer_toolbar_status.text = "Receiving $filesRemaining remaining files"
 
 }
+
                     }
 
                         fileSize = inputStream.readUTF()
-
-
+outputStream.writeUTF("done")
+                    Log.d("VERIFY","fileSize")
                         val thumbnailSize=inputStream.readUTF()
+                    outputStream.writeUTF("done")
+                    Log.d("VERIFY","ThumbnailSize")
+
 
                         Log.d("TESTOS","Thumbnail  $thumbnailSize bytes")
                         if(thumbnailSize!="null"){

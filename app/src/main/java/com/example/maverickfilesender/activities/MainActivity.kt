@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.location.LocationManager
 import android.net.Uri
 import android.net.wifi.ScanResult
@@ -32,6 +33,7 @@ import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.fragment.*
 import com.example.maverickfilesender.handlers.ClientThread
 import com.example.maverickfilesender.handlers.ServerThread
+import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.receivers.WifiReceiver
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
@@ -124,7 +126,19 @@ var intent=Intent(this,TransferActivity::class.java)
 
 
         btn_send.setOnClickListener {
+            val list=ArrayList<FileMetaData>()
+            for(i in Constants.tempSelectedFiles){
+                list.add(FileMetaData(i.file.name,i.file.length(), BitmapFactory.decodeByteArray(i.data,0,i.data!!.size)))
+            }
+
+            Constants.onSelectedMetaData=list
+
             Constants.selectedFiles.addAll(Constants.tempSelectedFiles)
+
+
+
+
+
             Constants.tempSelectedFiles.clear()
 
 ll_transfering.visibility=View.VISIBLE

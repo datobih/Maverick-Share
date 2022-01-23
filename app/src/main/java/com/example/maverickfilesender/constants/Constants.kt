@@ -4,6 +4,7 @@ import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.activities.TransferActivity
 import com.example.maverickfilesender.handlers.ClientThread
 import com.example.maverickfilesender.handlers.ServerThread
+import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.model.ParseFile
 import com.example.maverickfilesender.model.RelativePath
 import java.io.File
@@ -43,7 +44,7 @@ var appSelected=ArrayList<Int>()
 
     var serverThread:ServerThread?=null
 var clientThread:ClientThread?=null
-
+var onSelectedMetaData=ArrayList<FileMetaData>()
     val inStoragePath="/storage/emulated/0"
     var transferActivity:TransferActivity?=null
 }

@@ -51,7 +51,7 @@ class ServerThread(val context: Context) : Thread() {
 
 
             while (true) {
-                try {
+
                     if (socket.isConnected) {
 
                         if (Constants.selectedFiles.isNotEmpty()) {
@@ -59,7 +59,13 @@ class ServerThread(val context: Context) : Thread() {
                             var dir = ""
                             transferFile = Constants.selectedFiles[0]
                             fileSize = transferFile!!.file.length().toInt()
+                            Constants.onSelectedMetaData.removeAt(0)
                             Constants.selectedFiles.remove(Constants.selectedFiles[0])
+
+
+                            if(Constants.transferActivity!=null){
+                                Constants.transferActivity!!.adapter?.notifyDataSetChanged()
+                            }
 
                             val fileSizeUnit = deriveUnits(transferFile!!.file.length().toInt()).toString()
 
@@ -81,7 +87,10 @@ class ServerThread(val context: Context) : Thread() {
                             }
 
                             outputStream.writeUTF(fileName)
+                          //  outputStream.flush()
+                            inputStream.readUTF()
                             outputStream.writeUTF(Constants.selectedFiles.lastIndex.toString())
+                            inputStream.readUTF()
 handler.post {
     if(Constants.transferActivity!=null) {
         Constants.transferActivity!!.tv_transfer_toolbar_status.text="Sending ${Constants.selectedFiles.lastIndex} remaining files"
@@ -90,9 +99,10 @@ handler.post {
 }
 
                             outputStream.writeUTF(transferFile!!.file.length().toString())
-
+inputStream.readUTF()
                             if (transferFile!!.data != null) {
                             outputStream.writeUTF(transferFile!!.data!!.size.toString())
+                                inputStream.readUTF()
                                 outputStream.flush()
 
 
@@ -101,7 +111,7 @@ handler.post {
 
 
                                 val response=inputStream.readUTF()
-
+Log.d("RESPONSE",response)
 
 
 
@@ -194,10 +204,7 @@ handler.post {
 
                         return
                     }
-                } catch (e: Exception) {
 
-                    return
-                }
 
 
             }

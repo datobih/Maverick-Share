@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Incoming files"
+            android:text="Received files"
             android:textColor="@color/black"
             android:layout_margin="6dp"
             android:textStyle="bold"

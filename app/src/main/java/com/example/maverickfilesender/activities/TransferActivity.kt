@@ -1,5 +1,6 @@
 package com.example.maverickfilesender.activities
 
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,8 +21,14 @@ class TransferActivity : AppCompatActivity() {
 
         Constants.transferActivity=this
         var isSender:Boolean = Constants.clientThread == null
-        adapter= QueueFileRecyclerAdapter(this,ArrayList<FileMetaData>(),isSender)
-        rv_queue.layoutManager=LinearLayoutManager(this)
+        if(isSender==true){
+
+            adapter= QueueFileRecyclerAdapter(this,Constants.onSelectedMetaData,isSender)
+        }
+        else {
+            adapter = QueueFileRecyclerAdapter(this, ArrayList<FileMetaData>(), isSender)
+        }
+            rv_queue.layoutManager=LinearLayoutManager(this)
         rv_queue.adapter=adapter
 
 
