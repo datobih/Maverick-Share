@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="5dp"
+    android:id="@+id/ll_itemFile"
+    >
+
+
+    <ImageView
+        android:id="@+id/imv_history_fileIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="10dp"
+
+></ImageView>
+
+    <TextView
+        android:id="@+id/tv_item_history_fileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="File Name"
+        android:textSize="16dp"
+        android:fontFamily="@font/gilroy_light"
+        android:layout_margin="15dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+
+        android:layout_toRightOf="@id/imv_history_fileIcon"
+        ></TextView>
+
+
+
+
+</RelativeLayout>

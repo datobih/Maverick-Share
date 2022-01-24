@@ -70,8 +70,12 @@ if(!Environment.isExternalStorageManager()){
         var sdAvailableSpace=0f
         var sdUsedSpace=0f
         if(files.size>1){
-            sdPath= getSDirectory(files[1].path)
-
+            try {
+                sdPath = getSDirectory(files[1].path)
+            }
+            catch (e:Exception){
+                sdPath=""
+            }
 
 
         }

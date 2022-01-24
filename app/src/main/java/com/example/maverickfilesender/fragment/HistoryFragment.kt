@@ -10,8 +10,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.adapters.HistoryFilesRecyclerAdapter
+import com.example.maverickfilesender.model.AppFile
+import kotlinx.android.synthetic.main.fragment_history.*
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HistoryFragment : Fragment() {
@@ -57,10 +63,40 @@ fetchFiles()
 
         val fileDir= File(mContext!!.getExternalFilesDir(null)!!.path+"/Received")
         val receivedFiles=fileDir.listFiles()
+        //Arrays.sort(receivedFiles, Comparator.comparingLong(File::lastModified))
+receivedFiles.let{
+    Arrays.sort(it){
+        f1,f2-> f2.lastModified().compareTo(f1.lastModified())
+    }
+    val receivedAppFile=ArrayList<AppFile>()
+    receivedFiles.forEach {
 
+        if(it.name.endsWith(".apk")){
+            val packageManager=mContext!!.packageManager
+            val packageInfo=packageManager.getPackageArchiveInfo(it.path,0)
+            val drawable=packageInfo!!.applicationInfo.loadIcon(packageManager)
+            receivedAppFile.add(AppFile(it,drawable,null,null))
+        }
+        else{
+            receivedAppFile.add(AppFile(it,null,null,null))
+        }
+
+    }
+
+
+    val adapter=HistoryFilesRecyclerAdapter(mContext!!,receivedAppFile)
+    rv_history.layoutManager=LinearLayoutManager(mContext)
+    rv_history.adapter=adapter
+
+}
 
 
     }
 
+    override fun onResume() {
+
+
+        super.onResume()
+    }
 
 }

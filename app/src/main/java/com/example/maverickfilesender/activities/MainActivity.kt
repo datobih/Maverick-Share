@@ -120,7 +120,7 @@ Constants.mainActivity=this
 var intent=Intent(this,TransferActivity::class.java)
             intent.putExtra(Constants.TRANSFER_EXTRA,connectionType)
 
-            startActivity(intent)
+            startActivityForResult(intent,3)
 
         }
 

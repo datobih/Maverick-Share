@@ -45,7 +45,7 @@ val animation=AnimationUtils.loadAnimation(context,R.anim.bounce)
 if(holder is FilesViewHolder){
 
 
-if(appFileList[position].onSelect){
+if(appFileList[position].onSelect!!){
 
     holder.itemView.imb_file_onSelect.background=ContextCompat.getDrawable(context,R.drawable.circle_selected)
     if(this.position!=-1 && position==this.position) {
@@ -66,9 +66,9 @@ mainContext.ll_main_send.startAnimation(animationMoveUp)
         }
 
 
-appFileList[position].onSelect = !appFileList[position].onSelect
+appFileList[position].onSelect = !appFileList[position].onSelect!!
 
-        if(appFileList[position].onSelect){
+        if(appFileList[position].onSelect!!){
             Constants.sendCount++
 
             var data:ByteArray?=null
