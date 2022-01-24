@@ -6,8 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity"
 android:theme="@style/Theme.MaterialComponents.NoActionBar"
-    android:background="#f4f4f4"
+
     >
+<!--    android:background="#f4f4f4"-->
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="100dp"
@@ -91,7 +93,7 @@ app:tabTextAppearance="@style/tab_text"
         android:layout_height="match_parent"
        android:layout_below="@id/tab_main"
 
-     android:background="#f5f5f5"
+     android:background="#212121"
 
         >
 
@@ -199,7 +201,7 @@ android:elevation="5dp"
             android:id="@+id/ll_main_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="#1b1b1b"
             android:layout_alignParentBottom="true"
           android:visibility="invisible"
             tools:visibility="visible"

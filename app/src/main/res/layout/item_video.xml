@@ -86,7 +86,7 @@ android:textColor="@color/white"
         android:focusable="true"
 
         android:scrollHorizontally="true"
-android:textColor="@color/black"
+
         ></TextView>
 
 

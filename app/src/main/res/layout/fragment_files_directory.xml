@@ -11,15 +11,10 @@
       android:layout_width="match_parent"
       android:layout_height="35dp"
 
-android:background="@color/white"
+android:background="#6d6d6d"
       ></androidx.recyclerview.widget.RecyclerView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#eeeeee"
 
-        ></View>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_files"

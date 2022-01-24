@@ -12,7 +12,7 @@ android:id="@+id/ll_relative_path"
         android:layout_height="wrap_content"
         android:text="Home"
         android:fontFamily="@font/gilroy_light"
-        android:textColor="@color/black"
+
         android:textSize="17dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
