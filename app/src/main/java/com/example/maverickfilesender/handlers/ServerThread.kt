@@ -64,8 +64,10 @@ class ServerThread(val context: Context) : Thread() {
 
 
                             if(Constants.transferActivity!=null){
-                                Constants.transferActivity!!.adapter?.notifyDataSetChanged()
-                            }
+                                handler.post {
+                                    Constants.transferActivity!!.adapter?.notifyDataSetChanged()
+                                }
+                                }
 
                             val fileSizeUnit = deriveUnits(transferFile!!.file.length().toInt()).toString()
 
@@ -73,6 +75,8 @@ class ServerThread(val context: Context) : Thread() {
                                     BufferedInputStream(FileInputStream(transferFile!!.file.path))
                             val bufferedOutputStream =
                               BufferedOutputStream(socket.getOutputStream())
+
+
 
 
 
@@ -140,16 +144,16 @@ Log.d("RESPONSE",response)
 
                                 if (Constants.transferActivity != null) {
                                   handler.post {
-                                        Constants.transferActivity!!.tv_incomingFile_name.text = transferFile!!.file.name
+                                        Constants.transferActivity!!.tv_incomingFile_name.text =fileName
                                         Constants.transferActivity!!.tv_item_incomingFile_totalSize.text = "/$fileSizeUnit"
                                         Constants.transferActivity!!.tv_item_incomingFile_currentSize.text = deriveUnits(bytesTransferred)
-
 
                                       if(timer%10==0){
                                           Constants.transferActivity!!.pb_incoming_file.max = transferFile!!.file.length().toInt()
                                           Constants.transferActivity!!.pb_incoming_file.progress = bytesTransferred
 
                                       }
+
 
                                     }
 
