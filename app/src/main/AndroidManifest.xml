@@ -31,7 +31,7 @@
         android:requestRawExternalStorageAccess="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MaverickFileSender">
+        android:theme="@style/splashScreenTheme">
         <activity android:name=".activities.TransferActivity"></activity>
         <activity android:name=".activities.MainActivity">
             <intent-filter>
