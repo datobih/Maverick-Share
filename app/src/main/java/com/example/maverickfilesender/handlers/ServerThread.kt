@@ -23,13 +23,20 @@ class ServerThread(val context: Context) : Thread() {
     var transferFile: ParseFile? = null
     var bytesTransferred: Int = 0
     var fileSize: Int = 0
+    var serverSocket:ServerSocket?=null
+
     override fun run() {
-        val serverSocket = ServerSocket(9999)
+         serverSocket = ServerSocket(9999)
 
-        serverSocket.soTimeout = 1000000000
+        serverSocket!!.soTimeout = 1000000000
+var socket:Socket?=null
+        try {
+             socket = serverSocket!!.accept()
+        }
 
-        val socket = serverSocket.accept()
-
+        catch (e:Exception) {
+return
+        }
 
 
 

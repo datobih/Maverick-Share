@@ -310,7 +310,12 @@ return true
 
                 if (isLocationEnabled()) {
 
-
+if(mReservation!=null){
+    mReservation!!.close()
+    Thread.sleep(3000)
+    mReservation=null
+    Constants.serverThread!!.serverSocket!!.close()
+}
                     val wifimanager =
                         applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
 
