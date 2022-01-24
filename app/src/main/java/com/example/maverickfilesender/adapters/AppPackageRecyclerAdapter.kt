@@ -24,6 +24,8 @@ import java.io.ObjectOutputStream
 import java.text.DecimalFormat
 
 class AppPackageRecyclerAdapter(val context: Context,val appPackagePackageList:MutableList<AppPackage>):RecyclerView.Adapter<AppPackageRecyclerAdapter.MyViewHolder>() {
+
+  var onClick=false
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app,parent,false))
     }
@@ -39,20 +41,24 @@ Constants.appSelected.add(position)
                 (context as MainActivity).ll_main_send.visibility = View.VISIBLE
                 (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
             }
+
+           onClick=false
             }
-        else{
+        else if(onClick){
             Constants.appSelected.remove(position)
             holder.itemView.imv_appPackageSelect.visibility=View.GONE
 
-            if(Constants.sendCount==0){
+            if(Constants.tempSelectedFiles.isEmpty()){
                 (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
                 (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
             }
+
+            onClick=false
         }
 
 
 holder.itemView.ll_appItem.setOnClickListener {
-
+onClick=true
 appPackagePackageList[position].onSelect=!appPackagePackageList[position].onSelect
 
 if(appPackagePackageList[position].onSelect){

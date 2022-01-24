@@ -55,7 +55,7 @@ android:layout_marginLeft="50dp"
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee"
+        android:background="#484848"
 
 
         >
@@ -64,7 +64,7 @@ android:layout_marginLeft="50dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Incoming file"
-            android:textColor="@color/black"
+
             android:fontFamily="@font/gilroy_light"
 
             android:layout_margin="6dp"
@@ -90,8 +90,7 @@ app:cardUseCompatPadding="true"
 
 
             android:padding="10dp"
-
-
+            android:background="#484848"
             >
 
 
@@ -109,7 +108,7 @@ app:cardUseCompatPadding="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hiii"
-                android:textColor="@color/black"
+
                 android:padding="9dp"
                 android:fontFamily="@font/gilroy_light"
                 android:layout_toRightOf="@id/imv_incoming_file"
@@ -140,7 +139,7 @@ app:cardUseCompatPadding="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="10MB"
-                android:textColor="@color/black"
+
                 android:layout_marginTop="9dp"
                 android:layout_below="@id/pb_incoming_file"
                 android:layout_toLeftOf="@id/tv_item_incomingFile_totalSize"
@@ -182,7 +181,7 @@ app:cardUseCompatPadding="true"
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee"
+        android:background="#484848"
 
 
         >
@@ -191,7 +190,7 @@ app:cardUseCompatPadding="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Queue"
-            android:textColor="@color/black"
+
             android:layout_margin="6dp"
             android:textStyle="bold"
             android:fontFamily="@font/gilroy_light"
