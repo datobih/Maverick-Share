@@ -77,9 +77,15 @@ return
                                 }
 
                             val fileSizeUnit = deriveUnits(transferFile!!.file.length().toInt()).toString()
-
-                            val fileInputStream =
-                                    BufferedInputStream(FileInputStream(transferFile!!.file.path))
+                            var fileInputStream:BufferedInputStream?=null
+if(transferFile!!.path.isEmpty()) {
+     fileInputStream =
+            BufferedInputStream(FileInputStream(transferFile!!.file.path))
+}
+                            else{
+    fileInputStream =
+            BufferedInputStream(FileInputStream(transferFile!!.path))
+                            }
                             val bufferedOutputStream =
                               BufferedOutputStream(socket.getOutputStream())
 
@@ -171,8 +177,8 @@ Log.d("RESPONSE",response)
                             if (read <= 0) {
 
                                 handler.post {
-                                    Constants.transferActivity!!.pb_incoming_file.max = transferFile!!.file.length().toInt()
-                                    Constants.transferActivity!!.pb_incoming_file.progress = bytesTransferred
+                                    Constants.transferActivity?.pb_incoming_file?.max = transferFile!!.file.length().toInt()
+                                    Constants.transferActivity?.pb_incoming_file?.progress = bytesTransferred
 
                                 }
 

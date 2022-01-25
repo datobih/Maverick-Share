@@ -17,6 +17,7 @@ class TransferActivity : AppCompatActivity() {
     var adapter:QueueFileRecyclerAdapter?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_MaverickFileSender)
         setContentView(R.layout.activity_transfer)
 
         Constants.transferActivity=this

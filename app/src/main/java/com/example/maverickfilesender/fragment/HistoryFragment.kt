@@ -63,12 +63,14 @@ fetchFiles()
 
         val fileDir= File(mContext!!.getExternalFilesDir(null)!!.path+"/Received")
         val receivedFiles=fileDir.listFiles()
+        val receivedAppFile=ArrayList<AppFile>()
         //Arrays.sort(receivedFiles, Comparator.comparingLong(File::lastModified))
-receivedFiles.let{
+if(!receivedFiles.isNullOrEmpty()){
+        receivedFiles.let{
     Arrays.sort(it){
         f1,f2-> f2.lastModified().compareTo(f1.lastModified())
     }
-    val receivedAppFile=ArrayList<AppFile>()
+
     receivedFiles.forEach {
 
         if(it.name.endsWith(".apk")){
@@ -84,13 +86,14 @@ receivedFiles.let{
     }
 
 
-    val adapter=HistoryFilesRecyclerAdapter(mContext!!,receivedAppFile)
-    rv_history.layoutManager=LinearLayoutManager(mContext)
-    rv_history.adapter=adapter
+
 
 }
+}
 
-
+        val adapter=HistoryFilesRecyclerAdapter(mContext!!,receivedAppFile)
+        rv_history.layoutManager=LinearLayoutManager(mContext)
+        rv_history.adapter=adapter
     }
 
     override fun onResume() {

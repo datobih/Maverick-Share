@@ -84,7 +84,7 @@ appFileList[position].onSelect = !appFileList[position].onSelect!!
 //
 //}
 
-            Constants.tempSelectedFiles.add(ParseFile( appFileList[position].file,appFileList[position].data!!))
+            Constants.tempSelectedFiles.add(ParseFile( appFileList[position].file,appFileList[position].data!!,""))
 
             if(Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1

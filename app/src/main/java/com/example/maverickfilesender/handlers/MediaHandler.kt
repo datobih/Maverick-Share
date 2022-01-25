@@ -31,6 +31,7 @@ class MediaHandler(val context: Context) {
         MediaStore.Images.Media.DISPLAY_NAME,
         MediaStore.Images.Media.SIZE,
         MediaStore.Images.Media.DATE_ADDED,
+            MediaStore.Video.Media.DATA
 
     )
 
@@ -82,14 +83,14 @@ val imageList=ArrayList<Image>()
             val nameColumn = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
             val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE)
             val dateAddedColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED)
-
+            val dataColumn=cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
  while (cursor.moveToNext()){
 
      val id=cursor.getLong(idColumn)
      val name=cursor.getString(nameColumn)
      val size=cursor.getInt(sizeColumn)
      val date=cursor.getInt(dateAddedColumn)
-
+val path=cursor.getString(dataColumn)
 
 val contentUri=ContentUris.withAppendedId( MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL),id)
 
@@ -117,7 +118,7 @@ val contentUri=ContentUris.withAppendedId( MediaStore.Images.Media.getContentUri
 //
 // }
 
-imageList.add(Image(id,name,size,date,contentUri,null,false))
+imageList.add(Image(id,name,size,date,contentUri,path,null,false))
 
 
  }
