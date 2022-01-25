@@ -32,7 +32,7 @@ var onNetworkAvailable=false
     var heirarchyFiles=ArrayList<ArrayList<File>>()
 var parentFiles=ArrayList<File>()
 var selectedFiles=ArrayList<ParseFile>()
-    var tempSelectedFiles=ArrayList<ParseFile>()
+    val tempSelectedFiles=ArrayList<ParseFile>()
 
 
     var imagesSelected=ArrayList<Int>()

@@ -2,8 +2,10 @@ package com.example.maverickfilesender.adapters
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.media.MediaMetadataRetriever
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,31 +43,7 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
                 Glide.with(context)
 
                         .load(File(videoList[position].path))
-                        .listener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                                return true
-                            }
 
-                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-
-
-
-                                holder.itemView.imv_itemVideo.setImageDrawable(resource)
-
-
-                                val bitmap = (resource as BitmapDrawable).bitmap
-                                val stream=ByteArrayOutputStream()
-                                bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
-                                val data=stream.toByteArray()
-                                videoList[position].data=data
-
-
-
-                                return true
-                            }
-
-
-                        })
                         .centerCrop()
 
                         .into(holder.itemView.imv_itemVideo)
@@ -74,7 +52,7 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
                 holder.itemView.imv_itemVideo.setImageResource(R.drawable.video_placeholder_bg)
 
 
-                val bitmap = (ContextCompat.getDrawable(context,R.drawable.video_placeholder_bg) as BitmapDrawable).bitmap
+                val bitmap = getBitmapFromDrawable(ContextCompat.getDrawable(context,R.drawable.video_placeholder_bg)!!)
                 val stream=ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
                 val data=stream.toByteArray()
@@ -86,7 +64,7 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
 
             holder.itemView.tv_ItemVideoName.text = videoList[position].name
             holder.itemView.tv_itemVideo_duration.text = videoList[position].durationStr
-            val sizeKb = (videoList[position].size / (1024))
+            val sizeKb = videoList[position].size/ (1024)
             var sizeMb = sizeKb.toFloat() / 1024f
             var sizeGb = sizeMb.toFloat() / 1024f
 
@@ -97,7 +75,7 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
             if (sizeKb < 1000) {
                 holder.itemView.tv_ItemVideoSize.text = sizeKb.toString() + "KB"
             } else if (sizeKb > 1000 && sizeMb < 1000) {
-                holder.itemView.tv_ItemVideoSize.text.toString() + "MB"
+                holder.itemView.tv_ItemVideoSize.text=sizeMb.toString() + "MB"
 
             } else if (sizeMb > 1000) {
                 holder.itemView.tv_ItemVideoSize.text = sizeGb.toString() + "GB"
@@ -124,8 +102,17 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
                 if (videoList[position].onSelect) {
                     Constants.sendCount++
 
+//                    val metaDataReceiver = MediaMetadataRetriever()
+//                    metaDataReceiver.setDataSource(videoList[position].path)
+//                   val bitmap = metaDataReceiver.frameAtTime
 
-                    Constants.tempSelectedFiles.add(ParseFile( File(videoList[position].path),videoList[position].data))
+                    val bitmap=getBitmapFromDrawable(holder.itemView.imv_itemVideo.drawable)
+                    val stream=ByteArrayOutputStream()
+                    bitmap!!.compress(Bitmap.CompressFormat.PNG,100,stream)
+                    val data=stream.toByteArray()
+                    videoList[position].data=data
+
+                    Constants.tempSelectedFiles.add(ParseFile( File(videoList[position].path),data))
 
                     if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
 
@@ -137,7 +124,7 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
 
                 } else {
                     Constants.sendCount--
-                    Constants.selectedFiles.remove(File(videoList[position].path))
+                    Constants.tempSelectedFiles.remove(ParseFile(File(videoList[position].path),videoList[position].data))
 
 
                     if (Constants.tempSelectedFiles.isEmpty()) {
@@ -154,6 +141,14 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
         }
     }
 
+    fun getBitmapFromDrawable(drawable: Drawable):Bitmap{
+        val bitmap=Bitmap.createBitmap(drawable.intrinsicWidth,drawable.intrinsicHeight,Bitmap.Config.ARGB_8888)
+        val canvas= Canvas(bitmap)
+        drawable.setBounds(0,0,canvas.width,canvas.height)
+        drawable.draw(canvas)
+        return bitmap
+
+    }
 
     override fun getItemCount(): Int {
         return videoList.size

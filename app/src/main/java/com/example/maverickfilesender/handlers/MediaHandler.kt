@@ -10,6 +10,7 @@ import android.media.ThumbnailUtils
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import android.util.Size
 import com.example.maverickfilesender.model.Image
 import com.example.maverickfilesender.model.Video
 import java.lang.Exception
@@ -201,19 +202,24 @@ var durationStr=""
 
 
 //try {
-//    val metaDataReceiver = MediaMetadataRetriever()
-//    metaDataReceiver.setDataSource(context, contentUri)
-//    bitmap = metaDataReceiver.frameAtTime
+////    val metaDataReceiver = MediaMetadataRetriever()
+////    metaDataReceiver.setDataSource(data)
+////    bitmap = metaDataReceiver.frameAtTime
+//
+//    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+//        bitmap=context.contentResolver.loadThumbnail(contentUri, Size(640,480),null)
+//    }
 //}
 //catch (e:Exception){
+//    val msg=e.message
 //    bitmap=null
 //}
-
+//
 
 //bitmap=ThumbnailUtils.createVideoThumbnail(data,MediaStore.Video.Thumbnails.MICRO_KIND)
 
 
-                videoList.add(Video(id,name,size,date,contentUri,data,duration,durationStr,null,false))
+                videoList.add(Video(id,name,size,date,contentUri,data,duration,durationStr,null,bitmap,false))
 
 
             }
