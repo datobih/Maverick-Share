@@ -1,6 +1,9 @@
 package com.example.maverickfilesender.fragment
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,11 +19,14 @@ import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.listeners.FileOnClickListener
 import com.example.maverickfilesender.listeners.RelativePathOnClickListener
 import com.example.maverickfilesender.model.AppFile
+import com.example.maverickfilesender.model.ParseFile
 import com.example.maverickfilesender.model.RelativePath
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_files_directory.*
 import kotlinx.android.synthetic.main.fragment_files_directory.view.*
 import kotlinx.android.synthetic.main.fragment_videos.*
+import kotlinx.android.synthetic.main.item_file.view.*
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.file.Files
 
@@ -106,7 +112,9 @@ while(true){
     var i=0
 while(true){
     if(i!=Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
-        Constants.selectedFiles.remove(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i])
+
+        val tes=Constants.tempSelectedFiles.remove(ParseFile( Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].file,
+                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].data,""))
         i++
     }
 
@@ -117,7 +125,7 @@ while(true){
    }
 
     if((Constants.heirarchyFiles.isEmpty())||(Constants.heirarchyFiles.lastIndex==position-1)){
-        if(Constants.selectedFiles.isEmpty()){
+        if(Constants.tempSelectedFiles.isEmpty()){
             (mContext as MainActivity).ll_main_send.startAnimation((mContext as MainActivity).transitionDown)
             (mContext as MainActivity).ll_main_send.visibility=View.INVISIBLE
         }
@@ -166,7 +174,7 @@ relativePathAdapter.setOnClickListener(mRelativePathOnClickListener!!)
 
 
 Constants.countList.add(0)
-                Constants.heirarchyFiles.add(ArrayList<File>())
+                Constants.heirarchyFiles.add(ArrayList<ParseFile>())
                 view.rv_files.adapter=filesAdapter
             }
 
@@ -183,7 +191,14 @@ Constants.countList.add(0)
 
     }
 
+    fun getBitmapFromDrawable(drawable: Drawable): Bitmap {
+        val bitmap= Bitmap.createBitmap(drawable.intrinsicWidth,drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas= Canvas(bitmap)
+        drawable.setBounds(0,0,canvas.width,canvas.height)
+        drawable.draw(canvas)
+        return bitmap
 
+    }
 
     fun generateAppFile(fileList:Array<File>): ArrayList<AppFile>{
 
@@ -245,7 +260,10 @@ return list
         val exitIndex=Constants.heirarchyFiles.lastIndex-1
         while(true){
             if(i!=Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
-                Constants.selectedFiles.remove(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i])
+                Constants.tempSelectedFiles.remove(ParseFile(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].file,
+                        Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].data,
+                        ""
+                        ))
                 i++
             }
 
@@ -262,7 +280,7 @@ return list
         }
 
 
-        if(Constants.selectedFiles.isEmpty() && (context as MainActivity).ll_main_send.visibility==View.VISIBLE){
+        if(Constants.tempSelectedFiles.isEmpty() && (context as MainActivity).ll_main_send.visibility==View.VISIBLE){
 
             (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
             (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
@@ -279,7 +297,9 @@ var i=0
        while(true){
            if(Constants.heirarchyFiles.isNotEmpty()) {
                if (i != Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
-                   Constants.selectedFiles.remove(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i])
+                  val tes= Constants.tempSelectedFiles.remove(ParseFile(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].file,
+                           Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].data,
+                                   ""))
                    i++
                } else {
                    i = 0
@@ -300,12 +320,12 @@ else{
        while(Constants.parentFiles.isNotEmpty()){
 
 
-           Constants.selectedFiles.remove(Constants.parentFiles[Constants.parentFiles.lastIndex])
+           Constants.tempSelectedFiles.remove(Constants.parentFiles[Constants.parentFiles.lastIndex])
 Constants.parentFiles.removeAt(Constants.parentFiles.lastIndex)
        }
 
 
-       if(Constants.selectedFiles.isEmpty() && (context as MainActivity).ll_main_send.visibility==View.VISIBLE){
+       if(Constants.tempSelectedFiles.isEmpty() && (context as MainActivity).ll_main_send.visibility==View.VISIBLE){
 
            Constants.sendCount=0
 

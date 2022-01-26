@@ -1,5 +1,6 @@
 package com.example.maverickfilesender.constants
 
+import android.widget.ImageView
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.activities.TransferActivity
 import com.example.maverickfilesender.handlers.ClientThread
@@ -29,8 +30,8 @@ var onNetworkAvailable=false
     var sendCount=0
     var countList=ArrayList<Int>()
 
-    var heirarchyFiles=ArrayList<ArrayList<File>>()
-var parentFiles=ArrayList<File>()
+    var heirarchyFiles=ArrayList<ArrayList<ParseFile>>()
+var parentFiles=ArrayList<ParseFile>()
 var selectedFiles=ArrayList<ParseFile>()
     val tempSelectedFiles=ArrayList<ParseFile>()
 
@@ -47,4 +48,7 @@ var clientThread:ClientThread?=null
 var onSelectedMetaData=ArrayList<FileMetaData>()
     val inStoragePath="/storage/emulated/0"
     var transferActivity:TransferActivity?=null
+
+    val filesIconView=ArrayList<ImageView>()
+
 }

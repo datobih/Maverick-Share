@@ -44,6 +44,8 @@ val animation=AnimationUtils.loadAnimation(context,R.anim.bounce)
 
 if(holder is FilesViewHolder){
 
+Constants.filesIconView.add(holder.itemView.imv_fileIcon)
+
 
 if(appFileList[position].onSelect!!){
 
@@ -74,31 +76,31 @@ appFileList[position].onSelect = !appFileList[position].onSelect!!
             var data:ByteArray?=null
 
 //if(appFileList[position].drawable!=null){
-//
-//    val bitmap=getBitmapFromDrawable(appFileList[position].drawable!!)
-//    val stream= ByteArrayOutputStream()
-//    bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
-//    data=stream.toByteArray()
-//
-//
-//
+
+    val bitmap=getBitmapFromDrawable(holder.itemView.imv_fileIcon.drawable)
+    val stream= ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
+    data=stream.toByteArray()
+appFileList[position].data=data
+
+
 //}
 
-            Constants.tempSelectedFiles.add(ParseFile( appFileList[position].file,appFileList[position].data!!,""))
+            Constants.tempSelectedFiles.add(ParseFile( appFileList[position].file,appFileList[position].data,""))
 
             if(Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1
-                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].add(appFileList[position].file)
+                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].add(ParseFile(appFileList[position].file,data,appFileList[position].file.path))
             }
 
             else{
-               Constants.parentFiles.add(appFileList[position].file)
+               Constants.parentFiles.add(ParseFile(appFileList[position].file,data,""))
             }
 
         }
         else{
             Constants.sendCount--
-            Constants.tempSelectedFiles.remove(appFileList[position].file)
+            Constants.tempSelectedFiles.remove(ParseFile(appFileList[position].file,appFileList[position].data,""))
 
             if(Constants.countList.isNotEmpty()&& Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] - 1
@@ -146,28 +148,9 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
          Glide.with(context)
                  .load(appFileList[position].file)
                  .centerCrop()
-                 .listener(object:RequestListener<Drawable>{
-                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                         return true
-                     }
-
-                     override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-
-appFileList[position].drawable=resource
-                         val bitmap = getBitmapFromDrawable(resource!!)
-                         val stream=ByteArrayOutputStream()
-                         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
-                         val data=stream.toByteArray()
-                         appFileList[position].data=data
-
-
-holder.itemView.imv_fileIcon.setImageDrawable(resource)
-                         return true
-                     }
-
-
-                 })
                  .into(holder.itemView.imv_fileIcon)
+
+
 
 
 
@@ -180,11 +163,6 @@ holder.itemView.imv_fileIcon.setImageDrawable(resource)
                  .centerCrop()
                  .into(holder.itemView.imv_fileIcon)
 
-         val bitmap = getBitmapFromDrawable(ContextCompat.getDrawable(context,R.drawable.video_icon)!!)
-         val stream=ByteArrayOutputStream()
-         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
-         val data=stream.toByteArray()
-         appFileList[position].data=data
 
      }
 
@@ -198,11 +176,6 @@ holder.itemView.imv_fileIcon.setImageDrawable(resource)
 
 
 
-         val bitmap = getBitmapFromDrawable(ContextCompat.getDrawable(context,R.drawable.pdf_icon)!!)
-         val stream=ByteArrayOutputStream()
-         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
-         val data=stream.toByteArray()
-         appFileList[position].data=data
 
 
      }
@@ -217,12 +190,6 @@ holder.itemView.imv_fileIcon.setImageDrawable(resource)
                  .into(holder.itemView.imv_fileIcon)
 
 
-         val bitmap = getBitmapFromDrawable(ContextCompat.getDrawable(context,R.drawable.zip_icon)!!)
-         val stream=ByteArrayOutputStream()
-         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
-         val data=stream.toByteArray()
-         appFileList[position].data=data
-
      }
 
 
@@ -234,12 +201,6 @@ holder.itemView.imv_fileIcon.setImageDrawable(resource)
                  .into(holder.itemView.imv_fileIcon)
 
 
-         val bitmap = getBitmapFromDrawable(ContextCompat.getDrawable(context,R.drawable.docx_icon)!!)
-         val stream=ByteArrayOutputStream()
-         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
-         val data=stream.toByteArray()
-         appFileList[position].data=data
-
 
      }
      else if(appFileList[position].file.name.endsWith(".pptx")){
@@ -249,11 +210,6 @@ holder.itemView.imv_fileIcon.setImageDrawable(resource)
                  .centerCrop()
                  .into(holder.itemView.imv_fileIcon)
 
-         val bitmap = getBitmapFromDrawable(ContextCompat.getDrawable(context,R.drawable.ppt_icon)!!)
-         val stream=ByteArrayOutputStream()
-         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
-         val data=stream.toByteArray()
-         appFileList[position].data=data
 
      }
 
@@ -265,11 +221,6 @@ holder.itemView.imv_fileIcon.setImageDrawable(resource)
                  .into(holder.itemView.imv_fileIcon)
 
 
-         val bitmap = getBitmapFromDrawable(ContextCompat.getDrawable(context,R.drawable.xlsx_icon)!!)
-         val stream=ByteArrayOutputStream()
-         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
-         val data=stream.toByteArray()
-         appFileList[position].data=data
 
      }
 
@@ -284,11 +235,6 @@ holder.itemView.imv_fileIcon.setImageDrawable(resource)
 
 
 
-         val bitmap = getBitmapFromDrawable(appFileList[position].drawable!!)
-         val stream=ByteArrayOutputStream()
-         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
-         val data=stream.toByteArray()
-         appFileList[position].data=data
 
         }
         else{
@@ -299,11 +245,6 @@ holder.itemView.imv_fileIcon.setImageDrawable(resource)
                  .centerCrop()
                  .into(holder.itemView.imv_fileIcon)
 
-         val bitmap = getBitmapFromDrawable(ContextCompat.getDrawable(context,R.drawable.ic_twotone_file_24)!!)
-         val stream=ByteArrayOutputStream()
-         bitmap.compress(Bitmap.CompressFormat.PNG,100,stream)
-         val data=stream.toByteArray()
-         appFileList[position].data=data
 
 
      }
@@ -314,6 +255,8 @@ holder.itemView.imv_fileIcon.setImageDrawable(resource)
 
 }
     }
+
+
 
     fun getBitmapFromDrawable(drawable: Drawable): Bitmap {
         val bitmap= Bitmap.createBitmap(drawable.intrinsicWidth,drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
@@ -332,6 +275,6 @@ holder.itemView.imv_fileIcon.setImageDrawable(resource)
         return appFileList.size
     }
 
-    class FilesViewHolder(view: View):RecyclerView.ViewHolder(view)
+    class FilesViewHolder(val view: View):RecyclerView.ViewHolder(view)
 
 }
