@@ -70,6 +70,7 @@ val action=intent.action
                                 }
                                 Thread.sleep(5000)
                                 Constants.clientThread = ClientThread(Constants.mainActivity!!)
+                                Log.d("WIFITHREAD","Made")
                                 Constants.clientThread!!.start()
                                 (context as MainActivity).runOnUiThread {
                                     Constants.mainActivity!!.btn_receiver.visibility = View.GONE

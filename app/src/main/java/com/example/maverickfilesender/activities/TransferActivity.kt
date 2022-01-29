@@ -15,12 +15,15 @@ import java.text.DecimalFormat
 
 class TransferActivity : AppCompatActivity() {
     var adapter:QueueFileRecyclerAdapter?=null
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_MaverickFileSender)
         setContentView(R.layout.activity_transfer)
 
-        Constants.transferActivity=this
         var isSender:Boolean = Constants.clientThread == null
         if(isSender==true){
 
@@ -33,7 +36,7 @@ class TransferActivity : AppCompatActivity() {
         rv_queue.adapter=adapter
 
 
-
+        Constants.transferActivity= this
 
 
     }
@@ -47,12 +50,13 @@ class TransferActivity : AppCompatActivity() {
     }
 
 
-    override fun onDestroy() {
-
-    Constants.transferActivity=null
-        super.onDestroy()
 
 
+
+    override fun onBackPressed() {
+
+        Constants.transferActivity=null
+        super.onBackPressed()
     }
 
 }

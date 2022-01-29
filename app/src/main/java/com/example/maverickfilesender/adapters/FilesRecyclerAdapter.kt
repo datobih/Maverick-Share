@@ -86,21 +86,21 @@ appFileList[position].data=data
 
 //}
 
-            Constants.tempSelectedFiles.add(ParseFile( appFileList[position].file,appFileList[position].data,""))
+            Constants.tempSelectedFiles.add(ParseFile( appFileList[position].file,appFileList[position].data,"",holder.itemView.imv_fileIcon.drawable))
 
             if(Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1
-                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].add(ParseFile(appFileList[position].file,data,appFileList[position].file.path))
+                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].add(ParseFile(appFileList[position].file,data,appFileList[position].file.path,holder.itemView.imv_fileIcon.drawable))
             }
 
             else{
-               Constants.parentFiles.add(ParseFile(appFileList[position].file,data,""))
+               Constants.parentFiles.add(ParseFile(appFileList[position].file,data,"",holder.itemView.imv_fileIcon.drawable))
             }
 
         }
         else{
             Constants.sendCount--
-            Constants.tempSelectedFiles.remove(ParseFile(appFileList[position].file,appFileList[position].data,""))
+            Constants.tempSelectedFiles.remove(ParseFile(appFileList[position].file,appFileList[position].data,"",holder.itemView.imv_fileIcon.drawable))
 
             if(Constants.countList.isNotEmpty()&& Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] - 1

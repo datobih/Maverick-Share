@@ -28,6 +28,7 @@ class ClientThread(val context: Context) : Thread() {
     var bytesReceived:Int = 0
     var fileName=""
     var bitmap:Bitmap?=null
+    var filesRemaining=""
     override fun run() {
         var socketAddress = InetSocketAddress(mainContext.mIpAddress, 9999)
 
@@ -75,20 +76,24 @@ class ClientThread(val context: Context) : Thread() {
 while(fileName=="") {
 
 
+
     fileName = inputStream.readUTF()
 
 }
 
 
 outputStream.writeUTF("done")
-                    Log.d("VERIFY","fileNameDone")
+                    Log.d("VERIFY","$fileName fileNameDone")
 
-val filesRemaining=inputStream.readUTF()
+filesRemaining=inputStream.readUTF()
+                    Log.d("VERIFY","$filesRemaining fileNameDone")
+                    outputStream.flush()
                     outputStream.writeUTF("done")
                     Log.d("VERIFY","FileRemaining")
                     handler.post {
 if(Constants.transferActivity!=null) {
     Constants.transferActivity!!.tv_transfer_toolbar_status.text = "Receiving $filesRemaining remaining files"
+
 
 }
 
@@ -135,12 +140,12 @@ outputStream.writeUTF("done")
 
 
                             Log.d("TESTOS","Setup bitmap")
-if(Constants.transferActivity!=null){
-handler.post {
-    Constants.transferActivity!!.imv_incoming_file.setImageBitmap(bitmap)
-}
-
-}
+//if(Constants.transferActivity!=null){
+//handler.post {
+//    Constants.transferActivity!!.imv_incoming_file.setImageBitmap(bitmap)
+//}
+//
+//}
                         }
 
 
@@ -180,18 +185,24 @@ var count=0
                             bytesReceived += count
 
 
-
+Log.d("TRANSFER",bytesReceived.toString())
 
                             fileOutputStream!!.write(byteBuffer,0,count)
 
                             if(Constants.transferActivity!=null){
                                 (context as MainActivity).runOnUiThread {
-                                    Constants.transferActivity!!.tv_incomingFile_name!!.text=fileName
-                                    Constants.transferActivity!!.tv_item_incomingFile_totalSize!!.text="$fileSizeUnit"
-                                    Constants.transferActivity!!.tv_item_incomingFile_currentSize!!.text=deriveUnits(bytesReceived)
-                                Constants.transferActivity!!.imv_incoming_file.setImageBitmap(bitmap)
+
+                                    if(Constants.transferActivity?.cv_transfer_stack?.visibility==View.INVISIBLE){
+                                        filesSending()
+                                        Constants.transferActivity?.imv_incoming_file?.setImageBitmap(bitmap)
+                                        Constants.transferActivity?.tv_incomingFile_name?.text =fileName
+                                        Constants.transferActivity?.tv_item_incomingFile_totalSize?.text = "/$fileSizeUnit"
+
+                                    }
+
 
                                     if(timer%10==0) {
+                                        Constants.transferActivity?.tv_item_incomingFile_currentSize?.text = deriveUnits(bytesReceived)
                                         Constants.transferActivity!!.pb_incoming_file.max = fileTotalSize
                                         Constants.transferActivity!!.pb_incoming_file.progress = bytesReceived
                                     }
@@ -208,25 +219,34 @@ var count=0
                             Log.i("${fileName}", "$count bytes")
 
                         }
-                        if(bytesReceived==fileSize.toInt()){
-
+                        if(bytesReceived>=fileSize.toInt()){
+var done=true
                             if(Constants.transferActivity!=null) {
+                                done=false
                                 handler.post {
 
-                                    Constants.transferActivity!!.pb_incoming_file.max = fileTotalSize
-                                    Constants.transferActivity!!.pb_incoming_file.progress = bytesReceived
-                                    Constants.transferActivity!!.imv_incoming_file.setImageBitmap(bitmap)
+                                 noFiles()
 
                                     Constants.transferActivity!!.adapter!!.fileMetaDataList!!.add(FileMetaData(fileName,fileTotalSize.toLong(),bitmap))
                                     Constants.transferActivity!!.adapter!!.notifyDataSetChanged()
+                                    fileName=""
+                                    filesRemaining=(filesRemaining.toInt()-1).toString()
+                                    bytesReceived=0
+                                    fileTotalSize=0
+done=true
                                 }
 
 
+                            }else{
+                                fileName=""
+                                filesRemaining=(filesRemaining.toInt()-1).toString()
+                                bytesReceived=0
+                                fileTotalSize=0
                             }
-                            Thread.sleep(1000)
-fileName=""
-                            bytesReceived=0
-                            fileTotalSize=0
+while(!done){
+
+}
+
                             Log.i("TransferComplete", "Successful")
                         }
 
@@ -240,6 +260,18 @@ fileName=""
             }
         }
 
+
+    }
+
+    fun noFiles(){
+        Constants.transferActivity?.cv_transfer_stack?.visibility=View.INVISIBLE
+        Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.VISIBLE
+        Constants.transferActivity?.tv_fileTransfer_status?.text="No Files Incoming"
+    }
+
+    fun filesSending(){
+        Constants.transferActivity?.cv_transfer_stack?.visibility=View.VISIBLE
+        Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.INVISIBLE
 
     }
 

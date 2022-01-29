@@ -16,6 +16,7 @@ import com.example.maverickfilesender.adapters.HistoryFilesRecyclerAdapter
 import com.example.maverickfilesender.model.AppFile
 import kotlinx.android.synthetic.main.fragment_history.*
 import java.io.File
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -72,17 +73,19 @@ if(!receivedFiles.isNullOrEmpty()){
     }
 
     receivedFiles.forEach {
+try {
+    if (it.name.endsWith(".apk")) {
+        val packageManager = mContext!!.packageManager
+        val packageInfo = packageManager.getPackageArchiveInfo(it.path, 0)
+        val drawable = packageInfo!!.applicationInfo.loadIcon(packageManager)
+        receivedAppFile.add(AppFile(it, drawable, null, null))
+    } else {
+        receivedAppFile.add(AppFile(it, null, null, null))
+    }
+}
+catch (e:Exception){
 
-        if(it.name.endsWith(".apk")){
-            val packageManager=mContext!!.packageManager
-            val packageInfo=packageManager.getPackageArchiveInfo(it.path,0)
-            val drawable=packageInfo!!.applicationInfo.loadIcon(packageManager)
-            receivedAppFile.add(AppFile(it,drawable,null,null))
-        }
-        else{
-            receivedAppFile.add(AppFile(it,null,null,null))
-        }
-
+}
     }
 
 

@@ -76,12 +76,12 @@ this.appPackagePackageList[position].data=data
 
     }
 
-   Constants.tempSelectedFiles.add(ParseFile( File(appPackagePackageList[position].applicationInfo.sourceDir),data,""))
+   Constants.tempSelectedFiles.add(ParseFile( File(appPackagePackageList[position].applicationInfo.sourceDir),data,"",appPackagePackageList[position].drawable))
     Constants.sendCount++
 }
 
     else{
-  Constants.tempSelectedFiles.remove(ParseFile(File(appPackagePackageList[position].applicationInfo.sourceDir),appPackagePackageList[position].data,""))
+  Constants.tempSelectedFiles.remove(ParseFile(File(appPackagePackageList[position].applicationInfo.sourceDir),appPackagePackageList[position].data,"",appPackagePackageList[position].drawable))
 
     Constants.sendCount--
     }

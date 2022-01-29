@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.FileMetaData
@@ -24,8 +25,9 @@ class ServerThread(val context: Context) : Thread() {
     var bytesTransferred: Int = 0
     var fileSize: Int = 0
     var serverSocket:ServerSocket?=null
+    var bitmap:Bitmap?=null
 
-    override fun run() {
+ override fun run() {
          serverSocket = ServerSocket(9999)
 
         serverSocket!!.soTimeout = 1000000000
@@ -43,7 +45,7 @@ return
 
         if (socket!!.isConnected) {
             val outputStream = DataOutputStream(socket.getOutputStream())
-            val inputStream = DataInputStream(socket.getInputStream())
+            var inputStream = DataInputStream(socket.getInputStream())
 
 
             val userName = inputStream.readUTF()
@@ -71,9 +73,18 @@ return
 
 
                             if(Constants.transferActivity!=null){
-                                handler.post {
-                                    Constants.transferActivity!!.adapter?.notifyDataSetChanged()
-                                }
+
+
+                                    handler.post {
+
+
+                                        Constants.transferActivity!!.adapter?.notifyDataSetChanged()
+
+                                    }
+
+
+
+
                                 }
 
                             val fileSizeUnit = deriveUnits(transferFile!!.file.length().toInt()).toString()
@@ -101,13 +112,17 @@ if(transferFile!!.path.isEmpty()) {
                                 val packageManager = context!!.packageManager
                                 val packageInfo = packageManager.getPackageArchiveInfo(transferFile!!.file.path, 0)
                                 fileName = packageInfo!!.applicationInfo.loadLabel(packageManager).toString()+".apk"
+
                             }
 
                             outputStream.writeUTF(fileName)
                           //  outputStream.flush()
                             inputStream.readUTF()
-                            outputStream.writeUTF(Constants.selectedFiles.lastIndex.toString())
-                            inputStream.readUTF()
+                            val fileRemaining=Constants.selectedFiles.size+1
+                            outputStream.writeUTF(fileRemaining.toString())
+                            Log.d("VERIFY","$fileRemaining remaining" )
+                            val mResponse=inputStream.readUTF()
+                            Log.d("VERIFY","$mResponse response" )
 handler.post {
     if(Constants.transferActivity!=null) {
         Constants.transferActivity!!.tv_transfer_toolbar_status.text="Sending ${Constants.selectedFiles.lastIndex} remaining files"
@@ -116,23 +131,25 @@ handler.post {
 }
 
                             outputStream.writeUTF(transferFile!!.file.length().toString())
+                            Log.d("VERIFY","length sent" )
 inputStream.readUTF()
                             if (transferFile!!.data != null) {
                             outputStream.writeUTF(transferFile!!.data!!.size.toString())
+                                Log.d("VERIFY","thumbnail size" )
                                 inputStream.readUTF()
-                                outputStream.flush()
+
 
 
 
                               outputStream.write(transferFile!!.data,0,transferFile!!.data!!.size)
 
-
+                                Log.d("VERIFY","thumbnail sent" )
                                 val response=inputStream.readUTF()
 Log.d("RESPONSE",response)
 
 
 
-
+Thread.sleep(100)
 
 
                             }
@@ -154,18 +171,27 @@ Log.d("RESPONSE",response)
                                 bufferedOutputStream.write(byteBuffer, 0, read)
                                 bytesTransferred = bytesTransferred + read
                                 timer++
+                                Log.d("UITEST","Outside")
 
                                 if (Constants.transferActivity != null) {
-                                  handler.post {
-                                        Constants.transferActivity!!.tv_incomingFile_name.text =fileName
-                                        Constants.transferActivity!!.tv_item_incomingFile_totalSize.text = "/$fileSizeUnit"
-                                        Constants.transferActivity!!.tv_item_incomingFile_currentSize.text = deriveUnits(bytesTransferred)
+                                    (context as MainActivity).runOnUiThread {
+                                      Log.d("UITEST","Inside")
 
-                                      if(timer%10==0){
-                                          Constants.transferActivity!!.pb_incoming_file.max = transferFile!!.file.length().toInt()
-                                          Constants.transferActivity!!.pb_incoming_file.progress = bytesTransferred
+                                        if(Constants.transferActivity?.cv_transfer_stack?.visibility==View.INVISIBLE){
+                                            filesSending()
+                                            Constants.transferActivity?.imv_incoming_file?.setImageDrawable(transferFile!!.drawable)
+                                            Constants.transferActivity?.tv_incomingFile_name?.text =fileName
+                                            Constants.transferActivity?.tv_item_incomingFile_totalSize?.text = "/$fileSizeUnit"
+                                            Constants.transferActivity?.tv_item_incomingFile_currentSize?.text = deriveUnits(bytesTransferred)
+                                        }
 
-                                      }
+
+
+
+                                          Constants.transferActivity?.pb_incoming_file?.max = transferFile!!.file.length().toInt()
+                                          Constants.transferActivity?.pb_incoming_file?.progress = bytesTransferred
+
+
 
 
                                     }
@@ -175,30 +201,49 @@ Log.d("RESPONSE",response)
 
                             }
                             if (read <= 0) {
+                                var done=true
+if(Constants.transferActivity!=null) {
+    done=false
+    handler.post {
+      noFiles()
 
-                                handler.post {
-                                    Constants.transferActivity?.pb_incoming_file?.max = transferFile!!.file.length().toInt()
-                                    Constants.transferActivity?.pb_incoming_file?.progress = bytesTransferred
+        bytesTransferred = 0
+        Log.i("TransferComplete", "Successful")
+        fileSize = 0
+        bytesTransferred = 0
+        read = 0
+        done=true
+        Thread.sleep(100)
+    }
+}
+                                else{
+    bytesTransferred = 0
+    Log.i("TransferComplete", "Successful")
+    fileSize = 0
+    bytesTransferred = 0
+    read = 0
 
                                 }
 
-                                Thread.sleep(1000)
-                                var bitmap:Bitmap?=null
-                                if(transferFile!!.data!=null) {
-                                    bitmap = BitmapFactory.decodeByteArray(transferFile!!.data, 0, transferFile!!.data!!.size)
+                                while(!done){
+
                                 }
-                                FileMetaData(fileName,fileSize.toLong(),bitmap)
+                                Thread.sleep(100)
+
+                              //  Thread.sleep(1000)
+//                                var bitmap:Bitmap?=null
+//                                if(transferFile!!.data!=null) {
+//                                    bitmap = BitmapFactory.decodeByteArray(transferFile!!.data, 0, transferFile!!.data!!.size)
+//                                }
 
 
-                                bytesTransferred = 0
-                                Log.i("TransferComplete", "Successful")
-                                fileSize = 0
-                                bytesTransferred = 0
+
+
 
 
                             }
 
-                            read = 0
+
 
 
 //    if(transferFile!!.name.endsWith("apk")){
@@ -213,7 +258,9 @@ Log.d("RESPONSE",response)
 
                         }
 
+else{
 
+        }
 
                     } else {
                         fileSize = 0
@@ -228,6 +275,25 @@ Log.d("RESPONSE",response)
 
         }
 
+
+    }
+
+
+    fun noFiles(){
+
+
+        Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.VISIBLE
+        Constants.transferActivity?.tv_fileTransfer_status?.text="No Files Incoming"
+
+        Constants.transferActivity?.cv_transfer_stack?.visibility=View.INVISIBLE
+
+
+
+    }
+
+    fun filesSending(){
+        Constants.transferActivity?.cv_transfer_stack?.visibility=View.VISIBLE
+        Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.INVISIBLE
 
     }
 

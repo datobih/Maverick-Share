@@ -114,7 +114,8 @@ while(true){
     if(i!=Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
 
         val tes=Constants.tempSelectedFiles.remove(ParseFile( Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].file,
-                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].data,""))
+                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].data,"",
+                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].drawable))
         i++
     }
 
@@ -262,7 +263,7 @@ return list
             if(i!=Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
                 Constants.tempSelectedFiles.remove(ParseFile(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].file,
                         Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].data,
-                        ""
+                        "", Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].drawable
                         ))
                 i++
             }
@@ -299,7 +300,7 @@ var i=0
                if (i != Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
                   val tes= Constants.tempSelectedFiles.remove(ParseFile(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].file,
                            Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].data,
-                                   ""))
+                                   "",       Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].drawable))
                    i++
                } else {
                    i = 0

@@ -85,8 +85,9 @@ Constants.mainActivity=this
         registerReceiver(receiver, IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION))
 
         val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
-        vp_main.offscreenPageLimit=5
+
         vp_main.adapter = adapter
+        vp_main.offscreenPageLimit=5
         vp_main.isUserInputEnabled = false
 
         val appTab = tab_main.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
