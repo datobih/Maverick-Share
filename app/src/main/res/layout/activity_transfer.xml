@@ -98,6 +98,7 @@ android:layout_below="@id/ll_incomingFiles"
         android:layout_marginEnd="10dp"
 app:cardUseCompatPadding="true"
 android:visibility="invisible"
+        tools:visibility="visible"
         android:layout_below="@id/ll_incomingFiles"
         >
 

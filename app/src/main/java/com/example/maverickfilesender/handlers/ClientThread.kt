@@ -196,7 +196,7 @@ Log.d("TRANSFER",bytesReceived.toString())
                                         filesSending()
                                         Constants.transferActivity?.imv_incoming_file?.setImageBitmap(bitmap)
                                         Constants.transferActivity?.tv_incomingFile_name?.text =fileName
-                                        Constants.transferActivity?.tv_item_incomingFile_totalSize?.text = "/$fileSizeUnit"
+                                        Constants.transferActivity?.tv_item_incomingFile_totalSize?.text = "$fileSizeUnit"
 
                                     }
 
@@ -246,7 +246,7 @@ done=true
 while(!done){
 
 }
-
+outputStream.writeUTF("done")
                             Log.i("TransferComplete", "Successful")
                         }
 

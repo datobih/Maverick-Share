@@ -182,12 +182,12 @@ Thread.sleep(100)
                                             Constants.transferActivity?.imv_incoming_file?.setImageDrawable(transferFile!!.drawable)
                                             Constants.transferActivity?.tv_incomingFile_name?.text =fileName
                                             Constants.transferActivity?.tv_item_incomingFile_totalSize?.text = "/$fileSizeUnit"
-                                            Constants.transferActivity?.tv_item_incomingFile_currentSize?.text = deriveUnits(bytesTransferred)
+
                                         }
 
 
 
-
+                                        Constants.transferActivity?.tv_item_incomingFile_currentSize?.text = deriveUnits(bytesTransferred)
                                           Constants.transferActivity?.pb_incoming_file?.max = transferFile!!.file.length().toInt()
                                           Constants.transferActivity?.pb_incoming_file?.progress = bytesTransferred
 
@@ -228,7 +228,8 @@ if(Constants.transferActivity!=null) {
                                 while(!done){
 
                                 }
-                                Thread.sleep(100)
+                        val response=inputStream.readUTF()
+
 
                               //  Thread.sleep(1000)
 //                                var bitmap:Bitmap?=null
