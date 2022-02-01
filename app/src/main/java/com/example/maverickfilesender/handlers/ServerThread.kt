@@ -177,8 +177,9 @@ Thread.sleep(100)
                                     (context as MainActivity).runOnUiThread {
                                       Log.d("UITEST","Inside")
 
-                                        if(Constants.transferActivity?.cv_transfer_stack?.visibility==View.INVISIBLE){
-                                            filesSending()
+                                        if(Constants.transferActivity?.ll_transfer_stack?.visibility==View.INVISIBLE){
+                                            Constants.transferActivity?.transferViewModel?.isFileTransferring?.value=true
+                                            Constants.transferActivity?.pb_incoming_file?.max = transferFile!!.file.length().toInt()
                                             Constants.transferActivity?.imv_incoming_file?.setImageDrawable(transferFile!!.drawable)
                                             Constants.transferActivity?.tv_incomingFile_name?.text =fileName
                                             Constants.transferActivity?.tv_item_incomingFile_totalSize?.text = "/$fileSizeUnit"
@@ -187,9 +188,7 @@ Thread.sleep(100)
 
 
 
-                                        Constants.transferActivity?.tv_item_incomingFile_currentSize?.text = deriveUnits(bytesTransferred)
-                                          Constants.transferActivity?.pb_incoming_file?.max = transferFile!!.file.length().toInt()
-                                          Constants.transferActivity?.pb_incoming_file?.progress = bytesTransferred
+                                          Constants.transferActivity?.transferViewModel?.mutableLiveData?.value=bytesTransferred
 
 
 
@@ -205,7 +204,7 @@ Thread.sleep(100)
 if(Constants.transferActivity!=null) {
     done=false
     handler.post {
-      noFiles()
+        Constants.transferActivity?.transferViewModel?.isFileTransferring?.value=false
 
         bytesTransferred = 0
         Log.i("TransferComplete", "Successful")
@@ -286,14 +285,14 @@ else{
         Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.VISIBLE
         Constants.transferActivity?.tv_fileTransfer_status?.text="No Files Incoming"
 
-        Constants.transferActivity?.cv_transfer_stack?.visibility=View.INVISIBLE
+        Constants.transferActivity?.ll_transfer_stack?.visibility=View.INVISIBLE
 
 
 
     }
 
     fun filesSending(){
-        Constants.transferActivity?.cv_transfer_stack?.visibility=View.VISIBLE
+        Constants.transferActivity?.ll_transfer_stack?.visibility=View.VISIBLE
         Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.INVISIBLE
 
     }

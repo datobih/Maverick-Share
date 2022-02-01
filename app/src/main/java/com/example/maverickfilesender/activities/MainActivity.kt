@@ -44,6 +44,7 @@ import java.io.DataOutputStream
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
+import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity() {
     var ssid: String = ""
@@ -87,7 +88,7 @@ Constants.mainActivity=this
         val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
 
         vp_main.adapter = adapter
-        vp_main.offscreenPageLimit=5
+        vp_main.offscreenPageLimit=3
         vp_main.isUserInputEnabled = false
 
         val appTab = tab_main.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
@@ -562,6 +563,8 @@ if(mReservation!=null){
 
 
     }
+
+
 
 
     override fun onRequestPermissionsResult(

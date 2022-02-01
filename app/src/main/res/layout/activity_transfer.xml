@@ -9,7 +9,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/toolbar_main"
+        android:id="@+id/toolbar_transfer"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#283593"
@@ -52,28 +52,7 @@ android:layout_marginLeft="50dp"
     </RelativeLayout>
 
 
-    <LinearLayout
-        android:id="@+id/ll_incomingFiles"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#484848"
-android:layout_below="@id/toolbar_main"
 
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Incoming file"
-
-            android:fontFamily="@font/gilroy_light"
-
-            android:layout_margin="6dp"
-            android:textStyle="bold"
-            android:textSize="13dp"
-            ></TextView>
-
-    </LinearLayout>
 
 
     <TextView
@@ -85,30 +64,21 @@ android:layout_below="@id/toolbar_main"
         android:text="No Files Incoming"
         android:fontFamily="@font/gilroy"
         android:textColor="@color/white"
-android:layout_below="@id/ll_incomingFiles"
+android:layout_below="@id/toolbar_transfer"
         android:layout_centerHorizontal="true"
         ></TextView>
 
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_transfer_stack"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-app:cardUseCompatPadding="true"
-android:visibility="invisible"
-        tools:visibility="visible"
-        android:layout_below="@id/ll_incomingFiles"
-        >
 
         <RelativeLayout
+            android:id="@+id/ll_transfer_stack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-
+            android:layout_below="@id/toolbar_transfer"
             android:padding="10dp"
             android:background="#484848"
+android:visibility="invisible"
             >
 
 
@@ -186,7 +156,7 @@ android:textColor="@color/white"
 
 
         </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+
 
 
 
@@ -201,7 +171,7 @@ android:textColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#484848"
-android:layout_below="@id/cv_transfer_stack"
+android:layout_below="@id/ll_transfer_stack"
 
         >
 

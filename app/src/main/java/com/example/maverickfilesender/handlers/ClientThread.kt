@@ -192,8 +192,9 @@ Log.d("TRANSFER",bytesReceived.toString())
                             if(Constants.transferActivity!=null){
                                 (context as MainActivity).runOnUiThread {
 
-                                    if(Constants.transferActivity?.cv_transfer_stack?.visibility==View.INVISIBLE){
-                                        filesSending()
+                                    if(Constants.transferActivity?.ll_transfer_stack?.visibility==View.INVISIBLE){
+                                        Constants.transferActivity?.transferViewModel?.isFileTransferring?.value=true
+                                        Constants.transferActivity!!.pb_incoming_file.max = fileTotalSize
                                         Constants.transferActivity?.imv_incoming_file?.setImageBitmap(bitmap)
                                         Constants.transferActivity?.tv_incomingFile_name?.text =fileName
                                         Constants.transferActivity?.tv_item_incomingFile_totalSize?.text = "$fileSizeUnit"
@@ -203,8 +204,9 @@ Log.d("TRANSFER",bytesReceived.toString())
 
                                     if(timer%10==0) {
                                         Constants.transferActivity?.tv_item_incomingFile_currentSize?.text = deriveUnits(bytesReceived)
-                                        Constants.transferActivity!!.pb_incoming_file.max = fileTotalSize
-                                        Constants.transferActivity!!.pb_incoming_file.progress = bytesReceived
+
+
+                                        Constants.transferActivity!!.transferViewModel!!.mutableLiveData!!.value=bytesReceived
                                     }
                                     timer++
                                 }
@@ -220,12 +222,13 @@ Log.d("TRANSFER",bytesReceived.toString())
 
                         }
                         if(bytesReceived>=fileSize.toInt()){
+
 var done=true
                             if(Constants.transferActivity!=null) {
                                 done=false
                                 handler.post {
 
-                                 noFiles()
+                                 Constants.transferActivity?.transferViewModel?.isFileTransferring?.value=false
 
                                     Constants.transferActivity!!.adapter!!.fileMetaDataList!!.add(FileMetaData(fileName,fileTotalSize.toLong(),bitmap))
                                     Constants.transferActivity!!.adapter!!.notifyDataSetChanged()
@@ -264,13 +267,13 @@ outputStream.writeUTF("done")
     }
 
     fun noFiles(){
-        Constants.transferActivity?.cv_transfer_stack?.visibility=View.INVISIBLE
+        Constants.transferActivity?.ll_transfer_stack?.visibility=View.INVISIBLE
         Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.VISIBLE
         Constants.transferActivity?.tv_fileTransfer_status?.text="No Files Incoming"
     }
 
     fun filesSending(){
-        Constants.transferActivity?.cv_transfer_stack?.visibility=View.VISIBLE
+        Constants.transferActivity?.ll_transfer_stack?.visibility=View.VISIBLE
         Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.INVISIBLE
 
     }
