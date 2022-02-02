@@ -106,12 +106,12 @@ startActivity(Intent(this,MainActivity::class.java))
 
                 }
 
-                else{
+
+
                     finish()
                     startActivity(Intent(this,MainActivity::class.java))
 
 
-                }
 
 
 
