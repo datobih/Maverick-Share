@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
     var mDialog: Dialog? = null
     var mHandler: Handler? = null
     var mNetworkSSID = ""
-
+    var shouldScan=false
     var animationMoveUp:Animation?=null
     var transitionDown:Animation?=null
     var imageFragment:ImageFragment?=null
@@ -84,6 +84,8 @@ Constants.mainActivity=this
 
 
         registerReceiver(receiver, IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION))
+
+        registerReceiver(receiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
 
         val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
 
@@ -401,36 +403,9 @@ if(mReservation!=null){
 
                 val wifiManager =
                     applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                shouldScan=true
+wifiManager.startScan()
 
-                val scanResult = wifiManager.scanResults
-                val receiversResult = ArrayList<ScanResult>()
-                for (i in scanResult) {
-
-                    Log.i("WIFII", i.SSID)
-
-//if(i.SSID.contains("AndroidShare_")){
-                    receiversResult.add(i)
-//}
-
-
-                }
-
-
-                if (receiversResult.isNotEmpty()) {
-
-                    val dialog = Dialog(this)
-                    mDialog = dialog
-                    dialog.setContentView(R.layout.dialog_hotspot_receiver)
-                    val adapter = SSIDListRecyclerAdapter(this, receiversResult)
-
-                    dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(this)
-                    dialog.rv_receiver_ssid.setHasFixedSize(true)
-
-                    dialog.rv_receiver_ssid.adapter = adapter
-                    dialog.show()
-
-
-                }
 
 
             } else {

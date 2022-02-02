@@ -37,15 +37,19 @@ var transferViewModel:TransferViewModel?=null
         transferViewModel!!.isFileTransferring!!.observe(this,{
 
             if(it==true){
-             ll_transfer_stack?.visibility=View.VISIBLE
-                tv_fileTransfer_status?.visibility=View.INVISIBLE
+
+                vf_transfer_state.displayedChild=1
+
+//             ll_transfer_stack?.visibility=View.VISIBLE
+//                tv_fileTransfer_status?.visibility=View.INVISIBLE
 
             }
             else{
-                ll_transfer_stack?.visibility= View.INVISIBLE
-
-              tv_fileTransfer_status?.visibility= View.VISIBLE
-             tv_fileTransfer_status?.text="No Files Incoming"
+                vf_transfer_state.displayedChild=0
+//                ll_transfer_stack?.visibility= View.INVISIBLE
+//
+//              tv_fileTransfer_status?.visibility= View.VISIBLE
+//             tv_fileTransfer_status?.text="No Files Incoming"
 
 
             }

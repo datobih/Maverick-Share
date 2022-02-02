@@ -192,7 +192,7 @@ Log.d("TRANSFER",bytesReceived.toString())
                             if(Constants.transferActivity!=null){
                                 (context as MainActivity).runOnUiThread {
 
-                                    if(Constants.transferActivity?.ll_transfer_stack?.visibility==View.INVISIBLE){
+                                    if(Constants.transferActivity?.vf_transfer_state?.displayedChild==0){
                                         Constants.transferActivity?.transferViewModel?.isFileTransferring?.value=true
                                         Constants.transferActivity!!.pb_incoming_file.max = fileTotalSize
                                         Constants.transferActivity?.imv_incoming_file?.setImageBitmap(bitmap)

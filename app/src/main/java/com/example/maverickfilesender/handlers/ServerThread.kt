@@ -177,7 +177,7 @@ Thread.sleep(100)
                                     (context as MainActivity).runOnUiThread {
                                       Log.d("UITEST","Inside")
 
-                                        if(Constants.transferActivity?.ll_transfer_stack?.visibility==View.INVISIBLE){
+                                        if(Constants.transferActivity?.vf_transfer_state?.displayedChild==0){
                                             Constants.transferActivity?.transferViewModel?.isFileTransferring?.value=true
                                             Constants.transferActivity?.pb_incoming_file?.max = transferFile!!.file.length().toInt()
                                             Constants.transferActivity?.imv_incoming_file?.setImageDrawable(transferFile!!.drawable)

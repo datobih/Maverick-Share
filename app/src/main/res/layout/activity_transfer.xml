@@ -53,8 +53,13 @@ android:layout_marginLeft="50dp"
 
 
 
+<ViewFlipper
+    android:id="@+id/vf_transfer_state"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/toolbar_transfer"
 
-
+    >
     <TextView
         android:id="@+id/tv_fileTransfer_status"
         android:layout_width="wrap_content"
@@ -64,8 +69,7 @@ android:layout_marginLeft="50dp"
         android:text="No Files Incoming"
         android:fontFamily="@font/gilroy"
         android:textColor="@color/white"
-android:layout_below="@id/toolbar_transfer"
-        android:layout_centerHorizontal="true"
+android:layout_gravity="center_horizontal"
         ></TextView>
 
 
@@ -75,10 +79,9 @@ android:layout_below="@id/toolbar_transfer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:layout_below="@id/toolbar_transfer"
             android:padding="10dp"
             android:background="#484848"
-android:visibility="invisible"
+
             >
 
 
@@ -158,6 +161,7 @@ android:textColor="@color/white"
         </RelativeLayout>
 
 
+</ViewFlipper>
 
 
 
@@ -171,7 +175,7 @@ android:textColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#484848"
-android:layout_below="@id/ll_transfer_stack"
+android:layout_below="@id/vf_transfer_state"
 
         >
 

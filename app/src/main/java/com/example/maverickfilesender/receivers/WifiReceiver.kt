@@ -1,11 +1,13 @@
 package com.example.maverickfilesender.receivers
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
 import android.os.Handler
@@ -14,10 +16,14 @@ import android.text.format.Formatter
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
+import com.example.maverickfilesender.adapters.SSIDListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.handlers.ClientThread
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import java.net.InetAddress
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -27,7 +33,45 @@ class WifiReceiver() : BroadcastReceiver() {
 
 val action=intent.action
 
-        if(action== WifiManager.NETWORK_STATE_CHANGED_ACTION){
+
+if(action==WifiManager.SCAN_RESULTS_AVAILABLE_ACTION && (context as MainActivity).shouldScan){
+    (context as MainActivity).shouldScan=false
+    val wifiManager =
+            context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+    val scanResult = wifiManager.scanResults
+    val receiversResult = ArrayList<ScanResult>()
+    for (i in scanResult) {
+
+        Log.i("WIFII", i.SSID)
+
+//if(i.SSID.contains("AndroidShare_")){
+        receiversResult.add(i)
+//}
+
+
+    }
+
+
+    if (receiversResult.isNotEmpty()) {
+
+        val dialog = Dialog(context)
+        (context as MainActivity).mDialog = dialog
+        dialog.setContentView(R.layout.dialog_hotspot_receiver)
+        val adapter = SSIDListRecyclerAdapter(context, receiversResult)
+
+        dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(context)
+        dialog.rv_receiver_ssid.setHasFixedSize(true)
+
+        dialog.rv_receiver_ssid.adapter = adapter
+        dialog.show()
+
+
+    }
+
+}
+
+       else if(action== WifiManager.NETWORK_STATE_CHANGED_ACTION){
 
 
             if(Constants.onNetworkAvailable) {
