@@ -30,6 +30,7 @@ class PermissionsActivity : AppCompatActivity() {
 
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+
                 if (!Environment.isExternalStorageManager()) {
                     val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                     val uri = Uri.fromParts("package", this.packageName, null)
@@ -105,6 +106,13 @@ startActivity(Intent(this,MainActivity::class.java))
 
                 }
 
+                else{
+                    finish()
+                    startActivity(Intent(this,MainActivity::class.java))
+
+
+                }
+
 
 
             }
@@ -118,9 +126,6 @@ startActivity(Intent(this,MainActivity::class.java))
         super.onActivityResult(requestCode, resultCode, data)
 
     if(requestCode==0){
-
-        finish()
-        startActivity(Intent(this,MainActivity::class.java))
 
 
 
