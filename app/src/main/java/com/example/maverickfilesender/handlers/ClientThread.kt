@@ -153,15 +153,28 @@ outputStream.writeUTF("done")
 
 
                         var fileOutputStream: FileOutputStream? = null
+var fileDir:File?=null
+                    if(fileName.endsWith(".jpg")||
+                            fileName.endsWith(".jpeg")||
+                            fileName.endsWith(".png")||
+                            fileName.endsWith(".PNG")||
+                            fileName.endsWith(".mp4")||
+                            fileName.endsWith(".avi")||
+                            fileName.endsWith(".mvk")) {
 
-                        val fileDir=File(context.getExternalFilesDir(null)!!.path + "/Received")
-                        if(!fileDir.exists()){
-                            fileDir.mkdirs()
+
+                        fileDir = File("/storage/emulated/0/DCIM/Maverick")
+                    }else{
+                        fileDir = File(context.getExternalFilesDir(null)!!.path + "/Received")
+                    }
+
+                        if(!fileDir!!.exists()){
+                            fileDir!!.mkdirs()
                         }
 
 
                         fileOutputStream =
-                            FileOutputStream(context.getExternalFilesDir(null)!!.path + "/Received"+"/$fileName")
+                            FileOutputStream(fileDir.path+"/$fileName")
 
 
 val byteBuffer=ByteArray((1024*500)+1)

@@ -125,7 +125,7 @@ if(transferFile!!.path.isEmpty()) {
                             Log.d("VERIFY","$mResponse response" )
 handler.post {
     if(Constants.transferActivity!=null) {
-        Constants.transferActivity!!.tv_transfer_toolbar_status.text="Sending ${Constants.selectedFiles.lastIndex} remaining files"
+        Constants.transferActivity!!.tv_transfer_toolbar_status.text="Sending ${Constants.selectedFiles.lastIndex+1} remaining files"
 
     }
 }

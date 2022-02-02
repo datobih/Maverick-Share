@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.PermissionsActivity"
+    android:background="#212121"
+    android:orientation="vertical"
+    >
+
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="100dp"
+
+        android:src="@drawable/mv_logo"></ImageView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Maverick File Sender"
+        android:textColor="@color/white"
+        android:fontFamily="@font/gilroy"
+        android:textSize="19dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        ></TextView>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="To use this app you need to enable read and write permissions on your device"
+        android:textColor="@color/white"
+        android:fontFamily="@font/gilroy_light"
+        android:textSize="15dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        ></TextView>
+
+
+    <Button
+        android:id="@+id/btn_enable_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+android:textSize="20dp"
+        android:text="Enable"
+        android:fontFamily="@font/gilroy"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="#6259E1"
+        android:padding="20dp"
+        ></Button>
+
+</LinearLayout>

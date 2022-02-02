@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
 import android.provider.Settings
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -77,6 +78,17 @@ class StorageDirectoryFragment : Fragment() {
         }
 
         val inStoragePath = "/storage/emulated/0"
+
+        val dcim=inStoragePath+"/DCIM/Maverick"
+        val tesFile=File(dcim)
+
+        if(!tesFile.exists()){
+           val result= tesFile.mkdirs()
+
+            Log.d("TESTOS","File Created")
+
+        }
+
 
         var internalTotalSize = getTotalSpace(inStoragePath)
 
