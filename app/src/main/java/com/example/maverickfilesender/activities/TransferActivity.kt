@@ -45,6 +45,7 @@ var transferViewModel:TransferViewModel?=null
 
             }
             else{
+
                 vf_transfer_state.displayedChild=0
 //                ll_transfer_stack?.visibility= View.INVISIBLE
 //

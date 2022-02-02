@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.HistoryFragment"
     android:orientation="vertical"
+    android:layout_gravity="center"
     >
 
 
 
     <LinearLayout
+        android:id="@+id/ll_history_received"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#6d6d6d"
@@ -31,14 +33,28 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_history_noFiles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No files available"
+android:layout_centerInParent="true"
+
+        android:layout_margin="6dp"
+android:textColor="@color/white"
+        android:textSize="19dp"
+        android:fontFamily="@font/gilroy_light"
+        ></TextView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-
+android:visibility="gone"
+        android:layout_below="@id/ll_history_received"
         ></androidx.recyclerview.widget.RecyclerView>
 
 
 
-</LinearLayout>
+</RelativeLayout>

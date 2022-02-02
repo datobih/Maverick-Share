@@ -15,6 +15,7 @@ import com.example.maverickfilesender.R
 import com.example.maverickfilesender.adapters.HistoryFilesRecyclerAdapter
 import com.example.maverickfilesender.model.AppFile
 import kotlinx.android.synthetic.main.fragment_history.*
+import kotlinx.android.synthetic.main.fragment_history.view.*
 import java.io.File
 import java.lang.Exception
 import java.util.*
@@ -62,7 +63,7 @@ fetchFiles()
     fun fetchFiles(){
 
 
-        val fileDir= File(mContext!!.getExternalFilesDir(null)!!.path+"/Received")
+        val fileDir= File("/storage/emulated/0/Download/Maverick")
         val receivedFiles=fileDir.listFiles()
         val receivedAppFile=ArrayList<AppFile>()
         //Arrays.sort(receivedFiles, Comparator.comparingLong(File::lastModified))
@@ -94,13 +95,24 @@ catch (e:Exception){
 }
 }
 
-        val adapter=HistoryFilesRecyclerAdapter(mContext!!,receivedAppFile)
-        rv_history.layoutManager=LinearLayoutManager(mContext)
-        rv_history.adapter=adapter
+        if(receivedAppFile.isEmpty()){
+           tv_history_noFiles.visibility=View.VISIBLE
+          rv_history.visibility=View.GONE
+        }
+
+        else {
+            rv_history.visibility=View.VISIBLE
+            tv_history_noFiles.visibility=View.GONE
+
+
+            val adapter = HistoryFilesRecyclerAdapter(mContext!!, receivedAppFile)
+            rv_history.layoutManager = LinearLayoutManager(mContext)
+            rv_history.adapter = adapter
+        }
     }
 
     override fun onResume() {
-
+fetchFiles()
 
         super.onResume()
     }

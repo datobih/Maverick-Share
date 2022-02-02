@@ -90,14 +90,14 @@ filesRemaining=inputStream.readUTF()
                     outputStream.flush()
                     outputStream.writeUTF("done")
                     Log.d("VERIFY","FileRemaining")
-                    handler.post {
-if(Constants.transferActivity!=null) {
-    Constants.transferActivity!!.tv_transfer_toolbar_status.text = "Receiving $filesRemaining remaining files"
-
-
-}
-
-                    }
+//                    handler.post {
+//if(Constants.transferActivity!=null) {
+//    Constants.transferActivity!!.tv_transfer_toolbar_status.text = "Receiving $filesRemaining remaining files"
+//
+//
+//}
+//
+//                    }
 
                         fileSize = inputStream.readUTF()
 outputStream.writeUTF("done")
@@ -165,7 +165,7 @@ var fileDir:File?=null
 
                         fileDir = File("/storage/emulated/0/DCIM/Maverick")
                     }else{
-                        fileDir = File(context.getExternalFilesDir(null)!!.path + "/Received")
+                        fileDir = File("/storage/emulated/0/Download/Maverick")
                     }
 
                         if(!fileDir!!.exists()){
@@ -211,6 +211,7 @@ Log.d("TRANSFER",bytesReceived.toString())
                                         Constants.transferActivity?.imv_incoming_file?.setImageBitmap(bitmap)
                                         Constants.transferActivity?.tv_incomingFile_name?.text =fileName
                                         Constants.transferActivity?.tv_item_incomingFile_totalSize?.text = "$fileSizeUnit"
+                                        Constants.transferActivity!!.tv_transfer_toolbar_status.text = "Receiving $filesRemaining remaining files"
 
                                     }
 
@@ -249,6 +250,9 @@ var done=true
                                     filesRemaining=(filesRemaining.toInt()-1).toString()
                                     bytesReceived=0
                                     fileTotalSize=0
+                                    if(filesRemaining=="0"){
+                                        Constants.transferActivity!!.tv_transfer_toolbar_status.text = "No files remaining"
+                                    }
 done=true
                                 }
 

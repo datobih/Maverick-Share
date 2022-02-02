@@ -79,7 +79,7 @@ class StorageDirectoryFragment : Fragment() {
 
         val inStoragePath = "/storage/emulated/0"
 
-        val dcim=inStoragePath+"/DCIM/Maverick"
+        val dcim=inStoragePath+"/Download/Maverick"
         val tesFile=File(dcim)
 
         if(!tesFile.exists()){

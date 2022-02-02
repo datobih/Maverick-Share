@@ -123,12 +123,12 @@ if(transferFile!!.path.isEmpty()) {
                             Log.d("VERIFY","$fileRemaining remaining" )
                             val mResponse=inputStream.readUTF()
                             Log.d("VERIFY","$mResponse response" )
-handler.post {
-    if(Constants.transferActivity!=null) {
-        Constants.transferActivity!!.tv_transfer_toolbar_status.text="Sending ${Constants.selectedFiles.lastIndex+1} remaining files"
-
-    }
-}
+//handler.post {
+//    if(Constants.transferActivity!=null) {
+//        Constants.transferActivity!!.tv_transfer_toolbar_status.text="Sending ${Constants.selectedFiles.lastIndex+1} remaining files"
+//
+//    }
+//}
 
                             outputStream.writeUTF(transferFile!!.file.length().toString())
                             Log.d("VERIFY","length sent" )
@@ -183,6 +183,7 @@ Thread.sleep(100)
                                             Constants.transferActivity?.imv_incoming_file?.setImageDrawable(transferFile!!.drawable)
                                             Constants.transferActivity?.tv_incomingFile_name?.text =fileName
                                             Constants.transferActivity?.tv_item_incomingFile_totalSize?.text = "/$fileSizeUnit"
+                                            Constants.transferActivity!!.tv_transfer_toolbar_status.text="Sending ${Constants.selectedFiles.lastIndex+2} remaining files"
 
                                         }
 
@@ -205,7 +206,9 @@ if(Constants.transferActivity!=null) {
     done=false
     handler.post {
         Constants.transferActivity?.transferViewModel?.isFileTransferring?.value=false
-
+if(Constants.selectedFiles.isEmpty()){
+    Constants.transferActivity!!.tv_transfer_toolbar_status.text = "No files remaining"
+}
         bytesTransferred = 0
         Log.i("TransferComplete", "Successful")
         fileSize = 0
