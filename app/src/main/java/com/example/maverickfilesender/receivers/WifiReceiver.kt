@@ -90,6 +90,10 @@ if(action==WifiManager.SCAN_RESULTS_AVAILABLE_ACTION && (context as MainActivity
                             while (wifiInfo.ssid != "\"${Constants.mNetworkSSID}\""){
                                 wifiInfo=wifiManager.connectionInfo
                                 Log.d("TESTOS","SPAM")
+//                                if(Constants.noNetwork){
+//                                    Constants.noNetwork=false
+//                                    break
+//                                }
                             }
 
                             if (wifiInfo.ssid == "\"${Constants.mNetworkSSID}\"") {
@@ -111,6 +115,11 @@ if(action==WifiManager.SCAN_RESULTS_AVAILABLE_ACTION && (context as MainActivity
                                             .order(ByteOrder.LITTLE_ENDIAN)
                                             .putInt(wifiManager.dhcpInfo.gateway)
                                             .array()).hostAddress
+
+                                    if(Constants.noNetwork){
+                                        Constants.noNetwork=false
+                                        return
+                                    }
                                 }
                                 Thread.sleep(5000)
                                 Constants.clientThread = ClientThread(Constants.mainActivity!!)

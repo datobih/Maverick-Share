@@ -17,6 +17,7 @@ object Constants{
     val CONNECTION_TYPE_HOTSPOT="Hotspot"
     val CONNECTION_TYPE_WIFI="Wifi"
 
+    var noNetwork=false
 var onNetworkAvailable=false
     var mNetworkSSID=""
 

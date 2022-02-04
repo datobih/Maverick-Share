@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
     var imageFragment:ImageFragment?=null
     var appsFragment:AppsFragment?=null
     var videosFragment:VideosFragment?=null
+
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

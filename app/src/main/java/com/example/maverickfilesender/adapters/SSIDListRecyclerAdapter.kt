@@ -133,7 +133,7 @@ context.runOnUiThread {
 
                     override fun onUnavailable() {
                         super.onUnavailable()
-
+Constants.noNetwork=true
                         Log.i("WIFII", "onUnavailable")
                     }
 
