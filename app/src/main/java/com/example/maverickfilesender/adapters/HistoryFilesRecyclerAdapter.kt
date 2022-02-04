@@ -1,29 +1,21 @@
 package com.example.maverickfilesender.adapters
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
+import com.example.maverickfilesender.BuildConfig
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.model.AppFile
-import kotlinx.android.synthetic.main.item_file.view.*
-import kotlinx.android.synthetic.main.item_file.view.imv_fileIcon
-import kotlinx.android.synthetic.main.item_file.view.ll_itemFile
 import kotlinx.android.synthetic.main.item_history_file.view.*
-import java.io.ByteArrayOutputStream
-import java.io.File
 
-class HistoryFilesRecyclerAdapter(val context: Context,val appFileList:ArrayList<AppFile>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayList<AppFile>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-return HistoryViewHolder(LayoutInflater.from(context).inflate(R.layout.item_history_file,parent,false))
+return HistoryViewHolder(LayoutInflater.from(context).inflate(R.layout.item_history_file, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -33,7 +25,20 @@ return HistoryViewHolder(LayoutInflater.from(context).inflate(R.layout.item_hist
         if(holder is HistoryViewHolder){
 
 
+
         holder.itemView.tv_item_history_fileName.text=appFileList[position].file.name
+
+
+            holder.itemView.ll_historyItemFile.setOnClickListener {
+val intent= Intent(Intent.ACTION_VIEW)
+                val mUri=FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", appFileList[position].file)
+                intent.setDataAndType(mUri, "application/vnd.android.package-archive")
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                context.startActivity(intent)
+
+
+            }
 
         if(appFileList[position].file.isDirectory) {
 
@@ -162,5 +167,5 @@ return HistoryViewHolder(LayoutInflater.from(context).inflate(R.layout.item_hist
         return appFileList.size
     }
 
-class HistoryViewHolder(view:View):RecyclerView.ViewHolder(view)
+class HistoryViewHolder(view: View):RecyclerView.ViewHolder(view)
 }
