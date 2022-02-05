@@ -23,6 +23,7 @@ import com.example.maverickfilesender.adapters.SSIDListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.handlers.ClientThread
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import java.net.InetAddress
 import java.nio.ByteBuffer

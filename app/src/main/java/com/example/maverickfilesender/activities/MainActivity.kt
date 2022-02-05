@@ -37,6 +37,7 @@ import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.receivers.WifiReceiver
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import kotlinx.android.synthetic.main.dialog_hotspot_sender.*
 import java.io.DataInputStream
@@ -345,7 +346,9 @@ if(mReservation!=null){
                                 dialog.setContentView(R.layout.dialog_hotspot_sender)
                                 dialog.tv_hotspot_SSID.text = ssid
                                 dialog.tv_hotspot_password.text = password
-                                dialog.show()
+
+
+                                    dialog.show()
 
 
                             }

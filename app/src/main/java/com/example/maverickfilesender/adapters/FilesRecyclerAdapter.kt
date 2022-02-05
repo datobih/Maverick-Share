@@ -23,6 +23,7 @@ import com.example.maverickfilesender.listeners.FileOnClickListener
 import com.example.maverickfilesender.model.AppFile
 import com.example.maverickfilesender.model.ParseFile
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.item_file.view.*
 import java.io.ByteArrayOutputStream
 

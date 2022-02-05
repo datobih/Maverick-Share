@@ -23,6 +23,7 @@ import com.example.maverickfilesender.model.Image
 import com.example.maverickfilesender.model.ParseFile
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_images.view.*
 import kotlinx.android.synthetic.main.item_app.view.*
 import kotlinx.android.synthetic.main.item_image.view.*

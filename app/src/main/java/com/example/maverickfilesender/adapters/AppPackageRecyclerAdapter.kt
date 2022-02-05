@@ -17,6 +17,7 @@ import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.AppPackage
 import com.example.maverickfilesender.model.ParseFile
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.item_app.view.*
 import java.io.ByteArrayOutputStream
 import java.io.File

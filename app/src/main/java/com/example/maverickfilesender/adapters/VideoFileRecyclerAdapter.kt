@@ -23,6 +23,7 @@ import com.example.maverickfilesender.model.Image
 import com.example.maverickfilesender.model.ParseFile
 import com.example.maverickfilesender.model.Video
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.item_video.view.*
 import java.io.ByteArrayOutputStream
 import java.io.File

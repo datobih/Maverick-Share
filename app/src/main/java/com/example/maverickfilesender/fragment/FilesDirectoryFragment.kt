@@ -22,6 +22,7 @@ import com.example.maverickfilesender.model.AppFile
 import com.example.maverickfilesender.model.ParseFile
 import com.example.maverickfilesender.model.RelativePath
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_files_directory.*
 import kotlinx.android.synthetic.main.fragment_files_directory.view.*
 import kotlinx.android.synthetic.main.fragment_videos.*

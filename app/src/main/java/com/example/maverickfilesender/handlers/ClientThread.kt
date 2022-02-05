@@ -13,8 +13,10 @@ import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.FileMetaData
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_transfer.*
+import kotlinx.android.synthetic.main.content_main.*
 import java.io.*
 import java.lang.Exception
 import java.net.InetSocketAddress
@@ -69,6 +71,11 @@ class ClientThread(val context: Context) : Thread() {
 
 
             if (socket.isConnected) {
+
+                try{
+
+
+
                 while (true) {
                     var fileSize=""
 
@@ -275,7 +282,24 @@ outputStream.writeUTF("done")
 
 
                 }
+                }
+                catch (e:Exception){
+                    val snackBar= if(Constants.transferActivity!=null){
+                        Snackbar.make(Constants.transferActivity!!.findViewById(android.R.id.content),"Something went wrong", Snackbar.LENGTH_SHORT)
 
+
+
+                    }else{
+                        Snackbar.make((context as MainActivity).findViewById(android.R.id.content),"Something went wrong", Snackbar.LENGTH_SHORT)
+
+                    }
+
+
+                    snackBar.view.setBackgroundColor(ContextCompat.getColor(context, R.color.maverick_blue))
+
+                    snackBar.show()
+                    return
+                }
 
             }
         }
