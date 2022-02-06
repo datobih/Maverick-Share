@@ -152,6 +152,26 @@
     </FrameLayout>
 
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_disconnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_bg"
+
+        android:layout_centerHorizontal="true"
+      android:layout_centerInParent="true"
+
+        android:layout_marginBottom="15dp"
+        android:text="Disconnect"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:layout_above="@id/ll_main_send"
+        android:fontFamily="@font/gilroy_light"
+        android:textStyle="bold"
+android:visibility="gone"
+        tools:visibility="visible"
+        ></androidx.appcompat.widget.AppCompatButton>
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_sender"
@@ -167,8 +187,8 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:layout_above="@id/ll_main_send"
-        android:fontFamily="@font/gilroy"
-
+        android:fontFamily="@font/gilroy_light"
+android:textStyle="bold"
         ></androidx.appcompat.widget.AppCompatButton>
 
 
@@ -187,9 +207,9 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:layout_above="@id/ll_main_send"
-        android:fontFamily="@font/gilroy"
+        android:fontFamily="@font/gilroy_light"
 
-
+android:textStyle="bold"
         ></androidx.appcompat.widget.AppCompatButton>
 
 

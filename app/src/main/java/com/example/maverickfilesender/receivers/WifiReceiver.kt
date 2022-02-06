@@ -155,11 +155,9 @@ if(Constants.isReconnected!=null && Constants.isReconnected==true){
                                 Constants.clientThread = ClientThread(Constants.mainActivity!!)
                                 Log.d("WIFITHREAD","Made")
                                 Constants.clientThread!!.start()
-                                (context as MainActivity).runOnUiThread {
-                                    Constants.mainActivity!!.btn_receiver.visibility = View.GONE
-                                    Constants.mainActivity!!.btn_sender.visibility = View.GONE
-
-                                }
+//                                (context as MainActivity).runOnUiThread {
+//                                    (context as MainActivity).setupUIconnected()
+//                                }
 
 
 //                    btn_connect_status.visibility = View.VISIBLE

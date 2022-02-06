@@ -60,7 +60,7 @@ return
             val handler = android.os.Handler(Looper.getMainLooper())
             handler!!.post {
                 mainContext.tv_connection_status.text = "Connected to $userName"
-
+                (context as MainActivity).setupUIconnected()
             }
 
 

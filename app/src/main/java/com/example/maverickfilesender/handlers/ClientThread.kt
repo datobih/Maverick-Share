@@ -65,7 +65,7 @@ class ClientThread(val context: Context) : Thread() {
             val handler = android.os.Handler(Looper.getMainLooper())
             handler!!.post {
                 mainContext.tv_connection_status.text = "Connected to $userName"
-
+                (context as MainActivity).setupUIconnected()
             }
 
 
@@ -293,8 +293,6 @@ outputStream.writeUTF("done")
                     if(mFile.exists()){
                         val isDeleted=mFile.delete()
 
-                        var j=0
-                        j++
 
                     }
 

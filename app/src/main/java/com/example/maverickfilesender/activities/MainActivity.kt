@@ -489,71 +489,14 @@ wifiManager.startScan()
 //    }
 
 
-    fun initClientThread() {
-        clientSocketThread = Thread(object : Runnable {
-            override fun run() {
-                var socketAddress = InetSocketAddress(mIpAddress, 9999)
-                var socket = Socket()
-                socket.connect(socketAddress, 100000)
-                Log.i("SOCKETT", "Client Connected")
-                if (socket.isConnected) {
-                    val outputStream = DataOutputStream(socket.getOutputStream())
-                    val inputStream = DataInputStream(socket.getInputStream())
-                    outputStream.writeUTF("Migaaac")
-
-                    val userName = inputStream.readUTF()
-                    mHandler!!.post {
-                        tv_connection_status.text = "Connected to $userName"
-
-                    }
-
-                }
-
-            }
+fun setupUIconnected(){
+    btn_receiver.visibility=View.GONE
+    btn_sender.visibility=View.GONE
+btn_disconnect.visibility=View.VISIBLE
 
 
-        })
+}
 
-        clientSocketThread!!.start()
-
-
-    }
-
-    fun initServerThread() {
-
-        serverSocketThread = Thread(object : Runnable {
-            override fun run() {
-                val serverSocket = ServerSocket(9999)
-
-                val socket = serverSocket.accept()
-
-                if (socket.isConnected) {
-
-                    val inputStream = DataInputStream(socket.getInputStream())
-                    val outputStream = DataOutputStream(socket.getOutputStream())
-
-                    val userName = inputStream.readUTF()
-                    mHandler!!.post {
-                        tv_connection_status.text = "Connected to $userName"
-
-                    }
-
-                    outputStream.writeUTF("David")
-
-
-                }
-
-
-                Log.i("SOCKETT", "Server Connected")
-
-            }
-
-
-        })
-
-        serverSocketThread!!.start()
-
-    }
 
 
     fun isLocationEnabled(): Boolean {

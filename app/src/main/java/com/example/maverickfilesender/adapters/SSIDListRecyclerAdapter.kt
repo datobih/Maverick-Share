@@ -114,8 +114,8 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
 
 context.runOnUiThread {
 
-    context.btn_receiver.visibility=View.GONE
-    context.btn_send.visibility=View.GONE
+//    (context as MainActivity).setupUIconnected()
+
 
 //    context.btn_connect_status.visibility=View.VISIBLE
     context.connectionType=Constants.CONNECTION_TYPE_WIFI
