@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.location.LocationManager
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
@@ -83,7 +84,10 @@ Constants.mainActivity=this
         mHandler = Handler(Looper.getMainLooper())
         var receiver = WifiReceiver()
 
-
+val mIntentFilter=IntentFilter()
+        mIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+        mIntentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)
+registerReceiver(receiver,mIntentFilter)
 
         registerReceiver(receiver, IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION))
 
@@ -117,7 +121,7 @@ Constants.mainActivity=this
 
 
         mHandler!!.postDelayed(Runnable {      btn_receiver.startAnimation(receiveAnimation)
-            btn_send.startAnimation(sendAnimation)
+            btn_sender.startAnimation(sendAnimation)
 
         },400)
 

@@ -8,6 +8,7 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.ScanResult
+import android.net.wifi.SupplicantState
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pManager
 import android.os.Handler
@@ -35,10 +36,23 @@ class WifiReceiver() : BroadcastReceiver() {
 val action=intent.action
 
 
+
+        if(action==WifiManager.SUPPLICANT_STATE_CHANGED_ACTION){
+
+            if(intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_ERROR)){
+                if(Constants.isReconnected==null)
+                Constants.isReconnected=true
+            }
+
+        }
+
+
 if(action==WifiManager.SCAN_RESULTS_AVAILABLE_ACTION && (context as MainActivity).shouldScan){
     (context as MainActivity).shouldScan=false
     val wifiManager =
             context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+
 
     val scanResult = wifiManager.scanResults
     val receiversResult = ArrayList<ScanResult>()
@@ -84,7 +98,13 @@ if(action==WifiManager.SCAN_RESULTS_AVAILABLE_ACTION && (context as MainActivity
                         var wifiManager =
                                 context.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
+
+
                         if (wifiManager.isWifiEnabled) {
+
+                            val connectivityManager=context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                            val connectivityInfo=connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+
 
                             var wifiInfo = wifiManager.connectionInfo
 
@@ -121,7 +141,16 @@ if(action==WifiManager.SCAN_RESULTS_AVAILABLE_ACTION && (context as MainActivity
                                         Constants.noNetwork=false
                                         return
                                     }
+
+if(Constants.isReconnected!=null && Constants.isReconnected==true){
+    Constants.isReconnected=false
+    return
+}
+
                                 }
+                        if(wifiInfo.ssid != "\"${Constants.mNetworkSSID}\""){
+                            return
+                        }
                                 Thread.sleep(5000)
                                 Constants.clientThread = ClientThread(Constants.mainActivity!!)
                                 Log.d("WIFITHREAD","Made")

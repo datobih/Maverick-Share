@@ -20,7 +20,7 @@ object Constants{
     var noNetwork=false
 var onNetworkAvailable=false
     var mNetworkSSID=""
-
+var isReconnected:Boolean?=false
 
     var mainActivity:MainActivity?=null
 

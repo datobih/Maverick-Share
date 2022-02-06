@@ -144,6 +144,7 @@ Constants.noNetwork=true
 
 
             } else {
+                Constants.isReconnected=null
                 val wifiConfiguration=WifiConfiguration()
                 wifiConfiguration.SSID="\"${networkSSID}\""
                 wifiConfiguration.preSharedKey="\"${networkPassword}\""
@@ -169,7 +170,9 @@ Constants.noNetwork=true
 
                 wifiManager.disconnect()
                 wifiManager.enableNetwork(netID,true)
-                wifiManager.reconnect()
+      wifiManager.reconnect()
+
+
 
 //
 //
@@ -177,20 +180,10 @@ Constants.noNetwork=true
 //
 //                    val wifiInfo=wifiManager.connectionInfo
 //                    if(wifiInfo.ssid=="\"${networkSSID}\""){
-//                        if(context is MainActivity){
-//                            (context as MainActivity).isClientConnected=true
-//                            context.mIpAddress= Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
 //
-//                            Constants.clientThread= ClientThread(context)
-//                    Constants.clientThread!!.start()
-//
-//
-//                            context.btn_receiver.visibility=View.GONE
-//                            context.btn_send.visibility=View.GONE
-//
-////                            context.btn_connect_status.visibility=View.VISIBLE
-//                            context.connectionType=Constants.CONNECTION_TYPE_WIFI
-//                        }
+//                    }
+//                    else{
+//                        Constants.noNetwork=true
 //                    }
 //
 //                }
