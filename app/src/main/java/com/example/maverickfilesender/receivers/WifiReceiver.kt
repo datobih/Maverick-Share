@@ -148,9 +148,9 @@ if(Constants.isReconnected!=null && Constants.isReconnected==true){
 }
 
                                 }
-                        if(wifiInfo.ssid != "\"${Constants.mNetworkSSID}\""){
-                            return
-                        }
+//                        if(wifiInfo.ssid != "\"${Constants.mNetworkSSID}\""){
+//                            return
+//                        }
                                 Thread.sleep(5000)
                                 Constants.clientThread = ClientThread(Constants.mainActivity!!)
                                 Log.d("WIFITHREAD","Made")

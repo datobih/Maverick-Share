@@ -31,6 +31,7 @@ class ClientThread(val context: Context) : Thread() {
     var fileName=""
     var bitmap:Bitmap?=null
     var filesRemaining=""
+    var tempDir=""
     override fun run() {
         var socketAddress = InetSocketAddress(mainContext.mIpAddress, 9999)
 
@@ -178,7 +179,7 @@ var fileDir:File?=null
                         if(!fileDir!!.exists()){
                             fileDir!!.mkdirs()
                         }
-
+tempDir=fileDir.path+"/$fileName"
 
                         fileOutputStream =
                             FileOutputStream(fileDir.path+"/$fileName")
@@ -284,20 +285,19 @@ outputStream.writeUTF("done")
                 }
                 }
                 catch (e:Exception){
-                    val snackBar= if(Constants.transferActivity!=null){
-                        Snackbar.make(Constants.transferActivity!!.findViewById(android.R.id.content),"Something went wrong", Snackbar.LENGTH_SHORT)
+                   showErrorMessage()
 
 
+                    val mFile=File(tempDir)
 
-                    }else{
-                        Snackbar.make((context as MainActivity).findViewById(android.R.id.content),"Something went wrong", Snackbar.LENGTH_SHORT)
+                    if(mFile.exists()){
+                        val isDeleted=mFile.delete()
+
+                        var j=0
+                        j++
 
                     }
 
-
-                    snackBar.view.setBackgroundColor(ContextCompat.getColor(context, R.color.maverick_blue))
-
-                    snackBar.show()
                     return
                 }
 
@@ -306,6 +306,22 @@ outputStream.writeUTF("done")
 
 
     }
+
+    fun showErrorMessage(){
+        val snackBar= if(Constants.transferActivity!=null){
+            Snackbar.make(Constants.transferActivity!!.findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_SHORT)
+
+        }else{
+            Snackbar.make((context as MainActivity).findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_SHORT)
+        }
+        snackBar.view.setBackgroundColor(ContextCompat.getColor(context, R.color.maverick_blue))
+        snackBar.show()
+
+        bytesReceived=0
+        fileTotalSize=0
+        return
+    }
+
 
     fun noFiles(){
         Constants.transferActivity?.ll_transfer_stack?.visibility=View.INVISIBLE
