@@ -26,6 +26,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.adapters.MainPagerFragmentAdapter
@@ -36,6 +37,7 @@ import com.example.maverickfilesender.handlers.ClientThread
 import com.example.maverickfilesender.handlers.ServerThread
 import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.receivers.WifiReceiver
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -81,6 +83,19 @@ class MainActivity : AppCompatActivity() {
 //
 
 Constants.mainActivity=this
+
+        imv_drawer.setOnClickListener {
+
+            if(!main_drawerLayout.isDrawerOpen(GravityCompat.START)){
+                main_drawerLayout.openDrawer(GravityCompat.START)
+
+            }else{
+                main_drawerLayout.closeDrawer(GravityCompat.START)
+            }
+
+
+        }
+
         mHandler = Handler(Looper.getMainLooper())
         var receiver = WifiReceiver()
 
@@ -126,6 +141,25 @@ registerReceiver(receiver,mIntentFilter)
         },400)
 
 
+
+        drawer_navigation.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener {
+            when(it.itemId){
+               R.id.d_menu_settings->{
+
+
+                   return@OnNavigationItemSelectedListener true
+               }
+
+                else->{
+
+
+                    return@OnNavigationItemSelectedListener true
+                }
+
+            }
+
+
+        })
 
         ll_transfering.setOnClickListener {
 var intent=Intent(this,TransferActivity::class.java)

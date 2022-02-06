@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<group android:checkableBehavior="single">
+
+    <item
+android:id="@+id/d_menu_settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_round_settings_24"
+android:checkable="false"
+        ></item>
+
+    <item
+        android:id="@+id/d_menu_help"
+        android:title="Help"
+        android:icon="@drawable/ic_round_help_center_24"
+android:checkable="false"
+        ></item>
+
+
+
+</group>
+
+
+
+
+
+</menu>

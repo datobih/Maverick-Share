@@ -28,7 +28,7 @@
 
 
         <ImageView
-            android:id="@+id/imv_userProfile"
+            android:id="@+id/imv_drawer"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="15dp"

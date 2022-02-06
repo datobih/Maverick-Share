@@ -28,4 +28,11 @@
 
     </style>
 
+    <style name="gilroyTextViewStyle" parent="android:Widget.TextView">
+
+
+        <item name="fontFamily">@font/gilroy_light</item>
+
+    </style>
+
 </resources>
