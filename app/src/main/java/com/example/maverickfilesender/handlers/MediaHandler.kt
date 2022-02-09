@@ -3,7 +3,9 @@ package com.example.maverickfilesender.handlers
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
+import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
@@ -12,6 +14,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import com.example.maverickfilesender.model.Image
+import com.example.maverickfilesender.model.Music
 import com.example.maverickfilesender.model.Video
 import java.lang.Exception
 
@@ -56,11 +59,121 @@ class MediaHandler(val context: Context) {
 
 
 
+    val audioCollection =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+
+        } else {
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        }
+
+
+    val audioProjection = arrayOf(
+        MediaStore.Audio.Media._ID,
+        MediaStore.Audio.Media.DISPLAY_NAME,
+        MediaStore.Audio.Media.ARTIST,
+        MediaStore.Audio.Media.DATA,
+        MediaStore.Audio.Media.DURATION,
+        MediaStore.Audio.Media.SIZE,
+        MediaStore.Audio.Media.ALBUM,
+
+
+
+
+
+    )
+
+
+
 
     val imageSortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
 
 
     val videoSortOrder = "${MediaStore.Video.Media.DATE_ADDED} DESC"
+
+    val audioSortOrder="${MediaStore.Audio.Media.DATE_ADDED} DESC"
+
+
+    fun getMediaFromDevice(): ArrayList<Music> {
+        var query: Cursor?=null
+
+
+
+            query = context.contentResolver.query(audioCollection, audioProjection, null, null, audioSortOrder)
+
+
+
+        val musicList = ArrayList<Music>()
+
+
+        query.use { cursor ->
+
+
+            var idColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
+            var nameColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
+            var durationColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+            var sizeColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)
+            var artistColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
+            var dataColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+            var albumColumn=cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
+
+
+
+
+            while (cursor!!.moveToNext()) {
+                val id = cursor.getLong(idColumn!!)
+                val name = cursor.getString(nameColumn!!)
+                val duration = cursor.getInt(durationColumn!!)
+                val size = cursor.getInt(sizeColumn!!)
+                var artist = cursor.getString(artistColumn!!)
+                val pathData = cursor.getString(dataColumn!!)
+                val album=cursor.getString(albumColumn!!)
+
+                val contentUri = ContentUris.withAppendedId(
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    id
+                )
+
+
+                var bitmap: Bitmap? = null
+
+                try {
+                    var mediaMetaDataRetriever = MediaMetadataRetriever()
+                    mediaMetaDataRetriever.setDataSource(pathData)
+                    val data = mediaMetaDataRetriever.embeddedPicture
+                    bitmap = BitmapFactory.decodeByteArray(data, 0, data!!.size)
+
+                    mediaMetaDataRetriever.release()
+                } catch (e: Exception) {
+                    bitmap = null
+                }
+
+
+                /*
+            val artworkUri = Uri.parse("content://media/external/audio/albumart")
+            val albumArtUri = ContentUris.withAppendedId(artworkUri, id)
+
+
+             */
+
+
+
+                musicList.add(Music(contentUri, id, name, artist,album, bitmap, duration, size))
+            }
+
+
+
+
+
+
+
+
+            return musicList
+        }
+
+
+    }
+
 
 
     fun fetchImageFiles() : ArrayList<Image>{

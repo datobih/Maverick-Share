@@ -44,7 +44,7 @@ var socket:Socket?=null
         catch (e:Exception) {
 return
         }
-
+socket.soTimeout=300
 
 
         if (socket!!.isConnected) {
@@ -249,31 +249,39 @@ socket.soTimeout=1000000000
 
 
         } else {
-socket.soTimeout=200
-            try{
-inputStream.readUTF()
-            }
-            catch (e:Exception){
+            //**PREVIOUS IMPLEMENTATION**//
+//socket.soTimeout=200
+//            try{
+//inputStream.readUTF()
+//            }
+//            catch (e:Exception){
+//
+//                if(e is SocketTimeoutException){
+//
+//                }
+//                else{
+//                 showErrorMessage()
+//                   if( (context as MainActivity).mReservation!=null){
+//                       (context as MainActivity).mReservation!!.close()
+//                       Thread.sleep(3000)
+//                       (context as MainActivity).mReservation=null
+//
+//
+//                   }
+//                    Constants.serverThread!!.serverSocket!!.close()
+//
+//                    return
+//                }
+//
+//
+//            }
 
-                if(e is SocketTimeoutException){
+            outputStream.writeUTF("..isClientActive")
 
-                }
-                else{
-                 showErrorMessage()
-                   if( (context as MainActivity).mReservation!=null){
-                       (context as MainActivity).mReservation!!.close()
-                       Thread.sleep(3000)
-                       (context as MainActivity).mReservation=null
+            val response=inputStream.readUTF()
 
+Log.d("RESPONSEEE",response)
 
-                   }
-                    Constants.serverThread!!.serverSocket!!.close()
-
-                    return
-                }
-
-
-            }
 
         }
 
@@ -306,7 +314,7 @@ catch (e:Exception){
 
 
     }
-    Constants.serverThread!!.serverSocket!!.close()
+  serverSocket!!.close()
 
     return
 

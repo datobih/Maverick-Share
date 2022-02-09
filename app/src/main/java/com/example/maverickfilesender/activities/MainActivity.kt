@@ -84,6 +84,24 @@ class MainActivity : AppCompatActivity() {
 
 Constants.mainActivity=this
 
+
+        btn_disconnect.setOnClickListener {
+            val wifimanager =
+                    applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+
+if(connectionType==Constants.CONNECTION_TYPE_WIFI) {
+
+ if(android.os.Build.VERSION.SDK_INT<android.os.Build.VERSION_CODES.Q) {
+     wifimanager.setWifiEnabled(false)
+ }
+    else{
+        startActivity(Intent(android.provider.Settings.Panel.ACTION_WIFI))
+
+ }
+
+}
+        }
+
         imv_drawer.setOnClickListener {
 
             if(!main_drawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -111,15 +129,17 @@ registerReceiver(receiver,mIntentFilter)
         val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
 
         vp_main.adapter = adapter
-        vp_main.offscreenPageLimit=3
+        vp_main.offscreenPageLimit=4
         vp_main.isUserInputEnabled = false
 
         val appTab = tab_main.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
         val historyTab=tab_main.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24)
         tab_main.addTab(historyTab)
         tab_main.addTab(appTab)
+
         tab_main.addTab(tab_main.newTab().setText("Images").setIcon(R.drawable.ic_outline_image_24))
         tab_main.addTab(tab_main.newTab().setText("Videos").setIcon(R.drawable.ic_outline_video_library_24))
+        tab_main.addTab(tab_main.newTab().setText("Audio").setIcon(R.drawable.ic_outline_audiotrack_24))
         tab_main.addTab(tab_main.newTab().setText("Files").setIcon(R.drawable.ic_baseline_folder_24))
 //
 //        tab_main.selectTab(appTab)
@@ -445,9 +465,20 @@ if(mReservation!=null){
 
                 val wifiManager =
                     applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                shouldScan=true
-wifiManager.startScan()
+                if(!wifiManager.isWifiEnabled) {
+                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+                        wifiManager.setWifiEnabled(false)
+                        shouldScan = true
+                        wifiManager.startScan()
+                    } else {
+                        startActivity(Intent(android.provider.Settings.Panel.ACTION_WIFI))
 
+                    }
+                }
+                else {
+                    shouldScan = true
+                    wifiManager.startScan()
+                }
 
 
             } else {

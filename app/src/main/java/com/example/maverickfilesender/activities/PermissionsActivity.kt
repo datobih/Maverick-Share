@@ -40,8 +40,9 @@ class PermissionsActivity : AppCompatActivity() {
                 }
 
             }
+            startActivity(Intent(this,MainActivity::class.java))
             finish()
-startActivity(Intent(this,MainActivity::class.java))
+
 
         }
 

@@ -8,7 +8,7 @@ import com.example.maverickfilesender.fragment.*
 
 class MainPagerFragmentAdapter(fragmentManager: FragmentManager,lifecycle: Lifecycle):FragmentStateAdapter(fragmentManager,lifecycle) {
     override fun getItemCount(): Int {
-     return 5
+     return 6
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -20,12 +20,18 @@ if(position==1) {
 
 }
 
+
+
         if(position==2){
             return ImageFragment()
         }
 
         if(position==3){
             return VideosFragment()
+        }
+
+        if(position==4){
+            return MusicFragment()
         }
 
 

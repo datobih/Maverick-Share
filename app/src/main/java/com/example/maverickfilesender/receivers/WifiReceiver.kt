@@ -38,7 +38,11 @@ val action=intent.action
 
 
         if(action==WifiManager.SUPPLICANT_STATE_CHANGED_ACTION){
+            if(intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED)){
 
+                Log.d("CONNEC","Connected")
+
+            }
             if(intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_ERROR)){
                 if(Constants.isReconnected==null)
                 Constants.isReconnected=true
@@ -151,7 +155,7 @@ if(Constants.isReconnected!=null && Constants.isReconnected==true){
 //                        if(wifiInfo.ssid != "\"${Constants.mNetworkSSID}\""){
 //                            return
 //                        }
-                                Thread.sleep(5000)
+                                Thread.sleep(10000)
                                 Constants.clientThread = ClientThread(Constants.mainActivity!!)
                                 Log.d("WIFITHREAD","Made")
                                 Constants.clientThread!!.start()

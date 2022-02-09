@@ -48,6 +48,38 @@ val intent= Intent(Intent.ACTION_VIEW)
                 else if(appFileList[position].file.path.endsWith(".ppt")||appFileList[position].file.path.endsWith(".pptx")){
                     "application/vnd.ms-powerpoint"
                 }
+                else if(appFileList[position].file.path.endsWith(".xls")||appFileList[position].file.path.endsWith(".xlsx")){
+                    "application/vnd.ms-excel"
+                }
+                else if(appFileList[position].file.path.endsWith(".zip")){
+                    "application/zip"
+                }
+                else if(appFileList[position].file.path.endsWith(".rar")){
+                    "application/x-rar-compressed"
+                }
+                else if(appFileList[position].file.path.endsWith(".rtf")){
+                    "application/rtf"
+                }
+                else if(appFileList[position].file.path.endsWith(".wav")||appFileList[position].file.path.endsWith(".mp3")){
+                    "audio/x-wav"
+                }
+                else if(appFileList[position].file.path.endsWith(".gif")){
+                    "image/gif"
+                }
+                else if(appFileList[position].file.path.endsWith(".jpg")||appFileList[position].file.path.endsWith(".jpeg")||
+                        appFileList[position].file.path.endsWith(".png")){
+                    "image/jpeg"
+                }
+                else if(appFileList[position].file.path.endsWith(".txt")){
+                    "text/plain"
+                }
+                else if(appFileList[position].file.path.endsWith(".mp4")||appFileList[position].file.path.endsWith(".mpg")||
+                        appFileList[position].file.path.endsWith(".3gp")||appFileList[position].file.path.endsWith(".mpeg")||
+                        appFileList[position].file.path.endsWith(".mpe")||appFileList[position].file.path.endsWith(".avi")){
+
+                    "video/*"
+                }
+
 
                 else{
                     ""

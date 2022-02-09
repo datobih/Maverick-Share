@@ -83,7 +83,7 @@
         app:tabTextAppearance="@style/tab_text"
         app:tabTextColor="@color/white"
         app:tabIconTint="@color/white"
-
+app:tabMode="scrollable"
         ></com.google.android.material.tabs.TabLayout>
 
 

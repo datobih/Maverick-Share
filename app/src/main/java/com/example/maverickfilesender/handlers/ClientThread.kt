@@ -43,7 +43,7 @@ class ClientThread(val context: Context) : Thread() {
                 Log.i("SOCKETT", "Client Connecting")
                 socket.connect(socketAddress)
 
-
+socket.soTimeout=300
 
 
 
@@ -87,6 +87,11 @@ while(fileName=="") {
 
     fileName = inputStream.readUTF()
 
+    if(fileName=="..isClientActive"){
+      outputStream.writeUTF("..yes")
+
+        fileName=""
+    }
 }
 
 
