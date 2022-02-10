@@ -1,5 +1,6 @@
 package com.example.maverickfilesender.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -40,8 +41,10 @@ class PermissionsActivity : AppCompatActivity() {
                 }
 
             }
-            startActivity(Intent(this,MainActivity::class.java))
+setResult(Activity.RESULT_OK)
+            overridePendingTransition(0,0)
             finish()
+
 
 
         }
@@ -108,9 +111,9 @@ class PermissionsActivity : AppCompatActivity() {
                 }
 
 
-
+                setResult(Activity.RESULT_OK)
                     finish()
-                    startActivity(Intent(this,MainActivity::class.java))
+
 
 
 

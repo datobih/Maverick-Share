@@ -13,5 +13,8 @@ import android.os.Parcelable
          val album:String?,
          val albumArt:Bitmap?,
          val duration: Int,
-         val size: Int
+         val size: Int,
+         val path:String,
+         var onSelect:Boolean,
+         var data:ByteArray?
 )

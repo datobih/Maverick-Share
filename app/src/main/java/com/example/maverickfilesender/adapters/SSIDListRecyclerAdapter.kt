@@ -3,6 +3,7 @@ package com.example.maverickfilesender.adapters
 import android.content.Context
 import android.net.*
 import android.net.wifi.*
+import android.opengl.Visibility
 import android.os.Looper
 import android.text.format.Formatter
 import android.util.Log
@@ -80,6 +81,8 @@ class SSIDListRecyclerAdapter(val context: Context, val scanResults: ArrayList<S
 
     fun connectToNetwork(networkSSID: String, networkBSSID: String, networkPassword: String) {
        Constants.mNetworkSSID=networkSSID
+        Constants.ssidDialog?.dismiss()
+        (context as MainActivity).ll_loading.visibility=View.VISIBLE
         try {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 (context as MainActivity).isClientConnected=true
@@ -136,6 +139,7 @@ context.runOnUiThread {
                         super.onUnavailable()
 Constants.noNetwork=true
                         Log.i("WIFII", "onUnavailable")
+                        (context as MainActivity).ll_loading.visibility=View.GONE
                     }
 
                 }

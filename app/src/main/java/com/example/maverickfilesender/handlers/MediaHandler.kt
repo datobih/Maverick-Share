@@ -91,7 +91,7 @@ class MediaHandler(val context: Context) {
 
     val videoSortOrder = "${MediaStore.Video.Media.DATE_ADDED} DESC"
 
-    val audioSortOrder="${MediaStore.Audio.Media.DATE_ADDED} DESC"
+
 
 
     fun getMediaFromDevice(): ArrayList<Music> {
@@ -99,7 +99,7 @@ class MediaHandler(val context: Context) {
 
 
 
-            query = context.contentResolver.query(audioCollection, audioProjection, null, null, audioSortOrder)
+            query = context.contentResolver.query(audioCollection, audioProjection, null, null,null)
 
 
 
@@ -158,7 +158,7 @@ class MediaHandler(val context: Context) {
 
 
 
-                musicList.add(Music(contentUri, id, name, artist,album, bitmap, duration, size))
+                musicList.add(Music(contentUri, id, name, artist,album, bitmap, duration, size,pathData,false,null))
             }
 
 

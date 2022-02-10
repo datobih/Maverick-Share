@@ -38,6 +38,8 @@ val action=intent.action
 
 
         if(action==WifiManager.SUPPLICANT_STATE_CHANGED_ACTION){
+            val state=intent.getParcelableExtra<SupplicantState>(WifiManager.EXTRA_NEW_STATE)
+
             if(intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED)){
 
                 Log.d("CONNEC","Connected")
@@ -46,6 +48,8 @@ val action=intent.action
             if(intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_ERROR)){
                 if(Constants.isReconnected==null)
                 Constants.isReconnected=true
+
+                (context as MainActivity).ll_loading.visibility=View.GONE
             }
 
         }
@@ -84,7 +88,11 @@ if(action==WifiManager.SCAN_RESULTS_AVAILABLE_ACTION && (context as MainActivity
 
         dialog.rv_receiver_ssid.adapter = adapter
         dialog.show()
+        Constants.ssidDialog=dialog
+        dialog.setOnDismissListener {
 
+            Constants.ssidDialog=null
+        }
 
     }
 
@@ -141,6 +149,8 @@ if(action==WifiManager.SCAN_RESULTS_AVAILABLE_ACTION && (context as MainActivity
                                             .putInt(wifiManager.dhcpInfo.gateway)
                                             .array()).hostAddress
 
+
+
                                     if(Constants.noNetwork){
                                         Constants.noNetwork=false
                                         return
@@ -152,10 +162,11 @@ if(Constants.isReconnected!=null && Constants.isReconnected==true){
 }
 
                                 }
-//                        if(wifiInfo.ssid != "\"${Constants.mNetworkSSID}\""){
-//                            return
-//                        }
-                                Thread.sleep(10000)
+                        if(wifiInfo.ssid != "\"${Constants.mNetworkSSID}\""){
+                            return
+                        }
+                                       Log.d("WIFITHREAD",Constants.mainActivity!!.mIpAddress)
+                                Thread.sleep(7000)
                                 Constants.clientThread = ClientThread(Constants.mainActivity!!)
                                 Log.d("WIFITHREAD","Made")
                                 Constants.clientThread!!.start()

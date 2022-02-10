@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.adapters.AudioFileRecyclerAdapter
 import com.example.maverickfilesender.handlers.MediaHandler
 import com.example.maverickfilesender.model.Music
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.item_music.*
 
 class MusicFragment : Fragment() {
 var mContext:Context?=null
-
+    var adapter:AudioFileRecyclerAdapter?=null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -42,34 +43,34 @@ var mContext:Context?=null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (context as MainActivity).musicFragment=this
     var audioList=ArrayList<Music>()
 
 
-//      val musicThread=Thread(
-//          object :Runnable{
-//
-//              override fun run() {
-//
-//                  audioList=MediaHandler(mContext!!).getMediaFromDevice()
-//
-//
-//
-//              }
-//
-//
-//
-//
-//
-//          }
-//
-//
-//        )
-//        musicThread.start()
-//
-//musicThread.join()
+      val musicThread=Thread(
+          object :Runnable{
 
-        val adapter=AudioFileRecyclerAdapter(mContext!!,audioList)
+              override fun run() {
+
+                  audioList=MediaHandler(mContext!!).getMediaFromDevice()
+
+
+
+              }
+
+
+
+
+
+          }
+
+
+        )
+        musicThread.start()
+
+musicThread.join()
+
+        adapter=AudioFileRecyclerAdapter(mContext!!,audioList)
 view.rv_audio.layoutManager=LinearLayoutManager(mContext)
     view.rv_audio.adapter=adapter
 

@@ -116,7 +116,7 @@ while(true){
 
         val tes=Constants.tempSelectedFiles.remove(ParseFile( Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].file,
                 Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].data,"",
-                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].drawable))
+               null))
         i++
     }
 
@@ -210,9 +210,14 @@ Constants.countList.add(0)
             if( i.name.endsWith(".apk")){
                 val packageManager=mContext!!.packageManager
                 val packageInfo=packageManager.getPackageArchiveInfo(i.path,0)
-
-
-                appFiles.add(AppFile(i,packageInfo!!.applicationInfo.loadIcon(packageManager),false,null))
+var icon:Drawable?=null
+try {
+    icon= packageInfo!!.applicationInfo.loadIcon(packageManager)
+}
+catch (e:Exception){
+    continue
+}
+                appFiles.add(AppFile(i,icon,false,null))
 
             }
             else{
@@ -262,9 +267,9 @@ return list
         val exitIndex=Constants.heirarchyFiles.lastIndex-1
         while(true){
             if(i!=Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
-                Constants.tempSelectedFiles.remove(ParseFile(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].file,
+               val did= Constants.tempSelectedFiles.remove(ParseFile(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].file,
                         Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].data,
-                        "", Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].drawable
+                        "", null
                         ))
                 i++
             }
@@ -301,7 +306,7 @@ var i=0
                if (i != Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].size) {
                   val tes= Constants.tempSelectedFiles.remove(ParseFile(Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].file,
                            Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].data,
-                                   "",       Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex][i].drawable))
+                                   "",       null))
                    i++
                } else {
                    i = 0

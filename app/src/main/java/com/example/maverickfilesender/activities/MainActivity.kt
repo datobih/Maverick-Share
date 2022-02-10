@@ -2,6 +2,7 @@ package com.example.maverickfilesender.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -15,6 +16,7 @@ import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
@@ -68,6 +70,8 @@ class MainActivity : AppCompatActivity() {
     var imageFragment:ImageFragment?=null
     var appsFragment:AppsFragment?=null
     var videosFragment:VideosFragment?=null
+    var musicFragment:MusicFragment?=null
+var wifiManager:WifiManager?=null
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,21 +89,53 @@ class MainActivity : AppCompatActivity() {
 Constants.mainActivity=this
 
 
+
+        if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+
+startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ_PERMISSION_ACTIVITY)
+
+        }
+        else{
+
+            val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
+
+            vp_main.adapter = adapter
+            vp_main.offscreenPageLimit=4
+            vp_main.isUserInputEnabled = false
+
+
+
+        }
+        
+        
+        wifiManager =
+                applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+
         btn_disconnect.setOnClickListener {
-            val wifimanager =
-                    applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+
 
 if(connectionType==Constants.CONNECTION_TYPE_WIFI) {
 
- if(android.os.Build.VERSION.SDK_INT<android.os.Build.VERSION_CODES.Q) {
-     wifimanager.setWifiEnabled(false)
- }
-    else{
-        startActivity(Intent(android.provider.Settings.Panel.ACTION_WIFI))
+    Constants.clientThread!!.socket!!.close()
 
- }
+
+// if(android.os.Build.VERSION.SDK_INT<android.os.Build.VERSION_CODES.Q) {
+//
+
+// }
+//    else{
+//     Constants.clientThread!!.socket!!.close()
+//
+//
+// }
 
 }
+
+            else{
+                Constants.serverThread!!.socket!!.close()
+            }
+
         }
 
         imv_drawer.setOnClickListener {
@@ -126,11 +162,6 @@ registerReceiver(receiver,mIntentFilter)
 
         registerReceiver(receiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
 
-        val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
-
-        vp_main.adapter = adapter
-        vp_main.offscreenPageLimit=4
-        vp_main.isUserInputEnabled = false
 
         val appTab = tab_main.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
         val historyTab=tab_main.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24)
@@ -226,6 +257,14 @@ Constants.sendCount=0
                         Constants.imagesSelected.removeAt(0)
                     }
 
+
+
+            while (Constants.audioSelected.isNotEmpty()) {
+
+                musicFragment!!.adapter!!.audioList[Constants.audioSelected[0]].onSelect=false
+              musicFragment!!.adapter!!.notifyItemChanged(Constants.audioSelected[0])
+                Constants.audioSelected.removeAt(0)
+            }
 
 
 
@@ -460,14 +499,14 @@ if(mReservation!=null){
 
 
         btn_receiver.setOnClickListener {
-
+            Constants.noNetwork=false
             if (verifyLocation()) {
 
                 val wifiManager =
                     applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
                 if(!wifiManager.isWifiEnabled) {
                     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
-                        wifiManager.setWifiEnabled(false)
+                        wifiManager.setWifiEnabled(true)
                         shouldScan = true
                         wifiManager.startScan()
                     } else {
@@ -527,6 +566,13 @@ btn_disconnect.visibility=View.VISIBLE
 
 
 }
+
+    fun setupUIdisconnected(){
+        btn_disconnect.visibility=View.GONE
+        btn_receiver.visibility=View.VISIBLE
+        btn_sender.visibility=View.VISIBLE
+tv_connection_status.text="Not Connected"
+    }
 
 
 
@@ -588,6 +634,22 @@ btn_disconnect.visibility=View.VISIBLE
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+if(resultCode==Activity.RESULT_OK){
+
+    if(requestCode==Constants.RQ_PERMISSION_ACTIVITY){
+
+
+        val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
+
+        vp_main.adapter = adapter
+        vp_main.offscreenPageLimit=4
+        vp_main.isUserInputEnabled = false
+
+
+    }
+
+}
+
 
     }
 
@@ -631,7 +693,7 @@ btn_disconnect.visibility=View.VISIBLE
 
     override fun onBackPressed() {
         val f=supportFragmentManager.findFragmentById(R.id.holder_files_fragment)
-if(Constants.mRelativePath.size>1 && vp_main.currentItem==4){
+if(Constants.mRelativePath.size>1 && vp_main.currentItem==5){
 
 
 
@@ -648,7 +710,7 @@ if(Constants.mRelativePath.size>1 && vp_main.currentItem==4){
 
         else {
 
-     if(Constants.mRelativePath.size==1 && vp_main.currentItem==4){
+     if(Constants.mRelativePath.size==1 && vp_main.currentItem==5){
 
 if( f is FilesDirectoryFragment)
 f.onFinalStack(this)

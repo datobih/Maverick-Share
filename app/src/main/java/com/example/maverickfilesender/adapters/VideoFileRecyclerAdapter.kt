@@ -113,7 +113,7 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
                     val data=stream.toByteArray()
                     videoList[position].data=data
 
-                    Constants.tempSelectedFiles.add(ParseFile( File(videoList[position].path),data,"",holder.itemView.imv_itemVideo.drawable))
+                    Constants.tempSelectedFiles.add(ParseFile( File(videoList[position].path),data,"",null))
 
                     if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
 
@@ -125,7 +125,7 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
 
                 } else {
                     Constants.sendCount--
-                    Constants.tempSelectedFiles.remove(ParseFile(File(videoList[position].path),videoList[position].data,"",holder.itemView.imv_itemVideo.drawable))
+                    Constants.tempSelectedFiles.remove(ParseFile(File(videoList[position].path),videoList[position].data,"",null))
 
 
                     if (Constants.tempSelectedFiles.isEmpty()) {

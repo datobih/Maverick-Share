@@ -32,28 +32,39 @@ class ClientThread(val context: Context) : Thread() {
     var bitmap:Bitmap?=null
     var filesRemaining=""
     var tempDir=""
+    var socket:Socket?=null
     override fun run() {
         var socketAddress = InetSocketAddress(mainContext.mIpAddress, 9999)
 
-        var socket = Socket()
+       socket = Socket()
 
 
-
+socket!!.soTimeout=200
 
                 Log.i("SOCKETT", "Client Connecting")
-                socket.connect(socketAddress)
 
-socket.soTimeout=300
+            socket!!.connect(socketAddress)
+
+
+        val handler = android.os.Handler(Looper.getMainLooper())
+
+
+        handler.post {
+            (context as MainActivity).ll_loading.visibility=View.GONE
+
+        }
+
+socket!!.soTimeout=700
 
 
 
         Log.i("SOCKETT", "Client Connected")
 
-        if (socket.isConnected) {
+        if (socket!!.isConnected) {
 
-            val inputStream = DataInputStream(socket.getInputStream())
+            val inputStream = DataInputStream(socket!!.getInputStream())
 
-            val outputStream = DataOutputStream(socket.getOutputStream())
+            val outputStream = DataOutputStream(socket!!.getOutputStream())
 
 
 
@@ -61,8 +72,8 @@ socket.soTimeout=300
 
             val userName = inputStream.readUTF()
 
-            var bufferedInputStream = BufferedInputStream(socket.getInputStream())
-            val handler = android.os.Handler(Looper.getMainLooper())
+            var bufferedInputStream = BufferedInputStream(socket!!.getInputStream())
+
             handler!!.post {
                 mainContext.tv_connection_status.text = "Connected to $userName"
                 (context as MainActivity).setupUIconnected()
@@ -71,7 +82,7 @@ socket.soTimeout=300
 
 
 
-            if (socket.isConnected) {
+            if (socket!!.isConnected) {
 
                 try{
 
@@ -144,7 +155,7 @@ outputStream.writeUTF("done")
 
                             inputStream.readFully(byteData,0,byteData.size)
                             outputStream.writeUTF("done")
-                        bufferedInputStream =BufferedInputStream(socket.getInputStream())
+                        bufferedInputStream =BufferedInputStream(socket!!.getInputStream())
 
 
                             Log.d("TESTOS","Init bitmap")
@@ -300,8 +311,16 @@ outputStream.writeUTF("done")
 
 
                     }
+                    var q=false
+                    handler.post {
+                        (context as MainActivity).setupUIdisconnected()
+q=true
+                    }
+while(!q){
 
+}
                     return
+
                 }
 
             }
@@ -322,7 +341,7 @@ outputStream.writeUTF("done")
 
         bytesReceived=0
         fileTotalSize=0
-        return
+
     }
 
 

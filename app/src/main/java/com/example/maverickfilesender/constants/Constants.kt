@@ -1,5 +1,6 @@
 package com.example.maverickfilesender.constants
 
+import android.app.Dialog
 import android.widget.ImageView
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.activities.TransferActivity
@@ -14,9 +15,11 @@ object Constants{
 
     val RQ_READ_WRITE_PERMISSION=1
     val RQ_LOCATION_PERMISSION=2
+    val RQ_PERMISSION_ACTIVITY=3
     val CONNECTION_TYPE_HOTSPOT="Hotspot"
     val CONNECTION_TYPE_WIFI="Wifi"
 
+    var ssidDialog:Dialog?=null
     var noNetwork=false
 var onNetworkAvailable=false
     var mNetworkSSID=""
@@ -39,6 +42,7 @@ var selectedFiles=ArrayList<ParseFile>()
 
     var imagesSelected=ArrayList<Int>()
     var videosSelected=ArrayList<Int>()
+    var audioSelected=ArrayList<Int>()
 var appSelected=ArrayList<Int>()
 
 

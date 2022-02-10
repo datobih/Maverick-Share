@@ -95,7 +95,7 @@ var bitmap:Bitmap?=getBitmapFromDrawable(holder.itemView.imv_itemImage.drawable)
 
 
 
-                    Constants.tempSelectedFiles.add(ParseFile(File(imageList[position].path),imageList[position].data,imageList[position].path,holder.itemView.imv_itemImage.drawable))
+                    Constants.tempSelectedFiles.add(ParseFile(File(imageList[position].path),imageList[position].data,imageList[position].path,null))
 
 
                     Constants.sendCount++
@@ -106,7 +106,7 @@ var bitmap:Bitmap?=getBitmapFromDrawable(holder.itemView.imv_itemImage.drawable)
                 } else {
 
 
-                   val did= Constants.tempSelectedFiles.remove(ParseFile(File(imageList[position].path),imageList[position].data,imageList[position].path,holder.itemView.imv_itemImage.drawable))
+                   val did= Constants.tempSelectedFiles.remove(ParseFile(File(imageList[position].path),imageList[position].data,imageList[position].path,null))
                     Constants.sendCount--
 
                     if (Constants.tempSelectedFiles.isEmpty()) {

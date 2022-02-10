@@ -87,28 +87,28 @@ appFileList[position].data=data
 
 //}
 
-            Constants.tempSelectedFiles.add(ParseFile( appFileList[position].file,appFileList[position].data,"",holder.itemView.imv_fileIcon.drawable))
+            Constants.tempSelectedFiles.add(ParseFile( appFileList[position].file,appFileList[position].data,"",null))
 
             if(Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1
-                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].add(ParseFile(appFileList[position].file,data,appFileList[position].file.path,holder.itemView.imv_fileIcon.drawable))
+                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].add(ParseFile(appFileList[position].file,data,appFileList[position].file.path,null))
             }
 
             else{
-               Constants.parentFiles.add(ParseFile(appFileList[position].file,data,"",holder.itemView.imv_fileIcon.drawable))
+               Constants.parentFiles.add(ParseFile(appFileList[position].file,data,"",null))
             }
 
         }
         else{
             Constants.sendCount--
-            Constants.tempSelectedFiles.remove(ParseFile(appFileList[position].file,appFileList[position].data,"",holder.itemView.imv_fileIcon.drawable))
+            Constants.tempSelectedFiles.remove(ParseFile(appFileList[position].file,appFileList[position].data,"",null))
 
             if(Constants.countList.isNotEmpty()&& Constants.heirarchyFiles.isNotEmpty()) {
                 Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] - 1
-                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].remove(appFileList[position].file)
+                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].remove(ParseFile(appFileList[position].file,appFileList[position].data,"",null))
             }
             else{
-                Constants.parentFiles.remove(appFileList[position].file)
+                Constants.parentFiles.remove(ParseFile(appFileList[position].file,appFileList[position].data,"",null))
             }
 
             if(Constants.tempSelectedFiles.isEmpty()){

@@ -31,12 +31,12 @@ class ServerThread(val context: Context) : Thread() {
     var fileSize: Int = 0
     var serverSocket:ServerSocket?=null
     var bitmap:Bitmap?=null
-
+    var socket:Socket?=null
  override fun run() {
          serverSocket = ServerSocket(9999)
 
         serverSocket!!.soTimeout = 1000000000
-var socket:Socket?=null
+
         try {
              socket = serverSocket!!.accept()
         }
@@ -44,13 +44,13 @@ var socket:Socket?=null
         catch (e:Exception) {
 return
         }
-socket.soTimeout=300
+socket!!.soTimeout=700
 
 
         if (socket!!.isConnected) {
 
-            val outputStream = DataOutputStream(socket.getOutputStream())
-            var inputStream = DataInputStream(socket.getInputStream())
+            val outputStream = DataOutputStream(socket!!.getOutputStream())
+            var inputStream = DataInputStream(socket!!.getInputStream())
 
 
             val userName = inputStream.readUTF()
@@ -67,10 +67,10 @@ socket.soTimeout=300
             while (true) {
 try {
 
-    if (socket.isConnected) {
+    if (socket!!.isConnected) {
 
         if (Constants.selectedFiles.isNotEmpty()) {
-socket.soTimeout=1000000000
+socket!!.soTimeout=1000000000
             var dir = ""
             transferFile = Constants.selectedFiles[0]
             fileSize = transferFile!!.file.length().toInt()
@@ -101,7 +101,7 @@ socket.soTimeout=1000000000
                         BufferedInputStream(FileInputStream(transferFile!!.path))
             }
             val bufferedOutputStream =
-                    BufferedOutputStream(socket.getOutputStream())
+                    BufferedOutputStream(socket!!.getOutputStream())
 
 
             var fileName = transferFile!!.file.name
@@ -295,9 +295,14 @@ Log.d("RESPONSEEE",response)
 
         }
         Constants.serverThread!!.serverSocket!!.close()
+        var q=false
+        handler.post {
+            (context as MainActivity).setupUIdisconnected()
+            q=true
+        }
+        while(!q){
 
-
-
+        }
 //        fileSize = 0
 //        bytesTransferred = 0
 
@@ -315,6 +320,16 @@ catch (e:Exception){
 
     }
   serverSocket!!.close()
+socket!!.close()
+    var q=false
+    handler.post {
+        (context as MainActivity).setupUIdisconnected()
+        q=true
+    }
+    while(!q){
+
+    }
+
 
     return
 
