@@ -46,6 +46,18 @@ android:textColor="@color/white"
         android:fontFamily="@font/gilroy_light"
         ></TextView>
 
+    <ProgressBar
+        android:id="@+id/progress_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:indeterminateTint="#283593"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        ></ProgressBar>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_history"
         android:layout_width="match_parent"

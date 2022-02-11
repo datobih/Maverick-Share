@@ -12,10 +12,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.adapters.HistoryFilesRecyclerAdapter
 import com.example.maverickfilesender.model.AppFile
 import kotlinx.android.synthetic.main.fragment_history.*
 import kotlinx.android.synthetic.main.fragment_history.view.*
+import kotlinx.android.synthetic.main.fragment_videos.*
 import java.io.File
 import java.lang.Exception
 import java.util.*
@@ -52,7 +54,6 @@ var mContext:Context?=null
 
         }
 
-fetchFiles()
 
 
 
@@ -61,39 +62,46 @@ fetchFiles()
     }
 
     fun fetchFiles(){
-
-
         val fileDir= File("/storage/emulated/0/Download/Maverick")
         val receivedFiles=fileDir.listFiles()
         val receivedAppFile=ArrayList<AppFile>()
-        //Arrays.sort(receivedFiles, Comparator.comparingLong(File::lastModified))
-if(!receivedFiles.isNullOrEmpty()){
-        receivedFiles.let{
-    Arrays.sort(it){
-        f1,f2-> f2.lastModified().compareTo(f1.lastModified())
-    }
 
-    receivedFiles.forEach {
-try {
-    if (it.name.endsWith(".apk")) {
-        val packageManager = mContext!!.packageManager
-        val packageInfo = packageManager.getPackageArchiveInfo(it.path, 0)
-        val drawable = packageInfo!!.applicationInfo.loadIcon(packageManager)
-        receivedAppFile.add(AppFile(it, drawable, null, null))
-    } else {
-        receivedAppFile.add(AppFile(it, null, null, null))
-    }
-}
-catch (e:Exception){
+        progress_history.visibility=View.VISIBLE
 
-}
-    }
+        val fetchThread = Thread {
 
 
+            //Arrays.sort(receivedFiles, Comparator.comparingLong(File::lastModified))
+            if (!receivedFiles.isNullOrEmpty()) {
+                receivedFiles.let {
+                    Arrays.sort(it) { f1, f2 ->
+                        f2.lastModified().compareTo(f1.lastModified())
+                    }
+
+                    receivedFiles.forEach {
+                        try {
+                            if (it.name.endsWith(".apk")) {
+                                val packageManager = mContext!!.packageManager
+                                val packageInfo = packageManager.getPackageArchiveInfo(it.path, 0)
+                                val drawable = packageInfo!!.applicationInfo.loadIcon(packageManager)
+                                receivedAppFile.add(AppFile(it, drawable, null, null))
+                            } else {
+                                receivedAppFile.add(AppFile(it, null, null, null))
+                            }
+                        } catch (e: Exception) {
+
+                        }
+                    }
 
 
-}
-}
+                }
+            }
+        }.also {
+            it.start()
+            it.join()
+        }
+
+
 
         if(receivedAppFile.isEmpty()){
            tv_history_noFiles.visibility=View.VISIBLE
@@ -109,6 +117,7 @@ catch (e:Exception){
             rv_history.layoutManager = LinearLayoutManager(mContext)
             rv_history.adapter = adapter
         }
+        progress_history.visibility=View.GONE
     }
 
     override fun onResume() {

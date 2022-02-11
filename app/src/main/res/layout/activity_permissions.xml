@@ -57,12 +57,13 @@
         android:layout_height="wrap_content"
 
         android:text="Enable"
+        android:textAllCaps="false"
         android:textColor="@color/white"
         android:fontFamily="@font/gilroy"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
     android:background="@drawable/enable_btn_bg"
-android:textSize="23dp"
+android:textSize="20dp"
         android:padding="15dp"
         ></androidx.appcompat.widget.AppCompatButton>
 

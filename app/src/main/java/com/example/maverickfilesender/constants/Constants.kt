@@ -12,10 +12,14 @@ import com.example.maverickfilesender.model.RelativePath
 import java.io.File
 
 object Constants{
-
+val SHARED_PREFERENCES_NAME="maverick_file_sender"
+  val SP_PROFILE_PIC_DATA="profile_pic"
+    val SP_PROFILE_USERNAME="profile_username"
     val RQ_READ_WRITE_PERMISSION=1
     val RQ_LOCATION_PERMISSION=2
     val RQ_PERMISSION_ACTIVITY=3
+    val RQ_PROFILE_PIC=4
+
     val CONNECTION_TYPE_HOTSPOT="Hotspot"
     val CONNECTION_TYPE_WIFI="Wifi"
 

@@ -195,6 +195,13 @@ registerReceiver(receiver,mIntentFilter)
 
         drawer_navigation.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener {
             when(it.itemId){
+                R.id.d_menu_profile->{
+startActivity(Intent(this,ProfileActivity::class.java))
+
+
+                    return@OnNavigationItemSelectedListener true
+                }
+
                R.id.d_menu_settings->{
 
 
