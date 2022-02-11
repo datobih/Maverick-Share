@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.item_file.view.*
 import java.io.ByteArrayOutputStream
+import java.lang.Exception
 
 class FilesRecyclerAdapter(val context: Context,val appFileList:ArrayList<AppFile>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -72,32 +73,36 @@ mainContext.ll_main_send.startAnimation(animationMoveUp)
 appFileList[position].onSelect = !appFileList[position].onSelect!!
 
         if(appFileList[position].onSelect!!){
-            Constants.sendCount++
 
             var data:ByteArray?=null
 
 //if(appFileList[position].drawable!=null){
-
-    val bitmap=getBitmapFromDrawable(holder.itemView.imv_fileIcon.drawable)
-    val stream= ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
-    data=stream.toByteArray()
-appFileList[position].data=data
-
+try {
+    val bitmap = getBitmapFromDrawable(holder.itemView.imv_fileIcon.drawable)
+    val stream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+    data = stream.toByteArray()
+    appFileList[position].data = data
+}
+catch (e:Exception){
+    appFileList[position].onSelect= !appFileList[position].onSelect!!
+    data=null
+    mainContext.ll_main_send.visibility=View.INVISIBLE
+}
+if(data!=null) {
+    Constants.sendCount++
 
 //}
 
-            Constants.tempSelectedFiles.add(ParseFile( appFileList[position].file,appFileList[position].data,"",null))
+    Constants.tempSelectedFiles.add(ParseFile(appFileList[position].file, appFileList[position].data, "", null))
 
-            if(Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
-                Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1
-                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].add(ParseFile(appFileList[position].file,data,appFileList[position].file.path,null))
-            }
-
-            else{
-               Constants.parentFiles.add(ParseFile(appFileList[position].file,data,"",null))
-            }
-
+    if (Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
+        Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1
+        Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].add(ParseFile(appFileList[position].file, data, appFileList[position].file.path, null))
+    } else {
+        Constants.parentFiles.add(ParseFile(appFileList[position].file, data, "", null))
+    }
+}
         }
         else{
             Constants.sendCount--

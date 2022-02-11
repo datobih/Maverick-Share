@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.view.animation.AnimationUtils
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.maverickfilesender.R
@@ -22,7 +23,8 @@ class PermissionsActivity : AppCompatActivity() {
 
 
 
-
+val buttonAnimation= AnimationUtils.loadAnimation(this,R.anim.spawn_enable)
+        btn_enable_permission.startAnimation(buttonAnimation)
 
 
 
@@ -104,15 +106,23 @@ setResult(Activity.RESULT_OK)
                         intent.setData(uri)
                         startActivityForResult(intent,0)
 
+                    }else{
+                        setResult(Activity.RESULT_OK)
+                        finish()
+
+
                     }
 
 
 
+                }else{
+                    setResult(Activity.RESULT_OK)
+                    finish()
+
                 }
 
 
-                setResult(Activity.RESULT_OK)
-                    finish()
+
 
 
 
@@ -131,7 +141,8 @@ setResult(Activity.RESULT_OK)
 
     if(requestCode==0){
 
-
+        setResult(Activity.RESULT_OK)
+        finish()
 
     }
 

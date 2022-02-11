@@ -10,25 +10,31 @@
     >
 
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="100dp"
 
-        android:src="@drawable/mv_logo"></ImageView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to Maverick File Sender"
+        android:text="Storage Permission"
         android:textColor="@color/white"
         android:fontFamily="@font/gilroy"
-        android:textSize="24dp"
+        android:textSize="30dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
         ></TextView>
+
+
+
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+
+        android:layout_marginTop="40dp"
+
+        android:src="@drawable/mv_storage_logo"></ImageView>
 
 
     <TextView
@@ -37,25 +43,27 @@
         android:text="To use this app you need to enable read and write permissions on your device"
         android:textColor="@color/white"
         android:fontFamily="@font/gilroy_light"
-        android:textSize="15dp"
+        android:textSize="16dp"
+        android:textStyle="bold"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:gravity="center"
         ></TextView>
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_enable_permission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
         android:text="Enable"
+        android:textColor="@color/white"
         android:fontFamily="@font/gilroy"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#6259E1"
-android:textSize="17dp"
-        android:padding="5dp"
-        ></Button>
+        android:layout_marginTop="30dp"
+    android:background="@drawable/enable_btn_bg"
+android:textSize="23dp"
+        android:padding="15dp"
+        ></androidx.appcompat.widget.AppCompatButton>
 
 </LinearLayout>

@@ -3,6 +3,14 @@
 <group android:checkableBehavior="single">
 
     <item
+        android:id="@+id/d_menu_profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_round_person_24"
+        android:checkable="false"
+        ></item>
+
+
+    <item
 android:id="@+id/d_menu_settings"
         android:title="Settings"
         android:icon="@drawable/ic_round_settings_24"
@@ -15,6 +23,9 @@ android:checkable="false"
         android:icon="@drawable/ic_round_help_center_24"
 android:checkable="false"
         ></item>
+
+
+
 
 
 
