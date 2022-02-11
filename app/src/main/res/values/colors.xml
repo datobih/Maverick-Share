@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="maverick_blue">#283593</color>
+    <color name="maverick_green">#41FF41</color>
+    <color name="maveric_red">#FF4141</color>
 </resources>

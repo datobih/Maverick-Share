@@ -7,7 +7,9 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.LocationManager
 import android.net.ConnectivityManager
@@ -21,10 +23,13 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.text.format.Formatter
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -42,9 +47,13 @@ import com.example.maverickfilesender.receivers.WifiReceiver
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.activity_profile.civ_user_profile
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import kotlinx.android.synthetic.main.dialog_hotspot_sender.*
+import kotlinx.android.synthetic.main.drawer_header.*
+import kotlinx.android.synthetic.main.drawer_header.view.*
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.net.InetSocketAddress
@@ -72,7 +81,14 @@ class MainActivity : AppCompatActivity() {
     var videosFragment:VideosFragment?=null
     var musicFragment:MusicFragment?=null
 var wifiManager:WifiManager?=null
+    var mSharedPreferences : SharedPreferences?=null
 
+    var mProfilePicEncoded:String?=""
+    var mProfileName:String?=""
+    var profileBitmap: Bitmap?=null
+
+    var navUserImage:ImageView?=null
+    var navUserName:TextView?=null
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +104,27 @@ var wifiManager:WifiManager?=null
 
 Constants.mainActivity=this
 
+        val headerView=drawer_navigation.getHeaderView(0)
+         navUserImage=headerView.findViewById<ImageView>(R.id.drawer_user_profile_pic)
+         navUserName=headerView.findViewById<TextView>(R.id.tv_main_userName)
 
+        mSharedPreferences= getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+        mProfilePicEncoded=mSharedPreferences!!.getString(Constants.SP_PROFILE_PIC_DATA,"")
+        mProfileName=mSharedPreferences!!.getString(Constants.SP_PROFILE_USERNAME,"")
+
+
+        if(!mProfilePicEncoded.isNullOrEmpty()){
+            val userPictureByteArray= Base64.decode(mProfilePicEncoded, Base64.DEFAULT)
+            profileBitmap=BitmapFactory.decodeByteArray(userPictureByteArray,0,userPictureByteArray.size)
+
+navUserImage!!.setImageBitmap(profileBitmap)
+
+        }
+        if(!mProfileName.isNullOrEmpty()){
+
+       navUserName!!.text = mProfileName
+
+        }
 
         if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
@@ -107,7 +143,7 @@ startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ
 
 
         }
-        
+
         
         wifiManager =
                 applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
@@ -196,7 +232,7 @@ registerReceiver(receiver,mIntentFilter)
         drawer_navigation.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.d_menu_profile->{
-startActivity(Intent(this,ProfileActivity::class.java))
+startActivityForResult(Intent(this,ProfileActivity::class.java),Constants.RQ_PROFILE_ACTIVITY)
 
 
                     return@OnNavigationItemSelectedListener true
@@ -655,7 +691,26 @@ if(resultCode==Activity.RESULT_OK){
 
     }
 
+    else if(requestCode==Constants.RQ_PROFILE_ACTIVITY){
+
+if(Constants.userPictureOnChanged!=null){
+navUserImage!!.setImageBitmap(Constants.userPictureOnChanged)
+    Constants.userPictureOnChanged=null
 }
+        if(!Constants.userNameOnChanged.isNullOrEmpty()){
+navUserName!!.text=Constants.userNameOnChanged
+
+            Constants.userNameOnChanged=""
+        }
+
+
+
+    }
+
+
+}
+
+
 
 
     }

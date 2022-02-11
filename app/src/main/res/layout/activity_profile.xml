@@ -62,5 +62,33 @@ android:id="@+id/btn_update_user_profile"
         android:layout_marginBottom="200dp"
         ></androidx.appcompat.widget.AppCompatButton>
 
+    <RelativeLayout
+        android:id="@+id/ll_profile_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+
+        android:visibility="gone"
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="#8B000000"
+            android:clickable="true"
+            ></View>
+
+
+        <ProgressBar
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:indeterminateTint="#283593"
+            android:layout_centerInParent="true"
+            ></ProgressBar>
+
+
+    </RelativeLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.maverickfilesender.constants
 
 import android.app.Dialog
+import android.graphics.Bitmap
 import android.widget.ImageView
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.activities.TransferActivity
@@ -18,10 +19,20 @@ val SHARED_PREFERENCES_NAME="maverick_file_sender"
     val RQ_READ_WRITE_PERMISSION=1
     val RQ_LOCATION_PERMISSION=2
     val RQ_PERMISSION_ACTIVITY=3
-    val RQ_PROFILE_PIC=4
+    val RQ_PROFILE_ACTIVITY=4
+    val RQ_PROFILE_PIC=5
+
+
+
+
 
     val CONNECTION_TYPE_HOTSPOT="Hotspot"
     val CONNECTION_TYPE_WIFI="Wifi"
+
+
+    var userPictureOnChanged:Bitmap?=null
+    var userNameOnChanged:String=""
+
 
     var ssidDialog:Dialog?=null
     var noNetwork=false

@@ -56,10 +56,10 @@ socket!!.soTimeout=700
             val userName = inputStream.readUTF()
 
 
-            outputStream.writeUTF("Migaaac")
+            outputStream.writeUTF(mainContext.navUserName!!.text.toString())
             val handler = android.os.Handler(Looper.getMainLooper())
             handler!!.post {
-                mainContext.tv_connection_status.text = "Connected to $userName"
+                mainContext.tv_connected_userName.text = "Connected to $userName"
                 (context as MainActivity).setupUIconnected()
             }
 

@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
+import android.view.View
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.constants.Constants
 import kotlinx.android.synthetic.main.activity_profile.*
@@ -27,6 +28,7 @@ class ProfileActivity : AppCompatActivity() {
     var mProfileName:String?=""
     var mData:ByteArray?=null
 var profileBitmap:Bitmap?=null
+    var bitmap:Bitmap?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
@@ -61,28 +63,33 @@ val intent=Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_UR
 
         btn_update_user_profile.setOnClickListener {
             val editor=mSharedPreferences!!.edit()
-
+val dataArrayList=ArrayList<String>()
 
             var verify=false
             if(mData!=null){
+                ll_profile_loading.visibility=View.VISIBLE
                 verify=true
                 val encodedData=Base64.encodeToString(mData,Base64.DEFAULT)
 
 
                 editor.putString(Constants.SP_PROFILE_PIC_DATA,encodedData)
 editor.apply()
-
+                Constants.userPictureOnChanged=bitmap
+                ll_profile_loading.visibility=View.GONE
             }
             if(et_profile_username.text.toString()!=mProfileName){
+                ll_profile_loading.visibility=View.VISIBLE
 verify=true
                 editor.putString(Constants.SP_PROFILE_USERNAME,et_profile_username.text.toString())
                 editor.apply()
+                Constants.userNameOnChanged=et_profile_username.text.toString()
+                ll_profile_loading.visibility=View.GONE
             }
 
 
 if(verify){
-    finish()
-
+  setResult(Activity.RESULT_OK)
+finish()
 }
         }
 
@@ -104,7 +111,7 @@ if(verify){
 
 
                    val mDrawable=Drawable.createFromStream(inputStream, data!!.data!!.toString())
-val bitmap=getBitmapFromDrawable(mDrawable)
+bitmap=getBitmapFromDrawable(mDrawable)
 civ_user_profile.setImageBitmap(bitmap)
 
 

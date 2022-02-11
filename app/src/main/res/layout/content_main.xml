@@ -46,35 +46,55 @@
 
             ></ImageView>
 
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+android:layout_alignParentRight="true"
 
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/tv_connection_status"
-            android:text="Status:"
-            android:textSize="17dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:fontFamily="@font/gilroy"
-            ></TextView>
-
-
+    >
         <TextView
             android:id="@+id/tv_connection_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="22dp"
             android:layout_marginRight="10dp"
+
             android:text="Not Connected"
-            android:textColor="#41FF41"
-            android:textSize="15dp"
+            android:textSize="17dp"
             android:textStyle="bold"
+            android:textColor="@color/maveric_red"
             android:fontFamily="@font/gilroy_light"
+
             ></TextView>
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_connected_profile"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_user_place_holder"
+         android:visibility="gone"
+            ></de.hdodenhof.circleimageview.CircleImageView>
+
+
+        <TextView
+            android:id="@+id/tv_connected_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="22dp"
+            android:layout_marginRight="10dp"
+            android:text="David"
+            android:textColor="@color/white"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/gilroy"
+            android:visibility="gone"
+            ></TextView>
+
+</LinearLayout>
 
     </RelativeLayout>
 
