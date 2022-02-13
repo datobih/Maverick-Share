@@ -3,7 +3,9 @@
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Environment
 import android.os.Looper
 import android.util.Log
@@ -33,6 +35,8 @@ class ClientThread(val context: Context) : Thread() {
     var filesRemaining=""
     var tempDir=""
     var socket:Socket?=null
+    lateinit var outputStream: DataOutputStream
+    lateinit var inputStream: DataInputStream
     override fun run() {
         var socketAddress = InetSocketAddress(mainContext.mIpAddress, 9999)
 
@@ -54,7 +58,7 @@ socket!!.soTimeout=200
 
         }
 
-socket!!.soTimeout=700
+socket!!.soTimeout=2000
 
 
 
@@ -62,9 +66,9 @@ socket!!.soTimeout=700
 
         if (socket!!.isConnected) {
 
-            val inputStream = DataInputStream(socket!!.getInputStream())
+            inputStream = DataInputStream(socket!!.getInputStream())
 
-            val outputStream = DataOutputStream(socket!!.getOutputStream())
+             outputStream = DataOutputStream(socket!!.getOutputStream())
 
 
 
@@ -72,9 +76,42 @@ socket!!.soTimeout=700
 
             val userName = inputStream.readUTF()
 
+           val tempBitmap=getBitmapFromDrawable(mainContext.navUserImage!!.drawable)
+
+
+            val tempStream=ByteArrayOutputStream()
+
+            tempBitmap!!.compress(Bitmap.CompressFormat.JPEG,100,tempStream)
+            val tempData=tempStream.toByteArray()
+
+            outputStream.writeUTF(tempData.size.toString())
+
+            inputStream.readUTF()
+
+            outputStream.write(tempData, 0, tempData.size)
+
+
+            val userPictureSize=inputStream.readUTF()
+
+            val tempByteArray=ByteArray(userPictureSize.toInt())
+
+outputStream.writeUTF("done")
+
+inputStream.readFully(tempByteArray,0,tempByteArray.size)
+
+
+            val userBitmap=BitmapFactory.decodeByteArray(tempByteArray,0,tempByteArray.size)
+
+
+            socket!!.soTimeout=1000
+
             var bufferedInputStream = BufferedInputStream(socket!!.getInputStream())
 
             handler!!.post {
+                mainContext.tv_connection_status.visibility=View.GONE
+                mainContext.civ_connected_profile.visibility=View.VISIBLE
+                mainContext.civ_connected_profile.setImageBitmap(userBitmap)
+                mainContext.tv_connected_userName.visibility=View.VISIBLE
                 mainContext.tv_connected_userName.text = "Connected to $userName"
                 (context as MainActivity).setupUIconnected()
             }
@@ -301,9 +338,17 @@ outputStream.writeUTF("done")
                 }
                 }
                 catch (e:Exception){
+                    Log.d("ERRORR",e.stackTraceToString())
                    showErrorMessage()
 
 
+
+
+//                    try {
+//                        socket!!.shutdownInput()
+//                    }catch (e:Exception){
+//
+//                    }
                     val mFile=File(tempDir)
 
                     if(mFile.exists()){
@@ -312,13 +357,20 @@ outputStream.writeUTF("done")
 
                     }
                     var q=false
+                    if(!socket!!.isClosed) {
+                        socket!!.close()
+                    }
                     handler.post {
+                        (context as MainActivity).civ_connected_profile.visibility=View.GONE
+                        (context as MainActivity).tv_connected_userName.visibility=View.GONE
+                        (context as MainActivity).tv_connection_status.visibility=View.VISIBLE
                         (context as MainActivity).setupUIdisconnected()
 q=true
                     }
 while(!q){
 
 }
+
                     return
 
                 }
@@ -328,6 +380,16 @@ while(!q){
 
 
     }
+
+    fun getBitmapFromDrawable(drawable: Drawable):Bitmap{
+        val bitmap=Bitmap.createBitmap(drawable.intrinsicWidth,drawable.intrinsicHeight,Bitmap.Config.ARGB_8888)
+        val canvas= Canvas(bitmap)
+        drawable.setBounds(0,0,canvas.width,canvas.height)
+        drawable.draw(canvas)
+        return bitmap
+
+    }
+
 
     fun showErrorMessage(){
         val snackBar= if(Constants.transferActivity!=null){

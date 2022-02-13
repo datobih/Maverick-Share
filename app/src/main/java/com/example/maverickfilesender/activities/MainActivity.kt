@@ -148,12 +148,17 @@ startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ
         wifiManager =
                 applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
 
+
+
+
         btn_disconnect.setOnClickListener {
 
 
 if(connectionType==Constants.CONNECTION_TYPE_WIFI) {
-
     Constants.clientThread!!.socket!!.close()
+
+//
+//Constants.clientThread!!.socket!!.close()
 
 
 // if(android.os.Build.VERSION.SDK_INT<android.os.Build.VERSION_CODES.Q) {
@@ -169,7 +174,10 @@ if(connectionType==Constants.CONNECTION_TYPE_WIFI) {
 }
 
             else{
-                Constants.serverThread!!.socket!!.close()
+   Constants.serverThread!!.socket!!.close()
+    Log.d("OUTPUTSTREAMM","Closed")
+
+
             }
 
         }

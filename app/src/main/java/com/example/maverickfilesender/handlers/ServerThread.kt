@@ -3,6 +3,9 @@
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
+import android.opengl.Visibility
 import android.os.Looper
 import android.util.Log
 import android.view.View
@@ -18,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_transfer.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.io.*
 import java.lang.Exception
+import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
 import java.net.SocketTimeoutException
@@ -32,8 +36,12 @@ class ServerThread(val context: Context) : Thread() {
     var serverSocket:ServerSocket?=null
     var bitmap:Bitmap?=null
     var socket:Socket?=null
+lateinit var outputStream: DataOutputStream
+lateinit var inputStream: DataInputStream
  override fun run() {
-         serverSocket = ServerSocket(9999)
+         serverSocket = ServerSocket()
+     serverSocket!!.reuseAddress=true
+     serverSocket!!.bind(InetSocketAddress(9999))
 
         serverSocket!!.soTimeout = 1000000000
 
@@ -44,22 +52,63 @@ class ServerThread(val context: Context) : Thread() {
         catch (e:Exception) {
 return
         }
-socket!!.soTimeout=700
+
+socket!!.soTimeout=2000
 
 
         if (socket!!.isConnected) {
 
-            val outputStream = DataOutputStream(socket!!.getOutputStream())
-            var inputStream = DataInputStream(socket!!.getInputStream())
+            outputStream = DataOutputStream(socket!!.getOutputStream())
+             inputStream = DataInputStream(socket!!.getInputStream())
 
 
             val userName = inputStream.readUTF()
 
 
             outputStream.writeUTF(mainContext.navUserName!!.text.toString())
+
+
+           val userPictureSize= inputStream.readUTF()
+
+            outputStream.writeUTF("done")
+
+            val tempByteArray=ByteArray(userPictureSize.toInt())
+
+
+            inputStream.readFully(tempByteArray,0,tempByteArray.size)
+
+
+            val tempBitmap=getBitmapFromDrawable(mainContext.navUserImage!!.drawable)
+
+
+            val tempStream=ByteArrayOutputStream()
+
+            tempBitmap!!.compress(Bitmap.CompressFormat.JPEG,100,tempStream)
+            val tempData=tempStream.toByteArray()
+
+            outputStream.writeUTF(tempData.size.toString())
+
+            inputStream.readUTF()
+
+outputStream.write(tempData,0,tempData.size)
+
+
+            val userBitmap=BitmapFactory.decodeByteArray(tempByteArray,0,tempByteArray.size)
+
+            socket!!.soTimeout=1000
+
+
             val handler = android.os.Handler(Looper.getMainLooper())
             handler!!.post {
+mainContext.tv_connection_status.visibility=View.GONE
+                mainContext.civ_connected_profile.visibility=View.VISIBLE
+                mainContext.civ_connected_profile.setImageBitmap(userBitmap)
+
+                mainContext.tv_connected_userName.visibility=View.VISIBLE
                 mainContext.tv_connected_userName.text = "Connected to $userName"
+
+
+
                 (context as MainActivity).setupUIconnected()
             }
 
@@ -70,7 +119,7 @@ try {
     if (socket!!.isConnected) {
 
         if (Constants.selectedFiles.isNotEmpty()) {
-socket!!.soTimeout=1000000000
+socket!!.soTimeout=10000
             var dir = ""
             transferFile = Constants.selectedFiles[0]
             fileSize = transferFile!!.file.length().toInt()
@@ -237,7 +286,7 @@ socket!!.soTimeout=1000000000
 
             }
 
-
+            socket!!.soTimeout=1000
 //    if(transferFile!!.name.endsWith("apk")){
 //dir=context.getExternalFilesDir(null)!!.path+"/Apps"
 //
@@ -276,8 +325,13 @@ socket!!.soTimeout=1000000000
 //
 //            }
 
+if(Constants.isClose){
+    Constants.isClose=false
+    throw Exception("close")
+}
+Constants.isWriting=true
             outputStream.writeUTF("..isClientActive")
-
+Constants.isWriting=false
             val response=inputStream.readUTF()
 
 Log.d("RESPONSEEE",response)
@@ -286,7 +340,12 @@ Log.d("RESPONSEEE",response)
         }
 
     } else {
+
         showErrorMessage()
+
+
+        serverSocket!!.close()
+
         if( (context as MainActivity).mReservation!=null){
             (context as MainActivity).mReservation!!.close()
             Thread.sleep(3000)
@@ -294,9 +353,12 @@ Log.d("RESPONSEEE",response)
 
 
         }
-        Constants.serverThread!!.serverSocket!!.close()
+
         var q=false
         handler.post {
+            (context as MainActivity).civ_connected_profile.visibility=View.GONE
+            (context as MainActivity).tv_connected_userName.visibility=View.GONE
+            (context as MainActivity).tv_connection_status.visibility=View.VISIBLE
             (context as MainActivity).setupUIdisconnected()
             q=true
         }
@@ -310,8 +372,14 @@ Log.d("RESPONSEEE",response)
     }
 }
 catch (e:Exception){
-
+    Log.d("ERRORR",e.stackTraceToString())
     showErrorMessage()
+
+
+
+    serverSocket!!.close()
+
+
     if( (context as MainActivity).mReservation!=null){
         (context as MainActivity).mReservation!!.close()
         Thread.sleep(3000)
@@ -319,20 +387,22 @@ catch (e:Exception){
 
 
     }
-  serverSocket!!.close()
-socket!!.close()
+
     var q=false
     handler.post {
         (context as MainActivity).setupUIdisconnected()
+        (context as MainActivity).civ_connected_profile.visibility=View.GONE
+        (context as MainActivity).tv_connected_userName.visibility=View.GONE
+        (context as MainActivity).tv_connection_status.visibility=View.VISIBLE
         q=true
     }
     while(!q){
 
     }
-
+//        fileSize = 0
+//        bytesTransferred = 0
 
     return
-
 
 }
 
@@ -341,6 +411,14 @@ socket!!.close()
 
         }
 
+
+    }
+    fun getBitmapFromDrawable(drawable: Drawable):Bitmap{
+        val bitmap=Bitmap.createBitmap(drawable.intrinsicWidth,drawable.intrinsicHeight,Bitmap.Config.ARGB_8888)
+        val canvas= Canvas(bitmap)
+        drawable.setBounds(0,0,canvas.width,canvas.height)
+        drawable.draw(canvas)
+        return bitmap
 
     }
 

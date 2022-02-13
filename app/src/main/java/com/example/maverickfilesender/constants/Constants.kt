@@ -24,7 +24,8 @@ val SHARED_PREFERENCES_NAME="maverick_file_sender"
 
 
 
-
+var isClose=false
+    var isWriting=false
 
     val CONNECTION_TYPE_HOTSPOT="Hotspot"
     val CONNECTION_TYPE_WIFI="Wifi"
