@@ -11,6 +11,7 @@ import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.model.ParseFile
 import com.example.maverickfilesender.model.RelativePath
 import java.io.File
+import java.net.ServerSocket
 
 object Constants{
 val SHARED_PREFERENCES_NAME="maverick_file_sender"
@@ -22,10 +23,13 @@ val SHARED_PREFERENCES_NAME="maverick_file_sender"
     val RQ_PROFILE_ACTIVITY=4
     val RQ_PROFILE_PIC=5
 
-
+var isServer=false
 
 var isClose=false
     var isWriting=false
+var serverSocket:ServerSocket?=null
+
+
 
     val CONNECTION_TYPE_HOTSPOT="Hotspot"
     val CONNECTION_TYPE_WIFI="Wifi"

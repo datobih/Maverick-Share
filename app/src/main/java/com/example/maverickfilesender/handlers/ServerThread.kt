@@ -33,27 +33,32 @@ class ServerThread(val context: Context) : Thread() {
     var transferFile: ParseFile? = null
     var bytesTransferred: Int = 0
     var fileSize: Int = 0
-    var serverSocket:ServerSocket?=null
     var bitmap:Bitmap?=null
     var socket:Socket?=null
 lateinit var outputStream: DataOutputStream
 lateinit var inputStream: DataInputStream
+//lateinit var serverSocket: ServerSocket
  override fun run() {
-         serverSocket = ServerSocket()
-     serverSocket!!.reuseAddress=true
-     serverSocket!!.bind(InetSocketAddress(9999))
+    if(Constants.serverSocket==null) {
+        Constants.serverSocket = ServerSocket(9999)
 
-        serverSocket!!.soTimeout = 1000000000
+
+    }
+
+
+
+        Constants.serverSocket!!.soTimeout = 1000000000
 
         try {
-             socket = serverSocket!!.accept()
+             socket = Constants.serverSocket!!.accept()
+socket!!.keepAlive=true
         }
 
         catch (e:Exception) {
 return
         }
 
-socket!!.soTimeout=2000
+socket!!.soTimeout=1000000000
 
 
         if (socket!!.isConnected) {
@@ -324,14 +329,18 @@ socket!!.soTimeout=10000
 //
 //
 //            }
-
 if(Constants.isClose){
     Constants.isClose=false
+
     throw Exception("close")
+
+
 }
-Constants.isWriting=true
+
+            Thread.sleep(100)
             outputStream.writeUTF("..isClientActive")
-Constants.isWriting=false
+outputStream.flush()
+            Thread.sleep(100)
             val response=inputStream.readUTF()
 
 Log.d("RESPONSEEE",response)
@@ -344,15 +353,15 @@ Log.d("RESPONSEEE",response)
         showErrorMessage()
 
 
-        serverSocket!!.close()
-
-        if( (context as MainActivity).mReservation!=null){
-            (context as MainActivity).mReservation!!.close()
-            Thread.sleep(3000)
-            (context as MainActivity).mReservation=null
 
 
-        }
+//        if( (context as MainActivity).mReservation!=null){
+//            (context as MainActivity).mReservation!!.close()
+//            Thread.sleep(3000)
+//            (context as MainActivity).mReservation=null
+//
+//
+//        }
 
         var q=false
         handler.post {
@@ -374,10 +383,34 @@ Log.d("RESPONSEEE",response)
 catch (e:Exception){
     Log.d("ERRORR",e.stackTraceToString())
     showErrorMessage()
+//
+//val j=socket!!.isClosed
+////
+////
+
+    try {
+        inputStream.close()
+    }catch(e:Exception){
+        Log.d("INPUTSTREAMM",e.stackTraceToString())
+    }
+
+        try{
+            outputStream.close()
+        }catch(e:Exception){
+            Log.d("OUTPUTSTREAMM",e.stackTraceToString())
+        }
+
+
+if(!socket!!.isClosed) {
+    socket!!.close()
+}
+//    socket!!.shutdownInput()
+//    socket!!.shutdownOutput()
+
+//
 
 
 
-    serverSocket!!.close()
 
 
     if( (context as MainActivity).mReservation!=null){

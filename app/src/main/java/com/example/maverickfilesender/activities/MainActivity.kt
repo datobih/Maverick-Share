@@ -16,6 +16,9 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
+import android.net.wifi.p2p.WifiP2pDevice
+import android.net.wifi.p2p.WifiP2pDeviceList
+import android.net.wifi.p2p.WifiP2pManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -43,6 +46,7 @@ import com.example.maverickfilesender.fragment.*
 import com.example.maverickfilesender.handlers.ClientThread
 import com.example.maverickfilesender.handlers.ServerThread
 import com.example.maverickfilesender.model.FileMetaData
+import com.example.maverickfilesender.receivers.WifiDirectBroadcastReceiver
 import com.example.maverickfilesender.receivers.WifiReceiver
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
@@ -89,6 +93,14 @@ var wifiManager:WifiManager?=null
 
     var navUserImage:ImageView?=null
     var navUserName:TextView?=null
+
+    var p2pManager:WifiP2pManager?=null
+    var p2pChannel:WifiP2pManager.Channel?=null
+var p2pReceiver:WifiDirectBroadcastReceiver?=null
+    var p2pIntentFilter:IntentFilter?=null
+    var p2pDevices=ArrayList<WifiP2pDevice>()
+
+
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,37 +163,6 @@ startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ
 
 
 
-        btn_disconnect.setOnClickListener {
-
-
-if(connectionType==Constants.CONNECTION_TYPE_WIFI) {
-    Constants.clientThread!!.socket!!.close()
-
-//
-//Constants.clientThread!!.socket!!.close()
-
-
-// if(android.os.Build.VERSION.SDK_INT<android.os.Build.VERSION_CODES.Q) {
-//
-
-// }
-//    else{
-//     Constants.clientThread!!.socket!!.close()
-//
-//
-// }
-
-}
-
-            else{
-   Constants.serverThread!!.socket!!.close()
-    Log.d("OUTPUTSTREAMM","Closed")
-
-
-            }
-
-        }
-
         imv_drawer.setOnClickListener {
 
             if(!main_drawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -195,17 +176,33 @@ if(connectionType==Constants.CONNECTION_TYPE_WIFI) {
         }
 
         mHandler = Handler(Looper.getMainLooper())
-        var receiver = WifiReceiver()
+//        var receiver = WifiReceiver()
+//
+//val mIntentFilter=IntentFilter()
+//        mIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+//        mIntentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)
+//registerReceiver(receiver,mIntentFilter)
+//
+//        registerReceiver(receiver, IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION))
+//
+//        registerReceiver(receiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
 
-val mIntentFilter=IntentFilter()
-        mIntentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-        mIntentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)
-registerReceiver(receiver,mIntentFilter)
 
-        registerReceiver(receiver, IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION))
 
-        registerReceiver(receiver, IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+        p2pManager=getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
 
+        p2pChannel=p2pManager!!.initialize(this,mainLooper,null)
+
+        p2pChannel.also {
+            p2pReceiver=WifiDirectBroadcastReceiver(p2pManager!!,p2pChannel!!,this)
+
+        }
+        p2pIntentFilter=IntentFilter().apply {
+            addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)
+            addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION)
+            addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
+            addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
+        }
 
         val appTab = tab_main.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
         val historyTab=tab_main.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24)
@@ -234,6 +231,39 @@ registerReceiver(receiver,mIntentFilter)
             btn_sender.startAnimation(sendAnimation)
 
         },400)
+
+
+
+
+        btn_disconnect.setOnClickListener {
+
+
+            if(connectionType==Constants.CONNECTION_TYPE_WIFI) {
+                Constants.clientThread!!.inputStream.close()
+
+
+//
+//Constants.clientThread!!.socket!!.close()
+
+
+// if(android.os.Build.VERSION.SDK_INT<android.os.Build.VERSION_CODES.Q) {
+//
+
+// }
+//    else{
+//     Constants.clientThread!!.socket!!.close()
+//
+//
+// }
+
+            }
+
+            else{
+                Constants.isClose=true
+
+            }
+
+        }
 
 
 
@@ -388,194 +418,142 @@ ll_main_send.startAnimation(transitionDown)
 
 
 
-        /*
-bottomNavigation_main.setOnNavigationItemSelectedListener(object:BottomNavigationView.OnNavigationItemSelectedListener {
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
+        btn_sender.setOnClickListener {
 
-        when(item.itemId){
-
-            R.id.nav_apps-> {
-
-                vp_main.currentItem = 0
-return true
-            }
-            R.id.nav_media-> {
-                vp_main.currentItem = 1
-            return true
-            }
-
-
-            else -> {
-                vp_main.currentItem = 2
-                return true
-            }
-            }
-        return false
-    }
-
-
-})
-
-         */
-
-//        btn_connect_status.setOnClickListener {
+//            if (verifyLocation()) {
+//
+//                if (isLocationEnabled()) {
+//
+//if(mReservation!=null){
+//    mReservation!!.close()
+//    Thread.sleep(3000)
+//    mReservation=null
+//
+//}
+//                    val wifimanager =
+//                        applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+//
+//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//                        wifimanager.startLocalOnlyHotspot(object :
+//                            WifiManager.LocalOnlyHotspotCallback() {
+//
+//                            override fun onStarted(reservation: WifiManager.LocalOnlyHotspotReservation?) {
+//                                super.onStarted(reservation)
+//                                connectionType = Constants.CONNECTION_TYPE_HOTSPOT
+//                                Constants.serverThread = ServerThread(this@MainActivity)
+//                                Constants.serverThread!!.start()
 //
 //
-//            if (connectionType == Constants.CONNECTION_TYPE_HOTSPOT) {
-//                mReservation?.close()
+//                                mReservation = reservation
+//                                ssid = reservation!!.wifiConfiguration!!.SSID
+//                                password = reservation!!.wifiConfiguration!!.preSharedKey
 //
 //
-//                btn_connect_status.visibility = View.GONE
-//                btn_send.visibility = View.VISIBLE
-//                btn_receive.visibility = View.VISIBLE
-//            } else if (connectionType == Constants.CONNECTION_TYPE_WIFI) {
-//
-//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-//
-//                    val connectivityManager =
-//                        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-///*     connectivityManager.unregisterNetworkCallback(object:ConnectivityManager.NetworkCallback(){
-//
-//            })
+//                                val dialog = Dialog(this@MainActivity)
+//                                dialog.setContentView(R.layout.dialog_hotspot_sender)
+//                                dialog.tv_hotspot_SSID.text = ssid
+//                                dialog.tv_hotspot_password.text = password
 //
 //
-// */
+//                                    dialog.show()
+//
+//
+//                            }
+//
+//                        }, null)
+//
+//                    } else {
+//
+//                        val intent = Intent()
+//                        intent.setClassName(
+//                            "com.android.settings",
+//                            "com.android.settings.TetherSettings"
+//                        )
+//                        startActivityForResult(intent, 0)
+//                    }
+//
+//
 //                } else {
-//                    val wifiManager =
-//                        applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 //
+//                    Toast.makeText(this, "Your location needs to be turned on", Toast.LENGTH_SHORT)
+//                        .show()
+//                    var intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+//                    startActivity(intent)
 //
-//                    wifiManager.setWifiEnabled(false)
+//                }
+//            } else {
+//                if (ActivityCompat.shouldShowRequestPermissionRationale(
+//                        this,
+//                        Manifest.permission.ACCESS_FINE_LOCATION
+//                    )
+//                ) {
 //
-//                    btn_connect_status.visibility = View.GONE
-//                    btn_send.visibility = View.VISIBLE
-//                    btn_receive.visibility = View.VISIBLE
+//                    var intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+//                    var uri = Uri.fromParts("package", packageName, null)
+//                    intent.setData(uri)
+//                    startActivity(intent)
+//
+//                } else {
+//                    ActivityCompat.requestPermissions(
+//                        this,
+//                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+//                        Constants.RQ_LOCATION_PERMISSION
+//                    )
 //                }
 //
 //
 //            }
-//
-//        }
 
-
-        btn_sender.setOnClickListener {
-
-            if (verifyLocation()) {
-
-                if (isLocationEnabled()) {
-
-if(mReservation!=null){
-    mReservation!!.close()
-    Thread.sleep(3000)
-    mReservation=null
-    Constants.serverThread!!.serverSocket!!.close()
-}
-                    val wifimanager =
-                        applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
-
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        wifimanager.startLocalOnlyHotspot(object :
-                            WifiManager.LocalOnlyHotspotCallback() {
-
-                            override fun onStarted(reservation: WifiManager.LocalOnlyHotspotReservation?) {
-                                super.onStarted(reservation)
-                                connectionType = Constants.CONNECTION_TYPE_HOTSPOT
-                                Constants.serverThread = ServerThread(this@MainActivity)
-                                Constants.serverThread!!.start()
-
-
-                                mReservation = reservation
-                                ssid = reservation!!.wifiConfiguration!!.SSID
-                                password = reservation!!.wifiConfiguration!!.preSharedKey
-
-
-                                val dialog = Dialog(this@MainActivity)
-                                dialog.setContentView(R.layout.dialog_hotspot_sender)
-                                dialog.tv_hotspot_SSID.text = ssid
-                                dialog.tv_hotspot_password.text = password
-
-
-                                    dialog.show()
-
-
-                            }
-
-                        }, null)
-
-                    } else {
-
-                        val intent = Intent()
-                        intent.setClassName(
-                            "com.android.settings",
-                            "com.android.settings.TetherSettings"
-                        )
-                        startActivityForResult(intent, 0)
-                    }
-
-
-                } else {
-
-                    Toast.makeText(this, "Your location needs to be turned on", Toast.LENGTH_SHORT)
-                        .show()
-                    var intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                    startActivity(intent)
-
-                }
-            } else {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    )
-                ) {
-
-                    var intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    var uri = Uri.fromParts("package", packageName, null)
-                    intent.setData(uri)
-                    startActivity(intent)
-
-                } else {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        Constants.RQ_LOCATION_PERMISSION
-                    )
-                }
-
-
-            }
-
-
-        }
-
-
-        btn_receiver.setOnClickListener {
             Constants.noNetwork=false
             if (verifyLocation()) {
 
-                val wifiManager =
-                    applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                if(!wifiManager.isWifiEnabled) {
+
+                if(!wifiManager!!.isWifiEnabled) {
                     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
-                        wifiManager.setWifiEnabled(true)
-                        shouldScan = true
-                        wifiManager.startScan()
+                        wifiManager!!.setWifiEnabled(true)
+
                     } else {
                         startActivity(Intent(android.provider.Settings.Panel.ACTION_WIFI))
 
                     }
                 }
                 else {
-                    shouldScan = true
-                    wifiManager.startScan()
+                    Constants.isServer=true
+
+                    p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
+                        override fun onSuccess() {
+
+                            p2pManager!!.createGroup(p2pChannel,object:WifiP2pManager.ActionListener{
+                                override fun onSuccess() {
+
+                                    //INIT SERVER THREAD
+                                }
+
+                                override fun onFailure(p0: Int) {
+
+                                }
+
+
+                            })
+
+                        }
+
+                        override fun onFailure(p0: Int) {
+                            Toast.makeText(this@MainActivity,"Failed",Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
+
+
                 }
 
 
             } else {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    )
+                                this,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        )
                 ) {
 
                     var intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -585,14 +563,114 @@ if(mReservation!=null){
 
                 } else {
                     ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        Constants.RQ_LOCATION_PERMISSION
+                            this,
+                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                            Constants.RQ_LOCATION_PERMISSION
                     )
                 }
 
             }
 
+
+
+
+        }
+
+
+        btn_receiver.setOnClickListener {
+//            Constants.noNetwork=false
+//            if (verifyLocation()) {
+//
+//                val wifiManager =
+//                    applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+//                if(!wifiManager.isWifiEnabled) {
+//                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+//                        wifiManager.setWifiEnabled(true)
+//                        shouldScan = true
+//                        wifiManager.startScan()
+//                    } else {
+//                        startActivity(Intent(android.provider.Settings.Panel.ACTION_WIFI))
+//
+//                    }
+//                }
+//                else {
+//                    shouldScan = true
+//                    wifiManager.startScan()
+//                }
+//
+//
+//            } else {
+//                if (ActivityCompat.shouldShowRequestPermissionRationale(
+//                        this,
+//                        Manifest.permission.ACCESS_FINE_LOCATION
+//                    )
+//                ) {
+//
+//                    var intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+//                    var uri = Uri.fromParts("package", packageName, null)
+//                    intent.setData(uri)
+//                    startActivity(intent)
+//
+//                } else {
+//                    ActivityCompat.requestPermissions(
+//                        this,
+//                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+//                        Constants.RQ_LOCATION_PERMISSION
+//                    )
+//                }
+//
+//            }
+            Constants.noNetwork=false
+            if (verifyLocation()) {
+
+                if(!wifiManager!!.isWifiEnabled) {
+                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+                        wifiManager!!.setWifiEnabled(true)
+
+                    } else {
+                        startActivity(Intent(android.provider.Settings.Panel.ACTION_WIFI))
+
+                    }
+
+
+                }
+                else {
+
+                    p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
+                        override fun onSuccess() {
+                            Toast.makeText(this@MainActivity,"Successful Peer",Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        override fun onFailure(p0: Int) {
+                            Toast.makeText(this@MainActivity,"Failed",Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
+                }
+
+
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                                this,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        )
+                ) {
+
+                    var intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    var uri = Uri.fromParts("package", packageName, null)
+                    intent.setData(uri)
+                    startActivity(intent)
+
+                } else {
+                    ActivityCompat.requestPermissions(
+                            this,
+                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                            Constants.RQ_LOCATION_PERMISSION
+                    )
+                }
+
+            }
 
         }
 
@@ -624,6 +702,7 @@ btn_disconnect.visibility=View.VISIBLE
         btn_sender.visibility=View.VISIBLE
 tv_connection_status.text="Not Connected"
     }
+
 
 
 
@@ -725,40 +804,13 @@ navUserName!!.text=Constants.userNameOnChanged
 
     override fun onPause() {
         super.onPause()
-
+unregisterReceiver(p2pReceiver)
 
     }
 
     override fun onResume() {
-
-
-//        if (Constants.onNetworkAvailable) {
-//         mHandler!!.postDelayed({
-//             Constants.onNetworkAvailable = false
-//             var wifiManager =
-//                     getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
-//             if (wifiManager.isWifiEnabled) {
-//
-//                 val wifiInfo = wifiManager.connectionInfo
-//
-//                     if (wifiInfo.ssid == "\"${Constants.mNetworkSSID}\"") {
-//                         isClientConnected = true
-//                         mIpAddress = Formatter.formatIpAddress(wifiManager.dhcpInfo.serverAddress)
-//                         Constants.clientThread = ClientThread(this)
-//                         Constants.clientThread!!.start()
-//                         btn_receiver.visibility = View.GONE
-//                         btn_send.visibility = View.GONE
-//
-////                    btn_connect_status.visibility = View.VISIBLE
-//                         connectionType = Constants.CONNECTION_TYPE_WIFI
-//                     }
-//
-//
-//             }},1000)
-//
-//        }
-
         super.onResume()
+        registerReceiver(p2pReceiver,p2pIntentFilter)
     }
 
     override fun onBackPressed() {
