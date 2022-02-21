@@ -26,7 +26,8 @@ import java.net.InetSocketAddress
 import java.net.Socket
 import java.text.DecimalFormat
 
-class ClientThread(val context: Context,val ipAddress:String) : Thread() {
+
+    class ClientThread(val context: Context,val ipAddress:String) : Thread() {
     val mainContext = context as MainActivity
     var transferFile: File? = null
     var fileTotalSize:Int=0
@@ -39,7 +40,7 @@ class ClientThread(val context: Context,val ipAddress:String) : Thread() {
     lateinit var outputStream: DataOutputStream
     lateinit var inputStream: DataInputStream
     override fun run() {
-
+        val handler = android.os.Handler(Looper.getMainLooper())
        // mainContext.mIpAddress
         var socketAddress = InetSocketAddress(ipAddress, 9999)
 
@@ -50,10 +51,48 @@ socket!!.soTimeout=1000000000
 
                 Log.i("SOCKETT", "Client Connecting")
 
+        try {
             socket!!.connect(socketAddress)
+        }
+        catch(e:Exception){
+            Log.d("ERRORR",e.stackTraceToString())
+            showErrorMessage("Can't connect,device already in use")
 
 
-        val handler = android.os.Handler(Looper.getMainLooper())
+
+            mainContext.p2pManager!!.removeGroup(mainContext.p2pChannel,object: WifiP2pManager.ActionListener{
+                override fun onSuccess() {
+                    //
+                }
+
+                override fun onFailure(p0: Int) {
+                    //
+                }
+
+            })
+
+
+
+
+            var q=false
+            if(!socket!!.isClosed) {
+                socket!!.close()
+            }
+            handler.post {
+                (context as MainActivity).civ_connected_profile.visibility=View.GONE
+                (context as MainActivity).tv_connected_userName.visibility=View.GONE
+                (context as MainActivity).tv_connection_status.visibility=View.VISIBLE
+                (context as MainActivity).setupUIdisconnected()
+                q=true
+            }
+            while(!q){
+
+            }
+            Constants.clientThread=null
+            return
+        }
+
+
 
 
         handler.post {
@@ -344,7 +383,7 @@ outputStream.writeUTF("done")
                 }
                 catch (e:Exception){
                     Log.d("ERRORR",e.stackTraceToString())
-                   showErrorMessage()
+                   showErrorMessage("Something went wrong")
 
 
 
@@ -407,12 +446,12 @@ Constants.clientThread=null
     }
 
 
-    fun showErrorMessage(){
+    fun showErrorMessage( message:String){
         val snackBar= if(Constants.transferActivity!=null){
-            Snackbar.make(Constants.transferActivity!!.findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_SHORT)
+            Snackbar.make(Constants.transferActivity!!.findViewById(android.R.id.content),message,Snackbar.LENGTH_SHORT)
 
         }else{
-            Snackbar.make((context as MainActivity).findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_SHORT)
+            Snackbar.make((context as MainActivity).findViewById(android.R.id.content),message,Snackbar.LENGTH_SHORT)
         }
         snackBar.view.setBackgroundColor(ContextCompat.getColor(context, R.color.maverick_blue))
         snackBar.show()

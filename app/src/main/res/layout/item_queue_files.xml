@@ -38,9 +38,12 @@ app:cardUseCompatPadding="true"
 
             <TextView
                 android:id="@+id/tv_item_queueFile_name"
-                android:layout_width="wrap_content"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
-                android:text="Hiii"
+                android:text="Hii"
+                android:ellipsize="end"
+                android:maxLines="1"
+
 android:textColor="@color/black"
                 android:padding="10dp"
                 android:layout_marginLeft="15dp"
