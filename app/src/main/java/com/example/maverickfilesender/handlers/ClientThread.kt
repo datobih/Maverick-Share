@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.net.wifi.p2p.WifiP2pManager
 import android.os.Environment
 import android.os.Looper
 import android.util.Log
@@ -25,7 +26,7 @@ import java.net.InetSocketAddress
 import java.net.Socket
 import java.text.DecimalFormat
 
-class ClientThread(val context: Context) : Thread() {
+class ClientThread(val context: Context,val ipAddress:String) : Thread() {
     val mainContext = context as MainActivity
     var transferFile: File? = null
     var fileTotalSize:Int=0
@@ -38,7 +39,9 @@ class ClientThread(val context: Context) : Thread() {
     lateinit var outputStream: DataOutputStream
     lateinit var inputStream: DataInputStream
     override fun run() {
-        var socketAddress = InetSocketAddress(mainContext.mIpAddress, 9999)
+
+       // mainContext.mIpAddress
+        var socketAddress = InetSocketAddress(ipAddress, 9999)
 
        socket = Socket()
 
@@ -345,6 +348,17 @@ outputStream.writeUTF("done")
 
 
 
+                    mainContext.p2pManager!!.removeGroup(mainContext.p2pChannel,object: WifiP2pManager.ActionListener{
+                        override fun onSuccess() {
+                            //
+                        }
+
+                        override fun onFailure(p0: Int) {
+                            //
+                        }
+
+                    })
+
 
 //                    try {
 //                        socket!!.shutdownInput()
@@ -372,7 +386,7 @@ q=true
 while(!q){
 
 }
-
+Constants.clientThread=null
                     return
 
                 }

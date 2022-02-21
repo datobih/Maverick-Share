@@ -7,10 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.NetworkInfo
-import android.net.wifi.p2p.WifiP2pDevice
-import android.net.wifi.p2p.WifiP2pDeviceList
-import android.net.wifi.p2p.WifiP2pInfo
-import android.net.wifi.p2p.WifiP2pManager
+import android.net.wifi.p2p.*
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -19,7 +16,10 @@ import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.adapters.DevicePeerListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.handlers.ClientThread
+import com.example.maverickfilesender.handlers.ServerThread
 import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
+import java.net.ServerSocket
 
 class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2pManager.Channel,val activity: MainActivity):BroadcastReceiver() {
 
@@ -81,22 +81,35 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
             WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION->{
 
                 val networkInfo=intent.getParcelableExtra<NetworkInfo>(WifiP2pManager.EXTRA_NETWORK_INFO)
-
+val groupList=intent.getParcelableExtra<WifiP2pGroup>(WifiP2pManager.EXTRA_WIFI_P2P_GROUP)
 
 if(networkInfo!!.isConnected){
 
 
     manager.requestConnectionInfo(channel,object :WifiP2pManager.ConnectionInfoListener{
+
+
+
         override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
 
             val groupOwnerAddress=info!!.groupOwnerAddress.hostAddress
 
             if(info.groupFormed && info.isGroupOwner){
 
+                if(Constants.serverThread==null) {
+                    Constants.serverThread = ServerThread(context!!)
+                    Constants.serverThread!!.start()
+                }
+
 Toast.makeText(context,"THIS IS GROUP OWNER",Toast.LENGTH_SHORT).show()
 
             }
             else if(info.groupFormed){
+
+                if(Constants.clientThread==null) {
+                    Constants.clientThread = ClientThread(context!!,groupOwnerAddress)
+                    Constants.clientThread!!.start()
+                }
 
                 Toast.makeText(context,"THIS IS GROUP MEMBER",Toast.LENGTH_SHORT).show()
             }

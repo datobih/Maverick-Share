@@ -238,8 +238,8 @@ startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ
         btn_disconnect.setOnClickListener {
 
 
-            if(connectionType==Constants.CONNECTION_TYPE_WIFI) {
-                Constants.clientThread!!.inputStream.close()
+            if(!Constants.isServer) {
+                Constants.clientThread!!.socket!!.close()
 
 
 //
@@ -259,8 +259,8 @@ startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ
             }
 
             else{
-                Constants.isClose=true
-
+//                Constants.isClose=true
+Constants.serverThread!!.socket!!.close()
             }
 
         }
@@ -800,6 +800,21 @@ navUserName!!.text=Constants.userNameOnChanged
 
 
 
+    }
+
+    override fun onDestroy() {
+
+        p2pManager!!.removeGroup(p2pChannel,object: WifiP2pManager.ActionListener{
+            override fun onSuccess() {
+                //
+            }
+
+            override fun onFailure(p0: Int) {
+              //
+            }
+
+        })
+        super.onDestroy()
     }
 
     override fun onPause() {

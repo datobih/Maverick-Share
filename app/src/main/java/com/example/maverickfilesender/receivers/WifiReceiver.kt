@@ -32,168 +32,168 @@ import java.nio.ByteOrder
 
 class WifiReceiver() : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-
-val action=intent.action
-
-
-
-        if(action==WifiManager.SUPPLICANT_STATE_CHANGED_ACTION){
-            val state=intent.getParcelableExtra<SupplicantState>(WifiManager.EXTRA_NEW_STATE)
-
-            if(intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED)){
-
-                Log.d("CONNEC","Connected")
-
-            }
-            if(intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_ERROR)){
-                if(Constants.isReconnected==null)
-                Constants.isReconnected=true
-
-                (context as MainActivity).ll_loading.visibility=View.GONE
-            }
-
-        }
-
-
-if(action==WifiManager.SCAN_RESULTS_AVAILABLE_ACTION && (context as MainActivity).shouldScan){
-    (context as MainActivity).shouldScan=false
-    val wifiManager =
-            context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-
-
-    val scanResult = wifiManager.scanResults
-    val receiversResult = ArrayList<ScanResult>()
-    for (i in scanResult) {
-
-        Log.i("WIFII", i.SSID)
-
-//if(i.SSID.contains("AndroidShare_")){
-        receiversResult.add(i)
+//
+//val action=intent.action
+//
+//
+//
+//        if(action==WifiManager.SUPPLICANT_STATE_CHANGED_ACTION){
+//            val state=intent.getParcelableExtra<SupplicantState>(WifiManager.EXTRA_NEW_STATE)
+//
+//            if(intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED)){
+//
+//                Log.d("CONNEC","Connected")
+//
+//            }
+//            if(intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_ERROR)){
+//                if(Constants.isReconnected==null)
+//                Constants.isReconnected=true
+//
+//                (context as MainActivity).ll_loading.visibility=View.GONE
+//            }
+//
+//        }
+//
+//
+//if(action==WifiManager.SCAN_RESULTS_AVAILABLE_ACTION && (context as MainActivity).shouldScan){
+//    (context as MainActivity).shouldScan=false
+//    val wifiManager =
+//            context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+//
+//
+//
+//    val scanResult = wifiManager.scanResults
+//    val receiversResult = ArrayList<ScanResult>()
+//    for (i in scanResult) {
+//
+//        Log.i("WIFII", i.SSID)
+//
+////if(i.SSID.contains("AndroidShare_")){
+//        receiversResult.add(i)
+////}
+//
+//
+//    }
+//
+//
+//    if (receiversResult.isNotEmpty()) {
+//
+//        val dialog = Dialog(context)
+//        (context as MainActivity).mDialog = dialog
+//        dialog.setContentView(R.layout.dialog_hotspot_receiver)
+//        val adapter = SSIDListRecyclerAdapter(context, receiversResult)
+//
+//        dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(context)
+//        dialog.rv_receiver_ssid.setHasFixedSize(true)
+//
+//        dialog.rv_receiver_ssid.adapter = adapter
+//        dialog.show()
+//        Constants.ssidDialog=dialog
+//        dialog.setOnDismissListener {
+//
+//            Constants.ssidDialog=null
+//        }
+//
+//    }
+//
 //}
-
-
-    }
-
-
-    if (receiversResult.isNotEmpty()) {
-
-        val dialog = Dialog(context)
-        (context as MainActivity).mDialog = dialog
-        dialog.setContentView(R.layout.dialog_hotspot_receiver)
-        val adapter = SSIDListRecyclerAdapter(context, receiversResult)
-
-        dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(context)
-        dialog.rv_receiver_ssid.setHasFixedSize(true)
-
-        dialog.rv_receiver_ssid.adapter = adapter
-        dialog.show()
-        Constants.ssidDialog=dialog
-        dialog.setOnDismissListener {
-
-            Constants.ssidDialog=null
-        }
-
-    }
-
-}
-
-       else if(action== WifiManager.NETWORK_STATE_CHANGED_ACTION){
-
-
-            if(Constants.onNetworkAvailable) {
-                Constants.onNetworkAvailable = false
-                Thread(object :Runnable{
-
-                    override fun run() {
-                        Log.d("TESTOS","Outside")
-                        var wifiManager =
-                                context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-
-
-                        if (wifiManager.isWifiEnabled) {
-
-                            val connectivityManager=context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                            val connectivityInfo=connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-
-
-                            var wifiInfo = wifiManager.connectionInfo
-
-                            while (wifiInfo.ssid != "\"${Constants.mNetworkSSID}\""){
-                                wifiInfo=wifiManager.connectionInfo
-                                Log.d("TESTOS","SPAM")
-//                                if(Constants.noNetwork){
-//                                    Constants.noNetwork=false
-//                                    break
+//
+//       else if(action== WifiManager.NETWORK_STATE_CHANGED_ACTION){
+//
+//
+//            if(Constants.onNetworkAvailable) {
+//                Constants.onNetworkAvailable = false
+//                Thread(object :Runnable{
+//
+//                    override fun run() {
+//                        Log.d("TESTOS","Outside")
+//                        var wifiManager =
+//                                context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+//
+//
+//
+//                        if (wifiManager.isWifiEnabled) {
+//
+//                            val connectivityManager=context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//                            val connectivityInfo=connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+//
+//
+//                            var wifiInfo = wifiManager.connectionInfo
+//
+//                            while (wifiInfo.ssid != "\"${Constants.mNetworkSSID}\""){
+//                                wifiInfo=wifiManager.connectionInfo
+//                                Log.d("TESTOS","SPAM")
+////                                if(Constants.noNetwork){
+////                                    Constants.noNetwork=false
+////                                    break
+////                                }
+//                            }
+//
+//                            if (wifiInfo.ssid == "\"${Constants.mNetworkSSID}\"") {
+//                                Log.d("TESTOS","Insidee")
+//
+//                                val handler=Handler(Looper.getMainLooper())
+//
+//                                Constants.mainActivity!!.mIpAddress = InetAddress.getByAddress(ByteBuffer
+//                                        .allocate(Integer.BYTES)
+//                                        .order(ByteOrder.LITTLE_ENDIAN)
+//                                        .putInt(wifiManager.dhcpInfo.gateway)
+//                                        .array()).hostAddress
+//
+//
+//                                while(   Constants.mainActivity!!.mIpAddress=="0.0.0.0"){
+//                                    Log.i("TESTOS",Constants.mainActivity!!.mIpAddress)
+//                                    Constants.mainActivity!!.mIpAddress = InetAddress.getByAddress(ByteBuffer
+//                                            .allocate(Integer.BYTES)
+//                                            .order(ByteOrder.LITTLE_ENDIAN)
+//                                            .putInt(wifiManager.dhcpInfo.gateway)
+//                                            .array()).hostAddress
+//
+//
+//
+//                                    if(Constants.noNetwork){
+//                                        Constants.noNetwork=false
+//                                        return
+//                                    }
+//
+//if(Constants.isReconnected!=null && Constants.isReconnected==true){
+//    Constants.isReconnected=false
+//    return
+//}
+//
 //                                }
-                            }
-
-                            if (wifiInfo.ssid == "\"${Constants.mNetworkSSID}\"") {
-                                Log.d("TESTOS","Insidee")
-
-                                val handler=Handler(Looper.getMainLooper())
-
-                                Constants.mainActivity!!.mIpAddress = InetAddress.getByAddress(ByteBuffer
-                                        .allocate(Integer.BYTES)
-                                        .order(ByteOrder.LITTLE_ENDIAN)
-                                        .putInt(wifiManager.dhcpInfo.gateway)
-                                        .array()).hostAddress
-
-
-                                while(   Constants.mainActivity!!.mIpAddress=="0.0.0.0"){
-                                    Log.i("TESTOS",Constants.mainActivity!!.mIpAddress)
-                                    Constants.mainActivity!!.mIpAddress = InetAddress.getByAddress(ByteBuffer
-                                            .allocate(Integer.BYTES)
-                                            .order(ByteOrder.LITTLE_ENDIAN)
-                                            .putInt(wifiManager.dhcpInfo.gateway)
-                                            .array()).hostAddress
-
-
-
-                                    if(Constants.noNetwork){
-                                        Constants.noNetwork=false
-                                        return
-                                    }
-
-if(Constants.isReconnected!=null && Constants.isReconnected==true){
-    Constants.isReconnected=false
-    return
-}
-
-                                }
-                        if(wifiInfo.ssid != "\"${Constants.mNetworkSSID}\""){
-                            return
-                        }
-                                       Log.d("WIFITHREAD",Constants.mainActivity!!.mIpAddress)
-                                Thread.sleep(7000)
-                                Constants.clientThread = ClientThread(Constants.mainActivity!!)
-                                Log.d("WIFITHREAD","Made")
-                                Constants.clientThread!!.start()
-//                                (context as MainActivity).runOnUiThread {
-//                                    (context as MainActivity).setupUIconnected()
-//                                }
-
-
-//                    btn_connect_status.visibility = View.VISIBLE
-                                Constants.mainActivity!!.connectionType = Constants.CONNECTION_TYPE_WIFI
-
-                            }
-
-
-                        }
-
-                        else {
-                            Log.d("TESTOS","Else")
-                        }
-
-                    }
-
-                }).start()
-            }
-        }
-
-
+//                        if(wifiInfo.ssid != "\"${Constants.mNetworkSSID}\""){rf
+//                            return
+//                        }
+//                                       Log.d("WIFITHREAD",Constants.mainActivity!!.mIpAddress)
+//                                Thread.sleep(7000)
+//                                Constants.clientThread = ClientThread(Constants.mainActivity!!)
+//                                Log.d("WIFITHREAD","Made")
+//                                Constants.clientThread!!.start()
+////                                (context as MainActivity).runOnUiThread {
+////                                    (context as MainActivity).setupUIconnected()
+////                                }
+//
+//
+////                    btn_connect_status.visibility = View.VISIBLE
+//                                Constants.mainActivity!!.connectionType = Constants.CONNECTION_TYPE_WIFI
+//
+//                            }
+//
+//
+//                        }
+//
+//                        else {
+//                            Log.d("TESTOS","Else")
+//                        }
+//
+//                    }
+//
+//                }).start()
+//            }
+//        }
+//
+//
 
     }
 }

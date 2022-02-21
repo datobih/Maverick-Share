@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import android.net.wifi.p2p.WifiP2pManager
 import android.opengl.Visibility
 import android.os.Looper
 import android.util.Log
@@ -388,17 +389,17 @@ catch (e:Exception){
 ////
 ////
 
-    try {
-        inputStream.close()
-    }catch(e:Exception){
-        Log.d("INPUTSTREAMM",e.stackTraceToString())
-    }
-
-        try{
-            outputStream.close()
-        }catch(e:Exception){
-            Log.d("OUTPUTSTREAMM",e.stackTraceToString())
-        }
+//    try {
+//        inputStream.close()
+//    }catch(e:Exception){
+//        Log.d("INPUTSTREAMM",e.stackTraceToString())
+//    }
+//
+//        try{
+//            outputStream.close()
+//        }catch(e:Exception){
+//            Log.d("OUTPUTSTREAMM",e.stackTraceToString())
+//        }
 
 
 if(!socket!!.isClosed) {
@@ -411,15 +412,29 @@ if(!socket!!.isClosed) {
 
 
 
+//
+//
+//    if( (context as MainActivity).mReservation!=null){
+//        (context as MainActivity).mReservation!!.close()
+//        Thread.sleep(3000)
+//        (context as MainActivity).mReservation=null
+//
+//
+//    }
 
 
-    if( (context as MainActivity).mReservation!=null){
-        (context as MainActivity).mReservation!!.close()
-        Thread.sleep(3000)
-        (context as MainActivity).mReservation=null
 
+    mainContext.p2pManager!!.removeGroup(mainContext.p2pChannel,object: WifiP2pManager.ActionListener{
+        override fun onSuccess() {
+            //
+        }
 
-    }
+        override fun onFailure(p0: Int) {
+            //
+        }
+
+    })
+
 
     var q=false
     handler.post {
@@ -434,7 +449,7 @@ if(!socket!!.isClosed) {
     }
 //        fileSize = 0
 //        bytesTransferred = 0
-
+    Constants.serverThread=null
     return
 
 }
