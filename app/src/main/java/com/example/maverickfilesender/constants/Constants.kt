@@ -15,6 +15,8 @@ import java.net.ServerSocket
 
 object Constants{
 val SHARED_PREFERENCES_NAME="maverick_file_sender"
+
+    val SP_DARK_MODE="maverick_dark_mode"
   val SP_PROFILE_PIC_DATA="profile_pic"
     val SP_PROFILE_USERNAME="profile_username"
     val RQ_READ_WRITE_PERMISSION=1

@@ -12,20 +12,15 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.LocationManager
-import android.net.ConnectivityManager
 import android.net.Uri
-import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pDevice
-import android.net.wifi.p2p.WifiP2pDeviceList
 import android.net.wifi.p2p.WifiP2pManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.text.format.Formatter
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -34,36 +29,26 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.adapters.MainPagerFragmentAdapter
-import com.example.maverickfilesender.adapters.SSIDListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.fragment.*
-import com.example.maverickfilesender.handlers.ClientThread
-import com.example.maverickfilesender.handlers.ServerThread
 import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.receivers.WifiDirectBroadcastReceiver
-import com.example.maverickfilesender.receivers.WifiReceiver
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.activity_profile.civ_user_profile
+import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import kotlinx.android.synthetic.main.dialog_hotspot_sender.*
 import kotlinx.android.synthetic.main.drawer_header.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
-import java.io.DataInputStream
-import java.io.DataOutputStream
-import java.net.InetSocketAddress
-import java.net.ServerSocket
-import java.net.Socket
-import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity() {
     var ssid: String = ""
@@ -104,6 +89,7 @@ var p2pReceiver:WifiDirectBroadcastReceiver?=null
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setTheme(R.style.Theme_MaverickFileSender)
         setContentView(R.layout.activity_main)
 
@@ -114,6 +100,9 @@ var p2pReceiver:WifiDirectBroadcastReceiver?=null
 //       val valid= Testdir!!.mkdirs()
 //
 
+
+
+
 Constants.mainActivity=this
 
         val headerView=drawer_navigation.getHeaderView(0)
@@ -121,11 +110,28 @@ Constants.mainActivity=this
          navUserName=headerView.findViewById<TextView>(R.id.tv_main_userName)
 
         mSharedPreferences= getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+
+        val isDarkMode=mSharedPreferences!!.getBoolean(Constants.SP_DARK_MODE,true)
+
+if(!isDarkMode){
+    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+}
+
+
+
+
         mProfilePicEncoded=mSharedPreferences!!.getString(Constants.SP_PROFILE_PIC_DATA,"")
         mProfileName=mSharedPreferences!!.getString(Constants.SP_PROFILE_USERNAME,"")
 
 
         if(!mProfilePicEncoded.isNullOrEmpty()){
+val editor=mSharedPreferences!!.edit()
+
+editor.putBoolean(Constants.SP_DARK_MODE,isDarkMode)
+            editor.apply()
+
+
+
             val userPictureByteArray= Base64.decode(mProfilePicEncoded, Base64.DEFAULT)
             profileBitmap=BitmapFactory.decodeByteArray(userPictureByteArray,0,userPictureByteArray.size)
 
@@ -278,7 +284,7 @@ startActivityForResult(Intent(this,ProfileActivity::class.java),Constants.RQ_PRO
 
                R.id.d_menu_settings->{
 
-
+                   startActivity(Intent(this, SettingsActivity::class.java))
                    return@OnNavigationItemSelectedListener true
                }
 

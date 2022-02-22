@@ -10,8 +10,8 @@
     <color name="maverick_blue">#283593</color>
     <color name="maverick_green">#41FF41</color>
     <color name="maveric_red">#FF4141</color>
-    <color name="background_color">#212121</color>
-    <color name="text_color">#FFFFFF</color>
-    <color name="thumb_color">#FFFFFF</color>
-    <color name="track_color">#9E9E9E</color>
+    <color name="background_color">#F3F3F3</color>
+    <color name="text_color">#212121</color>
+    <color name="thumb_color">#212121</color>
+    <color name="track_color">#424242</color>
 </resources>

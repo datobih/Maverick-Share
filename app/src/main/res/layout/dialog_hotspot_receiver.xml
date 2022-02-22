@@ -4,7 +4,9 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingVertical="20dp">
+    android:paddingVertical="20dp"
+    android:background="@color/background_color"
+    >
 
 
     <TextView
@@ -12,7 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="List of Networks available"
-        android:textColor="#2C2C2C"
+        android:textColor="@color/text_color"
 
         android:textSize="17dp"
         android:textStyle="bold"></TextView>

@@ -76,10 +76,10 @@ android:textColor="@color/white"
 
         android:text="Video Name"
         android:fontFamily="@font/gilroy_light"
-        android:textSize="17dp"
+        android:textSize="14dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-
+android:textColor="@color/text_color"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:marqueeRepeatLimit="marquee_forever"
@@ -97,9 +97,10 @@ android:textColor="@color/white"
 
             android:text="2.35MB"
             android:fontFamily="@font/gilroy_light"
-            android:textSize="14dp"
+            android:textSize="11dp"
             android:layout_marginLeft="10dp"
 android:layout_marginTop="25dp"
+            android:textColor="@color/text_color"
             ></TextView>
 
 

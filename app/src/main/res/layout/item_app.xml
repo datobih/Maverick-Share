@@ -55,7 +55,7 @@ android:layout_centerHorizontal="true"
 android:ellipsize="end"
         android:maxLines="1"
 android:gravity="center"
-
+android:textColor="@color/text_color"
         android:fontFamily="@font/gilroy_light"
         ></TextView>
 
@@ -69,7 +69,7 @@ android:gravity="center"
         android:textSize="13dp"
         android:maxLines="1"
         android:gravity="center"
-
+android:textColor="@color/text_color"
         android:fontFamily="@font/gilroy_light">
 
     </TextView>

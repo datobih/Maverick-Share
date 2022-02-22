@@ -27,7 +27,7 @@ android:foreground="?attr/selectableItemBackground"
         android:layout_margin="15dp"
         android:ellipsize="end"
         android:maxLines="1"
-
+android:textColor="@color/text_color"
         android:layout_toRightOf="@id/imv_history_fileIcon"
         ></TextView>
 

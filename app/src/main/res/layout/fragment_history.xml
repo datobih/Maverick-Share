@@ -7,6 +7,7 @@
     tools:context=".fragment.HistoryFragment"
     android:orientation="vertical"
     android:layout_gravity="center"
+    android:background="@color/background_color"
     >
 
 
@@ -41,7 +42,7 @@
 android:layout_centerInParent="true"
 
         android:layout_margin="6dp"
-android:textColor="@color/white"
+android:textColor="@color/text_color"
         android:textSize="19dp"
         android:fontFamily="@font/gilroy_light"
         ></TextView>

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.PermissionsActivity"
-    android:background="#212121"
+    android:background="@color/background_color"
+
     android:orientation="vertical"
     >
 
@@ -16,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Storage Permission"
-        android:textColor="@color/white"
+        android:textColor="@color/text_color"
         android:fontFamily="@font/gilroy"
         android:textSize="30dp"
         android:layout_gravity="center_horizontal"
@@ -41,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="To use this app you need to enable read and write permissions on your device"
-        android:textColor="@color/white"
+        android:textColor="@color/text_color"
         android:fontFamily="@font/gilroy_light"
         android:textSize="16dp"
         android:textStyle="bold"

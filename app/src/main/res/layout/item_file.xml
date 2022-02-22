@@ -26,6 +26,7 @@
         android:layout_margin="15dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textColor="@color/text_color"
 android:layout_toLeftOf="@id/imb_file_onSelect"
         android:layout_toRightOf="@id/imv_fileIcon"
         ></TextView>

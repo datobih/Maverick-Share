@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity"
     android:theme="@style/Theme.MaterialComponents.NoActionBar"
-
+android:background="@color/background_color"
     >
     <!--    android:background="#f4f4f4"-->
 
@@ -107,7 +107,7 @@ android:layout_alignParentRight="true"
 
         android:background="@drawable/tab_layout_background"
         app:tabIndicatorColor="@color/white"
-
+app:tabIndicatorFullWidth="false"
         android:elevation="5dp"
         app:tabTextAppearance="@style/tab_text"
         app:tabTextColor="@color/white"

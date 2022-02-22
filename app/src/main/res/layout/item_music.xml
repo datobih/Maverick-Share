@@ -48,9 +48,9 @@ android:layout_weight="1"
                     android:fontFamily="@font/gilroy_light"
 
                     android:text="Title"
-                    android:textSize="18dp"
+                    android:textSize="14dp"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color"
 
                     ></TextView>
 
@@ -61,9 +61,9 @@ android:layout_weight="1"
 
                     android:fontFamily="@font/gilroy_light"
                     android:text="Artist"
-                    android:textSize="15dp"
+                    android:textSize="11dp"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_color"
 
                     ></TextView>
 
