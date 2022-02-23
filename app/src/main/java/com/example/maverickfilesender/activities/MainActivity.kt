@@ -136,7 +136,8 @@ navUserImage!!.setImageBitmap(profileBitmap)
 
         }else{
             val editor=mSharedPreferences!!.edit()
-
+editor.putString(Constants.SP_PROFILE_PIC_DATA,"pic")
+            editor.putString(Constants.SP_PROFILE_USERNAME,"Guest")
             editor.putBoolean(Constants.SP_DARK_MODE,isDarkMode)
             editor.putString(Constants.SP_STORAGE_LOCATION,"/storage/emulated/0")
 

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingVertical="20dp"
+    android:background="@color/background_color"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Download Location"
+        android:textColor="@color/text_color"
+android:fontFamily="@font/gilroy"
+        android:textSize="20dp"
+        android:textStyle="bold"></TextView>
+
+
+<RelativeLayout
+    android:id="@+id/ll_Dialog_internalStorage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+android:layout_marginTop="30dp"
+android:foreground="?attr/selectableItemBackground"
+    >
+
+
+
+<RelativeLayout
+    android:id="@+id/checkbox_internal"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:background="@drawable/storage_select_check_bg"
+    android:layout_alignParentLeft="true"
+    android:layout_marginLeft="30dp"
+    android:layout_centerVertical="true"
+>
+    <ImageView
+    android:id="@+id/imv_internalStorage_check"
+    android:layout_width="20dp"
+    android:layout_height="20dp"
+
+    android:background="@drawable/storage_select_bg"
+  android:layout_centerInParent="true"
+
+    ></ImageView>
+
+
+</RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvDialog_internalStorage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Internal Storage"
+        android:layout_toRightOf="@id/checkbox_internal"
+        android:textSize="16sp"
+        android:textColor="@color/text_color"
+        android:fontFamily="@font/gilroy_light"
+        android:layout_marginLeft="25dp"
+        ></TextView>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="/storage/emulated/0"
+        android:layout_toRightOf="@id/checkbox_internal"
+        android:layout_below="@id/tvDialog_internalStorage"
+        android:textSize="10sp"
+        android:textColor="@color/text_color"
+        android:fontFamily="@font/gilroy_light"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="25dp"
+        ></TextView>
+
+
+</RelativeLayout>
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/ll_Dialog_sdStorage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:foreground="?attr/selectableItemBackground"
+        tools:visibility="visible"
+        android:visibility="gone"
+        >
+
+        <RelativeLayout
+            android:id="@+id/checkbox_sd"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/storage_select_check_bg"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:layout_centerVertical="true"
+            >
+            <ImageView
+                android:id="@+id/imv_sdStorage_check"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+
+                android:background="@drawable/storage_select_bg"
+                android:layout_centerInParent="true"
+android:visibility="gone"
+                ></ImageView>
+
+
+        </RelativeLayout>
+
+
+
+        <TextView
+            android:id="@+id/tvDialog_sdStorage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SD Storage"
+            android:layout_toRightOf="@id/checkbox_sd"
+            android:textSize="16sp"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/gilroy_light"
+            android:layout_marginLeft="25dp"
+            ></TextView>
+
+
+        <TextView
+            android:id="@+id/tvDialog_sdDirectory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/storage/emulated/0"
+            android:layout_toRightOf="@id/checkbox_sd"
+            android:layout_below="@id/tvDialog_sdStorage"
+            android:textSize="10sp"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/gilroy_light"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="25dp"
+            ></TextView>
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>
+

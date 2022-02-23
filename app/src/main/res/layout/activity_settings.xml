@@ -101,6 +101,7 @@ android:layout_centerVertical="true"
 
 
         <TextView
+            android:id="@+id/tv_current_StorageLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/imv_download_location"
