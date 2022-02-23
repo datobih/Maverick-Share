@@ -125,7 +125,7 @@ if(!isDarkMode){
         mProfileName=mSharedPreferences!!.getString(Constants.SP_PROFILE_USERNAME,"")
 
 
-        if(!mProfilePicEncoded.isNullOrEmpty()){
+        if(!mProfilePicEncoded.isNullOrEmpty()&& mProfilePicEncoded!="pic"){
 
 
 
@@ -134,7 +134,7 @@ if(!isDarkMode){
 
 navUserImage!!.setImageBitmap(profileBitmap)
 
-        }else{
+        }else if(mProfilePicEncoded.isNullOrEmpty()){
             val editor=mSharedPreferences!!.edit()
 editor.putString(Constants.SP_PROFILE_PIC_DATA,"pic")
             editor.putString(Constants.SP_PROFILE_USERNAME,"Guest")
