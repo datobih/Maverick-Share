@@ -109,7 +109,7 @@ android:layout_centerVertical="true"
 
 
             android:fontFamily="@font/gilroy_light"
-            android:text="Phone Storage"
+            android:text="Internal Storage"
             android:textColor="@color/text_color"
             ></TextView>
 </RelativeLayout>

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import android.media.MediaPlayer
 import android.net.wifi.p2p.WifiP2pManager
 import android.opengl.Visibility
 import android.os.Looper
@@ -102,6 +103,9 @@ outputStream.write(tempData,0,tempData.size)
             val userBitmap=BitmapFactory.decodeByteArray(tempByteArray,0,tempByteArray.size)
 
             socket!!.soTimeout=1000
+
+            val media= MediaPlayer.create(context,R.raw.connected)
+            media.start()
 
 
             val handler = android.os.Handler(Looper.getMainLooper())

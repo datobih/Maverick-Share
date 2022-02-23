@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.media.MediaPlayer
 import android.net.wifi.p2p.WifiP2pManager
 import android.os.Environment
 import android.os.Looper
@@ -148,6 +149,9 @@ inputStream.readFully(tempByteArray,0,tempByteArray.size)
             socket!!.soTimeout=1000
 
             var bufferedInputStream = BufferedInputStream(socket!!.getInputStream())
+
+            val media=MediaPlayer.create(context,R.raw.connected)
+            media.start()
 
             handler!!.post {
                 mainContext.tv_connection_status.visibility=View.GONE
