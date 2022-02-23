@@ -234,7 +234,7 @@ startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ
 //        tab_main.selectTab(appTab)
 //        vp_main.currentItem=1
 
-
+tab_main.selectTab(historyTab)
         val receiveAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_recieve)
         val sendAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_send)
          transitionDown=AnimationUtils.loadAnimation(this,R.anim.transition_down)

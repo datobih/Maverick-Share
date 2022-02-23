@@ -17,86 +17,82 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val sharedPreferences=getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
-        val isDarkMode=sharedPreferences.getBoolean(Constants.SP_DARK_MODE,true)
+        val isDarkMode = sharedPreferences.getBoolean(Constants.SP_DARK_MODE, true)
 
 
-        if(isDarkMode){
-
-            switch_darkMode.isChecked=true
-
-        }
-        else{
-            switch_darkMode.isChecked=false
-        }
+        switch_darkMode.isChecked = isDarkMode
 
 
 
-        switch_darkMode.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener{
-            val editor=sharedPreferences.edit()
+        switch_darkMode.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
+            val editor = sharedPreferences.edit()
 
             override fun onCheckedChanged(p0: CompoundButton?, value: Boolean) {
 
 
-
-                Constants.tempSelectedFiles.clear()
-
-
-
-//Constants.selectedFiles.clear()
-                Constants.heirarchyFiles.clear()
-                Constants.sendCount=0
+                clearSelectedFiles()
 
 
 
+                if (value == false) {
 
-                while (Constants.imagesSelected.isNotEmpty()) {
-
-
-                    Constants.imagesSelected.removeAt(0)
-                }
-
-
-
-                while (Constants.audioSelected.isNotEmpty()) {
-
-                    Constants.audioSelected.removeAt(0)
-                }
-
-
-
-                while (Constants.appSelected.isNotEmpty()){
-
-                    Constants.appSelected.removeAt(0)
-
-
-                }
-
-                while(Constants.videosSelected.isNotEmpty()){
-
-
-
-                    Constants.videosSelected.removeAt(0)
-
-                }
-
-
-                if(value==false){
-
-                    editor.putBoolean(Constants.SP_DARK_MODE,false)
+                    editor.putBoolean(Constants.SP_DARK_MODE, false)
 
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
-                }
-                else{
-                    editor.putBoolean(Constants.SP_DARK_MODE,true)
+                } else {
+                    editor.putBoolean(Constants.SP_DARK_MODE, true)
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 }
-editor.apply()
+                editor.apply()
             }
 
 
         })
     }
+
+    fun clearSelectedFiles() {
+        Constants.tempSelectedFiles.clear()
+
+
+
+
+        Constants.heirarchyFiles.clear()
+        Constants.sendCount = 0
+
+
+
+
+        while (Constants.imagesSelected.isNotEmpty()) {
+
+
+            Constants.imagesSelected.removeAt(0)
+        }
+
+
+
+        while (Constants.audioSelected.isNotEmpty()) {
+
+            Constants.audioSelected.removeAt(0)
+        }
+
+
+
+        while (Constants.appSelected.isNotEmpty()) {
+
+            Constants.appSelected.removeAt(0)
+
+
+        }
+
+        while (Constants.videosSelected.isNotEmpty()) {
+
+
+            Constants.videosSelected.removeAt(0)
+
+        }
+    }
+
 }
