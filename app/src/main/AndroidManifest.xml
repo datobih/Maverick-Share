@@ -56,7 +56,8 @@
             android:name=".activities.MainActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@style/splashScreenTheme">
+            android:theme="@style/splashScreenTheme"
+    >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

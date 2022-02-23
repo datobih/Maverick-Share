@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.HolderFilesFragment"
     android:id="@+id/holder_files_fragment"
+
     android:background="@color/background_color"
     >
 </FrameLayout>

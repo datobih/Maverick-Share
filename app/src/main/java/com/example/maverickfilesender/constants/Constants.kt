@@ -17,6 +17,7 @@ object Constants{
 val SHARED_PREFERENCES_NAME="maverick_file_sender"
 
     val SP_DARK_MODE="maverick_dark_mode"
+    val SP_STORAGE_LOCATION="maverick_storage_location"
   val SP_PROFILE_PIC_DATA="profile_pic"
     val SP_PROFILE_USERNAME="profile_username"
     val RQ_READ_WRITE_PERMISSION=1
@@ -33,8 +34,13 @@ var serverSocket:ServerSocket?=null
 
 
 
+
     val CONNECTION_TYPE_HOTSPOT="Hotspot"
     val CONNECTION_TYPE_WIFI="Wifi"
+
+
+
+    var currentDownloadLocation=""
 
 
     var userPictureOnChanged:Bitmap?=null

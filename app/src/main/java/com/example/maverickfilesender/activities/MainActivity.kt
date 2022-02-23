@@ -49,6 +49,7 @@ import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import kotlinx.android.synthetic.main.dialog_hotspot_sender.*
 import kotlinx.android.synthetic.main.drawer_header.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
+import kotlin.reflect.typeOf
 
 class MainActivity : AppCompatActivity() {
     var ssid: String = ""
@@ -125,10 +126,6 @@ if(!isDarkMode){
 
 
         if(!mProfilePicEncoded.isNullOrEmpty()){
-val editor=mSharedPreferences!!.edit()
-
-editor.putBoolean(Constants.SP_DARK_MODE,isDarkMode)
-            editor.apply()
 
 
 
@@ -137,7 +134,21 @@ editor.putBoolean(Constants.SP_DARK_MODE,isDarkMode)
 
 navUserImage!!.setImageBitmap(profileBitmap)
 
+        }else{
+            val editor=mSharedPreferences!!.edit()
+
+            editor.putBoolean(Constants.SP_DARK_MODE,isDarkMode)
+            editor.putString(Constants.SP_STORAGE_LOCATION,"/storage/emulated/0")
+
+
+
+            editor.apply()
+
+
+
         }
+
+
         if(!mProfileName.isNullOrEmpty()){
 
        navUserName!!.text = mProfileName
@@ -626,6 +637,42 @@ ll_main_send.startAnimation(transitionDown)
 //                }
 //
 //            }
+
+            var files = ContextCompat.getExternalFilesDirs(this, null)
+
+var currentLocation=mSharedPreferences!!.getString(Constants.SP_STORAGE_LOCATION,"")
+
+            if(currentLocation!="/storage/emulated/0") {
+                if (files.size > 1) {
+
+                    val path = getSDirectory(files[1].path)
+
+
+
+                    if(currentLocation!=path){
+
+                        val editor=mSharedPreferences!!.edit()
+                        editor.putString(Constants.SP_STORAGE_LOCATION,path)
+                        editor.apply()
+currentLocation=path
+
+
+                    }
+
+
+                }
+            else{
+
+                val editor=mSharedPreferences!!.edit()
+                editor.putString(Constants.SP_STORAGE_LOCATION,"/storage/emulated/0")
+                    editor.apply()
+currentLocation="/storage/emulated/0"
+                }
+
+                Constants.currentDownloadLocation=currentLocation
+
+            }
+
             Constants.noNetwork=false
             if (verifyLocation()) {
 
@@ -737,7 +784,27 @@ tv_connection_status.text="Not Connected"
 
     }
 
+    fun getSDirectory(path: String): String {
+        var sdPath = ""
+        var count = 0
 
+        for (i in path) {
+
+            if (i == '/') {
+
+                count++
+
+            }
+
+            if (count == 3) {
+                break
+            }
+            sdPath += i
+
+        }
+
+        return sdPath
+    }
 
 
     override fun onRequestPermissionsResult(

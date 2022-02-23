@@ -44,4 +44,29 @@ android:trackTint="@color/track_color"
     ></Switch>
 
 
+    <ImageView
+        android:id="@+id/imv_download_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_download_location_icon"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintTop_toBottomOf="@id/imv_light_dark_icon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        ></ImageView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Download location"
+        android:textColor="@color/text_color"
+        android:fontFamily="@font/gilroy"
+        android:layout_marginTop="22dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintTop_toBottomOf="@id/imv_light_dark_icon"
+        app:layout_constraintLeft_toRightOf="@id/imv_download_location"
+        ></TextView>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

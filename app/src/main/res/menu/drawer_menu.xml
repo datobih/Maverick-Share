@@ -18,8 +18,8 @@ android:checkable="false"
         ></item>
 
     <item
-        android:id="@+id/d_menu_help"
-        android:title="Help"
+        android:id="@+id/d_menu_feedback"
+        android:title="Feedback"
         android:icon="@drawable/ic_round_help_center_24"
 android:checkable="false"
         ></item>

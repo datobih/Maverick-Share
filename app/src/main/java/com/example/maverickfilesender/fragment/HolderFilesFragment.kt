@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentContainer
+import androidx.fragment.app.FragmentTransaction
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
@@ -18,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_holder_files.*
 import kotlinx.android.synthetic.main.fragment_holder_files.view.*
 import java.io.File
 import java.text.DecimalFormat
+import kotlin.concurrent.fixedRateTimer
 
 class HolderFilesFragment : Fragment() {
 
@@ -28,8 +31,6 @@ class HolderFilesFragment : Fragment() {
         mContext=context
 
     }
-
-
 
 
     override fun onCreateView(
@@ -46,15 +47,25 @@ class HolderFilesFragment : Fragment() {
 
 
 
-        activity!!.supportFragmentManager.beginTransaction().apply {
+       this.childFragmentManager?.beginTransaction().apply {
+this.setReorderingAllowed(true)
 
-            replace(view.holder_files_fragment.id,StorageDirectoryFragment())
-            commit()
+
+            this.replace(view.holder_files_fragment.id,StorageDirectoryFragment())
+            this.commitAllowingStateLoss()
 
         }
 
 
 
+    }
+
+    override fun onDestroy() {
+
+
+
+
+        super.onDestroy()
     }
 
     fun onFinalStack(context: Context){

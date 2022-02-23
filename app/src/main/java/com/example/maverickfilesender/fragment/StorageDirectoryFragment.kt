@@ -48,7 +48,6 @@ class StorageDirectoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             if (!Environment.isExternalStorageManager()) {
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
@@ -113,8 +112,8 @@ class StorageDirectoryFragment : Fragment() {
 
         view.progress_internalStorage.progress =
                 ((internalUsedSpace / internalTotalSize) * 100).toInt()
-        val animation = AnimationUtils.loadAnimation(mContext!!, R.anim.bounce)
-        view.ll_internalStorage.startAnimation(animation)
+//        val animation = AnimationUtils.loadAnimation(mContext!!, R.anim.bounce)
+//        view.ll_internalStorage.startAnimation(animation)
 
         if (sdPath.isNotEmpty()) {
             view.ll_SD_storage.visibility = View.VISIBLE
@@ -139,8 +138,8 @@ class StorageDirectoryFragment : Fragment() {
 
 
             view.progress_SD.progress = ((sdUsedSpace / sdTotalSize) * 100).toInt()
-            val animation = AnimationUtils.loadAnimation(mContext!!, R.anim.bounce)
-            view.ll_SD_storage.startAnimation(animation)
+//            val animation = AnimationUtils.loadAnimation(mContext!!, R.anim.bounce)
+//            view.ll_SD_storage.startAnimation(animation)
         }
 
 
@@ -156,7 +155,7 @@ class StorageDirectoryFragment : Fragment() {
 
 
 
-            requireActivity().supportFragmentManager.beginTransaction().apply {
+            Constants.mainActivity!!.supportFragmentManager.beginTransaction().apply {
 
                 addToBackStack(null)
                 replace(R.id.holder_files_fragment, directoryFragment)

@@ -268,9 +268,9 @@ var fileDir:File?=null
                             fileName.endsWith(".mvk")) {
 
 
-                        fileDir = File("/storage/emulated/0/DCIM/Maverick")
+                        fileDir = File("${Constants.currentDownloadLocation}/DCIM/Maverick")
                     }else{
-                        fileDir = File("/storage/emulated/0/Download/Maverick")
+                        fileDir = File("${Constants.currentDownloadLocation}/Download/Maverick")
                     }
 
                         if(!fileDir!!.exists()){
