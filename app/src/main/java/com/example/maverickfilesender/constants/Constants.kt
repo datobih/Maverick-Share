@@ -33,7 +33,7 @@ var isClose=false
 var serverSocket:ServerSocket?=null
 
 
-
+var isMedia=false
 
     val CONNECTION_TYPE_HOTSPOT="Hotspot"
     val CONNECTION_TYPE_WIFI="Wifi"

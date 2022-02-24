@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,8 +9,47 @@
     android:layout_gravity="center"
     android:background="@color/background_color"
     >
+<RelativeLayout
+    android:id="@+id/ll_fileHistory_mode"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@id/ll_history_received"
+    app:layout_constraintRight_toRightOf="parent"
+    android:layout_marginTop="10dp"
+    android:background="@color/text_color"
+    android:paddingVertical="10dp"
+    >
+<ImageView
+    android:id="@+id/imb_fileHistory_mode"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:src="@drawable/file_icon"
 
 
+
+android:layout_toLeftOf="@id/tv_fileHistory_mode"
+
+   android:layout_marginRight="10dp"
+    ></ImageView>
+
+
+
+
+    <TextView
+        android:id="@+id/tv_fileHistory_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="General Files"
+        android:textColor="@color/background_color"
+    android:layout_centerVertical="true"
+        android:fontFamily="@font/gilroy_light"
+        android:layout_marginRight="20dp"
+
+        ></TextView>
+
+</RelativeLayout>
 
     <LinearLayout
         android:id="@+id/ll_history_received"
@@ -18,8 +57,11 @@
         android:layout_height="wrap_content"
         android:background="#6d6d6d"
 
-
+app:layout_constraintTop_toTopOf="parent"
         >
+
+
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,7 +81,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No files available"
-android:layout_centerInParent="true"
+app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
 
         android:layout_margin="6dp"
 android:textColor="@color/text_color"
@@ -54,7 +99,10 @@ android:textColor="@color/text_color"
         android:indeterminate="true"
         android:indeterminateTint="#283593"
         android:layout_gravity="center"
-        android:layout_centerInParent="true"
+app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:visibility="gone"
         ></ProgressBar>
 
@@ -62,12 +110,13 @@ android:textColor="@color/text_color"
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_history"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
 
 android:visibility="gone"
-        android:layout_below="@id/ll_history_received"
+        app:layout_constraintTop_toBottomOf="@id/ll_fileHistory_mode"
+        app:layout_constraintBottom_toBottomOf="parent"
         ></androidx.recyclerview.widget.RecyclerView>
 
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
