@@ -300,6 +300,14 @@ startActivityForResult(Intent(this,ProfileActivity::class.java),Constants.RQ_PRO
                    return@OnNavigationItemSelectedListener true
                }
 
+
+                R.id.d_menu_feedback->{
+
+
+                    startActivity(Intent(this, FeedbackActivity::class.java))
+                    return@OnNavigationItemSelectedListener true
+                }
+
                 else->{
 
 

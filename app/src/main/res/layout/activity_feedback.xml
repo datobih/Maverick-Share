@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.FeedbackActivity"
+    android:background="@color/background_color">
+
+
+    <RelativeLayout
+        android:id="@+id/toolbar_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#283593"
+        android:orientation="horizontal"
+        android:elevation="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+
+        <ImageView
+            android:id="@+id/btn_feedback_back"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="19dp"
+            android:src="@drawable/ic_round_arrow_back_ios_24"
+android:layout_centerVertical="true"
+            ></ImageView>
+
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Feedback"
+    android:textColor="@color/white"
+    android:fontFamily="@font/gilroy_light"
+    android:layout_centerVertical="true"
+    android:layout_toRightOf="@id/btn_feedback_back"
+    android:layout_marginLeft="30dp"
+
+    android:textSize="20sp"
+
+    ></TextView>
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_send_usEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send us an email"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_feedback"
+        android:textColor="@color/text_color"
+        android:fontFamily="@font/gilroy"
+        android:textSize="25sp"
+        android:layout_margin="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        ></TextView>
+
+
+    <TextView
+        android:id="@+id/tv_feedback_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subject:"
+        app:layout_constraintTop_toBottomOf="@id/tv_send_usEmail"
+        android:textColor="@color/text_color"
+        android:fontFamily="@font/gilroy_light"
+        android:textSize="20sp"
+        android:layout_margin="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        ></TextView>
+
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/et_feedback_subject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color"
+        android:fontFamily="@font/gilroy_light"
+        app:layout_constraintTop_toBottomOf="@id/tv_feedback_subject"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+
+        ></com.google.android.material.textfield.TextInputEditText>
+
+
+    <TextView
+        android:id="@+id/tv_feedback_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message:"
+        app:layout_constraintTop_toBottomOf="@id/et_feedback_subject"
+        android:textColor="@color/text_color"
+        android:fontFamily="@font/gilroy_light"
+        android:textSize="20sp"
+        android:layout_margin="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        ></TextView>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toBottomOf="@id/tv_feedback_message"
+style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        >
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/et_feedback_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+   android:lines="10"
+android:gravity="start"
+android:background="@drawable/et_message_bg"
+android:layout_marginTop="5dp"
+android:textColor="@color/text_color"
+        android:fontFamily="@font/gilroy_light"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+
+        ></com.google.android.material.textfield.TextInputEditText>
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_sendFeedback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Send"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:fontFamily="@font/gilroy"
+        android:layout_gravity="center"
+  android:layout_marginBottom="130dp"
+
+        android:background="@drawable/enable_btn_bg"
+        android:textSize="20dp"
+        android:padding="15dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        ></androidx.appcompat.widget.AppCompatButton>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

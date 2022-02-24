@@ -38,9 +38,11 @@
         android:requestRawExternalStorageAccess="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/splashScreenTheme">
-        <activity android:name=".activities.SettingsActivity"
-            android:theme="@style/Theme.MaverickFileSender"></activity>
+        android:theme="@style/Theme.MaverickFileSender">
+        <activity android:name=".activities.FeedbackActivity"></activity>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:theme="@style/Theme.MaverickFileSender" />
         <activity
             android:name=".activities.ProfileActivity"
             android:theme="@style/Theme.MaverickFileSender"
@@ -56,8 +58,7 @@
             android:name=".activities.MainActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@style/splashScreenTheme"
-    >
+            android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

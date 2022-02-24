@@ -22,7 +22,7 @@
 
         <ImageView
             android:id="@+id/imv_transfer_back"
-            android:layout_width="20dp"
+            android:layout_width="30dp"
             android:layout_height="20dp"
             android:layout_marginLeft="15dp"
  android:layout_centerVertical="true"
@@ -38,10 +38,10 @@ android:foreground="?attr/selectableItemBackground"
     android:textColor="@color/white"
     android:layout_toRightOf="@id/imv_transfer_back"
     android:layout_centerVertical="true"
-    android:textSize="17dp"
+    android:textSize="20sp"
     android:fontFamily="@font/gilroy_light"
-    android:textStyle="bold"
-android:layout_marginLeft="50dp"
+
+    android:layout_marginLeft="30dp"
     ></TextView>
 
 
