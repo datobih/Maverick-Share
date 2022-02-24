@@ -36,7 +36,7 @@
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:requestRawExternalStorageAccess="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaverickFileSender">
         <activity android:name=".activities.FeedbackActivity"></activity>

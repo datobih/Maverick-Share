@@ -15,203 +15,164 @@ import com.example.maverickfilesender.R
 import com.example.maverickfilesender.model.AppFile
 import kotlinx.android.synthetic.main.item_history_file.view.*
 
-class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayList<AppFile>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayList<AppFile>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-return HistoryViewHolder(LayoutInflater.from(context).inflate(R.layout.item_history_file, parent, false))
+        return HistoryViewHolder(LayoutInflater.from(context).inflate(R.layout.item_history_file, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
 
-
-        if(holder is HistoryViewHolder){
-
+        if (holder is HistoryViewHolder) {
 
 
-        holder.itemView.tv_item_history_fileName.text=appFileList[position].file.name
+            holder.itemView.tv_item_history_fileName.text = appFileList[position].file.name
 
 
             holder.itemView.ll_historyItemFile.setOnClickListener {
-val intent= Intent(Intent.ACTION_VIEW)
+                val intent = Intent(Intent.ACTION_VIEW)
 
-               val mUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                val mUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", appFileList[position].file)
-                } else{
+                } else {
                     Uri.fromFile(appFileList[position].file)
                 }
 
-                val type=if(appFileList[position].file.path.endsWith(".apk")){
+                val type = if (appFileList[position].file.path.endsWith(".apk")) {
                     "application/vnd.android.package-archive"
-                }else if(appFileList[position].file.path.endsWith(".doc")||appFileList[position].file.path.endsWith(".docx")){
+                } else if (appFileList[position].file.path.endsWith(".doc") || appFileList[position].file.path.endsWith(".docx")) {
                     "application/msword"
-                }
-                else if(appFileList[position].file.path.endsWith(".ppt")||appFileList[position].file.path.endsWith(".pptx")){
+                } else if (appFileList[position].file.path.endsWith(".ppt") || appFileList[position].file.path.endsWith(".pptx")) {
                     "application/vnd.ms-powerpoint"
-                }
-                else if(appFileList[position].file.path.endsWith(".xls")||appFileList[position].file.path.endsWith(".xlsx")){
+                } else if (appFileList[position].file.path.endsWith(".xls") || appFileList[position].file.path.endsWith(".xlsx")) {
                     "application/vnd.ms-excel"
-                }
-                else if(appFileList[position].file.path.endsWith(".zip")){
+                } else if (appFileList[position].file.path.endsWith(".zip")) {
                     "application/zip"
-                }
-                else if(appFileList[position].file.path.endsWith(".rar")){
+                } else if (appFileList[position].file.path.endsWith(".rar")) {
                     "application/x-rar-compressed"
-                }
-                else if(appFileList[position].file.path.endsWith(".rtf")){
+                } else if (appFileList[position].file.path.endsWith(".rtf")) {
                     "application/rtf"
-                }
-                else if(appFileList[position].file.path.endsWith(".wav")||appFileList[position].file.path.endsWith(".mp3")){
+                } else if (appFileList[position].file.path.endsWith(".wav") || appFileList[position].file.path.endsWith(".mp3")) {
                     "audio/x-wav"
-                }
-                else if(appFileList[position].file.path.endsWith(".gif")){
+                } else if (appFileList[position].file.path.endsWith(".gif")) {
                     "image/gif"
-                }
-                else if(appFileList[position].file.path.endsWith(".jpg")||appFileList[position].file.path.endsWith(".jpeg")||
-                        appFileList[position].file.path.endsWith(".png")){
+                } else if (appFileList[position].file.path.endsWith(".jpg") || appFileList[position].file.path.endsWith(".jpeg") ||
+                        appFileList[position].file.path.endsWith(".png") || appFileList[position].file.path.endsWith(".PNG")) {
                     "image/jpeg"
-                }
-                else if(appFileList[position].file.path.endsWith(".txt")){
+                } else if (appFileList[position].file.path.endsWith(".txt")) {
                     "text/plain"
-                }
-                else if(appFileList[position].file.path.endsWith(".mp4")||appFileList[position].file.path.endsWith(".mpg")||
-                        appFileList[position].file.path.endsWith(".3gp")||appFileList[position].file.path.endsWith(".mpeg")||
-                        appFileList[position].file.path.endsWith(".mpe")||appFileList[position].file.path.endsWith(".avi")){
+                } else if (appFileList[position].file.path.endsWith(".mp4") || appFileList[position].file.path.endsWith(".mpg") ||
+                        appFileList[position].file.path.endsWith(".3gp") || appFileList[position].file.path.endsWith(".mpeg") ||
+                        appFileList[position].file.path.endsWith(".mpe") || appFileList[position].file.path.endsWith(".avi")) {
 
                     "video/*"
-                }
-
-
-                else{
+                } else {
                     ""
                 }
-if(type.isNotEmpty()) {
-    intent.setDataAndType(mUri, type)
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-    context.startActivity(intent)
-}
+                if (type.isNotEmpty()) {
+                    intent.setDataAndType(mUri, type)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                    context.startActivity(intent)
+                }
 
             }
 
-        if(appFileList[position].file.isDirectory) {
+            if (appFileList[position].file.isDirectory) {
 
-            holder.itemView.imv_history_fileIcon.setImageResource(R.drawable.folder_icon)
-
-
-
-        }
-
-        else{
+                holder.itemView.imv_history_fileIcon.setImageResource(R.drawable.folder_icon)
 
 
-            if(appFileList[position].file.name.endsWith(".PNG")||
-                appFileList[position].file.name.endsWith(".jpg")||
-                appFileList[position].file.name.endsWith(".mp4")
-
-            ){
-
-                Glide.with(context)
-                    .load(appFileList[position].file)
-                    .centerCrop()
-                    .into(holder.itemView.imv_history_fileIcon)
+            } else {
 
 
+                if (appFileList[position].file.name.endsWith(".PNG") ||
+                        appFileList[position].file.name.endsWith(".png") ||
+                        appFileList[position].file.name.endsWith(".jpg") ||
+                        appFileList[position].file.name.endsWith(".mp4")
 
-            }
+                ) {
 
-
-            else if(appFileList[position].file.name.endsWith(".avi")||
-                appFileList[position].file.name.endsWith(".mkv")){
-
-                Glide.with(context)
-                    .load(R.drawable.video_icon)
-                    .centerCrop()
-                    .into(holder.itemView.imv_history_fileIcon)
-
-
-
-            }
+                    Glide.with(context)
+                            .load(appFileList[position].file)
+                            .centerCrop()
+                            .into(holder.itemView.imv_history_fileIcon)
 
 
-            else if(appFileList[position].file.name.endsWith(".pdf")||
-                appFileList[position].file.name.endsWith(".PDF")){
+                } else if (appFileList[position].file.name.endsWith(".avi") ||
+                        appFileList[position].file.name.endsWith(".mkv") ||
+                        appFileList[position].file.path.endsWith(".mpe") ||
+                        appFileList[position].file.path.endsWith(".mpg") ||
+                        appFileList[position].file.path.endsWith(".mpeg") ||
+                        appFileList[position].file.path.endsWith(".3gp")) {
 
-                Glide.with(context)
-                    .load(R.drawable.pdf_icon)
-                    .centerCrop()
-                    .into(holder.itemView.imv_history_fileIcon)
-
-
-
-            }
-
-            else if(appFileList[position].file.name.endsWith(".zip")||
-                appFileList[position].file.name.endsWith(".rar")||
-                appFileList[position].file.name.endsWith(".xz")){
-
-                Glide.with(context)
-                    .load(R.drawable.zip_icon)
-                    .centerCrop()
-                    .into(holder.itemView.imv_history_fileIcon)
+                    Glide.with(context)
+                            .load(R.drawable.video_icon)
+                            .centerCrop()
+                            .into(holder.itemView.imv_history_fileIcon)
 
 
+                } else if (appFileList[position].file.name.endsWith(".pdf") ||
+                        appFileList[position].file.name.endsWith(".PDF")) {
 
-            }
-
-            else if(appFileList[position].file.name.endsWith(".docx")){
-
-                Glide.with(context)
-                    .load(R.drawable.docx_icon)
-                    .centerCrop()
-                    .into(holder.itemView.imv_history_fileIcon)
+                    Glide.with(context)
+                            .load(R.drawable.pdf_icon)
+                            .centerCrop()
+                            .into(holder.itemView.imv_history_fileIcon)
 
 
+                } else if (appFileList[position].file.name.endsWith(".zip") ||
+                        appFileList[position].file.name.endsWith(".rar") ||
+                        appFileList[position].file.name.endsWith(".xz")) {
 
-            }
-
-            else if(appFileList[position].file.name.endsWith(".ppt")){
-
-                Glide.with(context)
-                    .load(R.drawable.ppt_icon)
-                    .centerCrop()
-                    .into(holder.itemView.imv_history_fileIcon)
-
+                    Glide.with(context)
+                            .load(R.drawable.zip_icon)
+                            .centerCrop()
+                            .into(holder.itemView.imv_history_fileIcon)
 
 
-            }
+                } else if (appFileList[position].file.name.endsWith(".docx")) {
 
-            else if(appFileList[position].file.name.endsWith(".xlsx")){
+                    Glide.with(context)
+                            .load(R.drawable.docx_icon)
+                            .centerCrop()
+                            .into(holder.itemView.imv_history_fileIcon)
 
-                Glide.with(context)
-                    .load(R.drawable.xlsx_icon)
-                    .centerCrop()
-                    .into(holder.itemView.imv_history_fileIcon)
 
+                } else if (appFileList[position].file.name.endsWith(".ppt")) {
+
+                    Glide.with(context)
+                            .load(R.drawable.ppt_icon)
+                            .centerCrop()
+                            .into(holder.itemView.imv_history_fileIcon)
+
+
+                } else if (appFileList[position].file.name.endsWith(".xlsx")) {
+
+                    Glide.with(context)
+                            .load(R.drawable.xlsx_icon)
+                            .centerCrop()
+                            .into(holder.itemView.imv_history_fileIcon)
+
+
+                } else if (appFileList[position].file.name.endsWith(".apk")) {
+
+                    Glide.with(context)
+                            .load(appFileList[position].drawable)
+                            .centerCrop()
+                            .into(holder.itemView.imv_history_fileIcon)
+
+
+                } else {
+                    Glide.with(context)
+                            .load(R.drawable.ic_twotone_file_24)
+                            .centerCrop()
+                            .into(holder.itemView.imv_history_fileIcon)
+
+                }
 
 
             }
-            else if(appFileList[position].file.name.endsWith(".apk")){
-
-                Glide.with(context)
-                    .load(appFileList[position].drawable)
-                    .centerCrop()
-                    .into(holder.itemView.imv_history_fileIcon)
-
-
-
-            }
-
-            else{
-                Glide.with(context)
-                    .load(R.drawable.ic_twotone_file_24)
-                    .centerCrop()
-                    .into(holder.itemView.imv_history_fileIcon)
-
-            }
-
-
-
-        }
         }
 
     }
@@ -220,5 +181,5 @@ if(type.isNotEmpty()) {
         return appFileList.size
     }
 
-class HistoryViewHolder(view: View):RecyclerView.ViewHolder(view)
+    class HistoryViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }
