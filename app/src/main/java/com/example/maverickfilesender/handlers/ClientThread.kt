@@ -10,6 +10,7 @@ import android.media.MediaPlayer
 import android.net.wifi.p2p.WifiP2pManager
 import android.os.Environment
 import android.os.Looper
+import android.os.StatFs
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -209,7 +210,24 @@ filesRemaining=inputStream.readUTF()
 //                    }
 
                         fileSize = inputStream.readUTF()
-outputStream.writeUTF("done")
+
+                    val availableSpace=getAvailableSpace(Constants.currentDownloadLocation)
+                    val fileSpace=fileSize.toFloat()
+
+                    if(fileSpace<availableSpace){
+                        outputStream.writeUTF("done")
+
+                    }
+
+                    else{
+                        outputStream.writeUTF("insufficient")
+
+                        showErrorMessage("Can't send file due to insufficient storage")
+
+                        continue
+                    }
+
+
                     Log.d("VERIFY","fileSize")
                         val thumbnailSize=inputStream.readUTF()
                     outputStream.writeUTF("done")
@@ -440,7 +458,26 @@ Constants.clientThread=null
 
     }
 
-    fun getBitmapFromDrawable(drawable: Drawable):Bitmap{
+
+        fun getAvailableSpace(path: String): Float {
+
+            val iPath: File = File(path)
+            val iStat = StatFs(iPath.path)
+            val iBlockSize = iStat.blockSizeLong
+            val iAvailableBlocks = iStat.availableBlocksLong
+            val iAvailableSpace = iAvailableBlocks * iBlockSize
+
+
+            val spaceKB = iAvailableSpace.toFloat() / 1024f
+            val spaceMB = spaceKB / 1024f
+
+
+            return spaceMB / 1024f
+        }
+
+
+
+        fun getBitmapFromDrawable(drawable: Drawable):Bitmap{
         val bitmap=Bitmap.createBitmap(drawable.intrinsicWidth,drawable.intrinsicHeight,Bitmap.Config.ARGB_8888)
         val canvas= Canvas(bitmap)
         drawable.setBounds(0,0,canvas.width,canvas.height)
@@ -477,6 +514,9 @@ Constants.clientThread=null
         Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.INVISIBLE
 
     }
+
+
+
 
 
     fun deriveUnits(bytes:Int):String{

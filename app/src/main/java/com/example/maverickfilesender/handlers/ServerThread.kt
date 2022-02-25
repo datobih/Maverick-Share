@@ -7,7 +7,6 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.net.wifi.p2p.WifiP2pManager
-import android.opengl.Visibility
 import android.os.Looper
 import android.util.Log
 import android.view.View
@@ -15,22 +14,17 @@ import androidx.core.content.ContextCompat
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
-import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.model.ParseFile
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_transfer.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.io.*
 import java.lang.Exception
-import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
-import java.net.SocketTimeoutException
 import java.text.DecimalFormat
-import java.util.logging.Handler
 
-class ServerThread(val context: Context) : Thread() {
+  class ServerThread(val context: Context) : Thread() {
     val mainContext = context as MainActivity
     var transferFile: ParseFile? = null
     var bytesTransferred: Int = 0
@@ -94,8 +88,10 @@ socket!!.soTimeout=1000000000
             val tempData=tempStream.toByteArray()
 
             outputStream.writeUTF(tempData.size.toString())
+inputStream.readUTF()
 
-            inputStream.readUTF()
+
+
 
 outputStream.write(tempData,0,tempData.size)
 
@@ -179,8 +175,15 @@ socket!!.soTimeout=10000
             val fileRemaining = Constants.selectedFiles.size + 1
             outputStream.writeUTF(fileRemaining.toString())
             Log.d("VERIFY", "$fileRemaining remaining")
-            val mResponse = inputStream.readUTF()
-            Log.d("VERIFY", "$mResponse response")
+            val sizeResponse = inputStream.readUTF()
+
+            if(sizeResponse!="done"){
+showErrorMessage("Failed to send file,the receiver has insufficient storage")
+                Thread.sleep(50)
+continue
+            }
+
+            Log.d("VERIFY", "$sizeResponse response")
 //handler.post {
 //    if(Constants.transferActivity!=null) {
 //        Constants.transferActivity!!.tv_transfer_toolbar_status.text="Sending ${Constants.selectedFiles.lastIndex+1} remaining files"
@@ -355,8 +358,7 @@ Log.d("RESPONSEEE",response)
 
     } else {
 
-        showErrorMessage()
-
+        showErrorMessage("Something went wrong")
 
 
 
@@ -387,7 +389,7 @@ Log.d("RESPONSEEE",response)
 }
 catch (e:Exception){
     Log.d("ERRORR",e.stackTraceToString())
-    showErrorMessage()
+    showErrorMessage("Something went wrong")
 //
 //val j=socket!!.isClosed
 ////
@@ -475,12 +477,12 @@ if(!socket!!.isClosed) {
     }
 
 
-    fun showErrorMessage(){
+    fun showErrorMessage(message:String){
         val snackBar= if(Constants.transferActivity!=null){
-            Snackbar.make(Constants.transferActivity!!.findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_SHORT)
+            Snackbar.make(Constants.transferActivity!!.findViewById(android.R.id.content),message,Snackbar.LENGTH_SHORT)
 
         }else{
-            Snackbar.make((context as MainActivity).findViewById(android.R.id.content),"Something went wrong",Snackbar.LENGTH_SHORT)
+            Snackbar.make((context as MainActivity).findViewById(android.R.id.content),message,Snackbar.LENGTH_SHORT)
         }
         snackBar.view.setBackgroundColor(ContextCompat.getColor(context, R.color.maverick_blue))
         snackBar.show()
