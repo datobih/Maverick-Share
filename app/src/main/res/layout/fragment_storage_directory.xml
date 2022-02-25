@@ -132,6 +132,7 @@
                         android:layout_marginEnd="15dp"
                         android:progress="10"
                         android:progressTint="#c1bf7f"
+                        android:progressBackgroundTint="@color/white"
                         ></ProgressBar>
 
 
@@ -263,6 +264,7 @@ app:cardCornerRadius="10dp"
                         android:layout_marginEnd="15dp"
                         android:progress="10"
                         android:progressTint="#c1bf7f"
+                        android:progressBackgroundTint="@color/white"
                         ></ProgressBar>
 
 

@@ -243,14 +243,22 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
 
 
         }
-        else{
+        else if(Constants.isDarkMode){
 
 
          Glide.with(context)
-                 .load(R.drawable.ic_twotone_file_24)
+                 .load(R.drawable.ic_round_light_insert_drive_file_24)
                  .centerCrop()
                  .into(holder.itemView.imv_fileIcon)
 
+
+
+     }
+        else{
+         Glide.with(context)
+                 .load(R.drawable.ic_round_dark_insert_drive_file_24)
+                 .centerCrop()
+                 .into(holder.itemView.imv_fileIcon)
 
 
      }

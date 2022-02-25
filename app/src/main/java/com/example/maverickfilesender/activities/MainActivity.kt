@@ -119,7 +119,7 @@ if(!isDarkMode){
 }
 
 
-
+Constants.isDarkMode=isDarkMode
 
         mProfilePicEncoded=mSharedPreferences!!.getString(Constants.SP_PROFILE_PIC_DATA,"")
         mProfileName=mSharedPreferences!!.getString(Constants.SP_PROFILE_USERNAME,"")

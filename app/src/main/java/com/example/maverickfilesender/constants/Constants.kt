@@ -39,7 +39,7 @@ var isMedia=false
     val CONNECTION_TYPE_WIFI="Wifi"
 
 
-
+var isDarkMode=true
     var currentDownloadLocation=""
 
 

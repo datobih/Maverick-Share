@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.maverickfilesender.BuildConfig
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.AppFile
+import kotlinx.android.synthetic.main.item_file.view.*
 import kotlinx.android.synthetic.main.item_history_file.view.*
 
 class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayList<AppFile>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -163,11 +165,23 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
                             .into(holder.itemView.imv_history_fileIcon)
 
 
-                } else {
+                }  else if(Constants.isDarkMode){
+
+
                     Glide.with(context)
-                            .load(R.drawable.ic_twotone_file_24)
+                            .load(R.drawable.ic_round_light_insert_drive_file_24)
                             .centerCrop()
                             .into(holder.itemView.imv_history_fileIcon)
+
+
+
+                }
+                else{
+                    Glide.with(context)
+                            .load(R.drawable.ic_round_dark_insert_drive_file_24)
+                            .centerCrop()
+                            .into(holder.itemView.imv_history_fileIcon)
+
 
                 }
 

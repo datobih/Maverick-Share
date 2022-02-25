@@ -146,10 +146,11 @@ var dialog=Dialog(this)
                     editor.putBoolean(Constants.SP_DARK_MODE, false)
 
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
+                    Constants.isDarkMode=false
                 } else {
                     editor.putBoolean(Constants.SP_DARK_MODE, true)
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    Constants.isDarkMode=true
                 }
                 editor.apply()
             }
