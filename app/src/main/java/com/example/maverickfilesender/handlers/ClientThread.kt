@@ -196,7 +196,7 @@ outputStream.writeUTF("done")
                     Log.d("VERIFY","$fileName fileNameDone")
 
 filesRemaining=inputStream.readUTF()
-                    Log.d("VERIFY","$filesRemaining fileNameDone")
+                    Log.d("VERIFY","$filesRemaining fileRemaining")
                     outputStream.flush()
                     outputStream.writeUTF("done")
                     Log.d("VERIFY","FileRemaining")
@@ -211,9 +211,9 @@ filesRemaining=inputStream.readUTF()
 
                         fileSize = inputStream.readUTF()
 
-                    val availableSpace=getAvailableSpace(Constants.currentDownloadLocation)
-                    val fileSpace=fileSize.toFloat()
-
+                    var availableSpace=getAvailableSpace(Constants.currentDownloadLocation)
+                    var fileSpace=fileSize.toLong()/(1024*1024)
+                    availableSpace=availableSpace*1024
                     if(fileSpace<availableSpace){
                         outputStream.writeUTF("done")
 

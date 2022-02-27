@@ -678,9 +678,10 @@ currentLocation=path
 currentLocation="/storage/emulated/0"
                 }
 
-                Constants.currentDownloadLocation=currentLocation
+
 
             }
+            Constants.currentDownloadLocation=currentLocation
 
             Constants.noNetwork=false
             if (verifyLocation()) {

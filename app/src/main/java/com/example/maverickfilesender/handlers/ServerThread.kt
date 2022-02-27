@@ -175,15 +175,10 @@ socket!!.soTimeout=10000
             val fileRemaining = Constants.selectedFiles.size + 1
             outputStream.writeUTF(fileRemaining.toString())
             Log.d("VERIFY", "$fileRemaining remaining")
-            val sizeResponse = inputStream.readUTF()
+             inputStream.readUTF()
 
-            if(sizeResponse!="done"){
-showErrorMessage("Failed to send file,the receiver has insufficient storage")
-                Thread.sleep(50)
-continue
-            }
 
-            Log.d("VERIFY", "$sizeResponse response")
+
 //handler.post {
 //    if(Constants.transferActivity!=null) {
 //        Constants.transferActivity!!.tv_transfer_toolbar_status.text="Sending ${Constants.selectedFiles.lastIndex+1} remaining files"
@@ -193,7 +188,14 @@ continue
 
             outputStream.writeUTF(transferFile!!.file.length().toString())
             Log.d("VERIFY", "length sent")
-            inputStream.readUTF()
+            val sizeResponse=inputStream.readUTF()
+
+            if(sizeResponse!="done"){
+                showErrorMessage("Failed to send file,the receiver has insufficient storage")
+                Thread.sleep(50)
+                continue
+            }
+
             if (transferFile!!.data != null) {
                 outputStream.writeUTF(transferFile!!.data!!.size.toString())
                 Log.d("VERIFY", "thumbnail size")
