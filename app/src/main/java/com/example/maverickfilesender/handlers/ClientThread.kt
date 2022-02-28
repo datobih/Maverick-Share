@@ -363,15 +363,15 @@ Log.d("TRANSFER",bytesReceived.toString())
 
                         }
                         if(bytesReceived>=fileSize.toInt()){
-
+tempDir=""
 var done=true
                             if(Constants.transferActivity!=null) {
                                 done=false
                                 handler.post {
 
                                  Constants.transferActivity?.transferViewModel?.isFileTransferring?.value=false
-
-                                    Constants.transferActivity!!.adapter!!.fileMetaDataList!!.add(FileMetaData(fileName,fileTotalSize.toLong(),bitmap))
+Constants.onSelectedMetaData.add(FileMetaData(fileName,fileTotalSize.toLong(),bitmap))
+                                  //  Constants.transferActivity!!.adapter!!.fileMetaDataList!!.add()
                                     Constants.transferActivity!!.adapter!!.notifyDataSetChanged()
                                     fileName=""
                                     filesRemaining=(filesRemaining.toInt()-1).toString()
@@ -426,14 +426,16 @@ outputStream.writeUTF("done")
 //                    }catch (e:Exception){
 //
 //                    }
-                    val mFile=File(tempDir)
+                    if(tempDir.isNotEmpty()) {
+                        val mFile = File(tempDir)
 
-                    if(mFile.exists()){
-                        val isDeleted=mFile.delete()
+                        if (mFile.exists()) {
+                            val isDeleted = mFile.delete()
 
 
+                        }
                     }
-                    var q=false
+                        var q=false
                     if(!socket!!.isClosed) {
                         socket!!.close()
                     }

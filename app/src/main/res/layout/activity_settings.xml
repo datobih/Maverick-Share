@@ -115,5 +115,65 @@ android:layout_centerVertical="true"
 </RelativeLayout>
 
 
+    <RelativeLayout
+        android:id="@+id/ll_historyLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/ll_downloadLocation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:foreground="?attr/selectableItemBackground"
+        >
+
+        <ImageView
+            android:id="@+id/imv_historyLocation"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/history_icon"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentLeft="true"
+            ></ImageView>
+
+        <TextView
+            android:id="@+id/tv_historyLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="History read Location"
+            android:textColor="@color/text_color"
+            android:textSize="20sp"
+            android:fontFamily="@font/gilroy"
+
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/imv_historyLocation"
+            ></TextView>
+
+        <ImageView
+            android:id="@+id/imv_history_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_chevron_right_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            ></ImageView>
+
+
+
+        <TextView
+            android:id="@+id/tv_current_historyLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imv_historyLocation"
+            android:layout_alignLeft="@id/tv_historyLocation"
+
+
+            android:fontFamily="@font/gilroy_light"
+            android:text="Internal Storage"
+            android:textColor="@color/text_color"
+            ></TextView>
+    </RelativeLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

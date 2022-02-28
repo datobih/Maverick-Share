@@ -64,7 +64,7 @@ var transferViewModel:TransferViewModel?=null
             adapter= QueueFileRecyclerAdapter(this,Constants.onSelectedMetaData,isSender)
         }
         else {
-            adapter = QueueFileRecyclerAdapter(this, ArrayList<FileMetaData>(), isSender)
+            adapter = QueueFileRecyclerAdapter(this,Constants.onSelectedMetaData, isSender)
         }
             rv_queue.layoutManager=LinearLayoutManager(this)
         rv_queue.adapter=adapter

@@ -13,7 +13,7 @@
     android:id="@+id/ll_fileHistory_mode"
     android:layout_width="150dp"
     android:layout_height="wrap_content"
-    app:layout_constraintTop_toBottomOf="@id/ll_history_received"
+    app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     android:layout_marginTop="10dp"
     android:background="@color/text_color"
@@ -51,30 +51,31 @@ android:layout_toLeftOf="@id/tv_fileHistory_mode"
 
 </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_history_received"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#6d6d6d"
+<!--    <LinearLayout-->
+<!--        android:id="@+id/ll_history_received"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="#283593"-->
 
-app:layout_constraintTop_toTopOf="parent"
-        >
+<!--app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        >-->
 
 
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Received files"
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Received files"-->
 
-            android:layout_margin="6dp"
+<!--            android:layout_margin="6dp"-->
 
-            android:textSize="15dp"
-            android:fontFamily="@font/gilroy"
-            ></TextView>
+<!--            android:textSize="15dp"-->
+<!--            android:fontFamily="@font/gilroy"-->
+<!--            ></TextView>-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
     <TextView
         android:id="@+id/tv_history_noFiles"
