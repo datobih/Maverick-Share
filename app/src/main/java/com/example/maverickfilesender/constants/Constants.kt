@@ -18,6 +18,10 @@ val SHARED_PREFERENCES_NAME="maverick_file_sender"
 
     val SP_DARK_MODE="maverick_dark_mode"
     val SP_STORAGE_LOCATION="maverick_storage_location"
+    val SP_HISTORY_LOCATION="maverick_history_location"
+
+
+
   val SP_PROFILE_PIC_DATA="profile_pic"
     val SP_PROFILE_USERNAME="profile_username"
     val RQ_READ_WRITE_PERMISSION=1
@@ -25,6 +29,7 @@ val SHARED_PREFERENCES_NAME="maverick_file_sender"
     val RQ_PERMISSION_ACTIVITY=3
     val RQ_PROFILE_ACTIVITY=4
     val RQ_PROFILE_PIC=5
+    val RQ_SETTINGS_ACTIVITY=6
 
 var isServer=false
 
@@ -41,7 +46,7 @@ var isMedia=false
 
 var isDarkMode=true
     var currentDownloadLocation=""
-
+var currentHistoryLocation=""
 
     var userPictureOnChanged:Bitmap?=null
     var userNameOnChanged:String=""

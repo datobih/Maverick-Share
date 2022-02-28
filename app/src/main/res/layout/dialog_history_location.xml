@@ -11,77 +11,76 @@
 
 
     <TextView
-        android:id="@+id/tv_dialog_storageLocation"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Download Location"
+        android:text="Historylocation"
         android:textColor="@color/text_color"
-android:fontFamily="@font/gilroy"
+        android:fontFamily="@font/gilroy"
         android:textSize="20dp"
         android:textStyle="bold"></TextView>
 
 
-<RelativeLayout
-    android:id="@+id/ll_Dialog_internalStorage"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-android:layout_marginTop="30dp"
-android:foreground="?attr/selectableItemBackground"
-    >
-
-
-
-<RelativeLayout
-    android:id="@+id/checkbox_internal"
-    android:layout_width="40dp"
-    android:layout_height="40dp"
-    android:background="@drawable/storage_select_check_bg"
-    android:layout_alignParentLeft="true"
-    android:layout_marginLeft="30dp"
-    android:layout_centerVertical="true"
->
-    <ImageView
-    android:id="@+id/imv_internalStorage_check"
-    android:layout_width="20dp"
-    android:layout_height="20dp"
-
-    android:background="@drawable/storage_select_bg"
-  android:layout_centerInParent="true"
-
-    ></ImageView>
-
-
-</RelativeLayout>
-
-    <TextView
-        android:id="@+id/tvDialog_internalStorage"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/ll_Dialog_internalStorage"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Internal Storage"
-        android:layout_toRightOf="@id/checkbox_internal"
-        android:textSize="16sp"
-        android:textColor="@color/text_color"
-        android:fontFamily="@font/gilroy_light"
-        android:layout_marginLeft="25dp"
-        ></TextView>
+        android:layout_marginTop="30dp"
+        android:foreground="?attr/selectableItemBackground"
+        >
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="/storage/emulated/0"
-        android:layout_toRightOf="@id/checkbox_internal"
-        android:layout_below="@id/tvDialog_internalStorage"
-        android:textSize="10sp"
-        android:textColor="@color/text_color"
-        android:fontFamily="@font/gilroy_light"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="25dp"
-        ></TextView>
+
+        <RelativeLayout
+            android:id="@+id/checkbox_internal"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/storage_select_check_bg"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:layout_centerVertical="true"
+            >
+            <ImageView
+                android:id="@+id/imv_internalStorage_check"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+
+                android:background="@drawable/storage_select_bg"
+                android:layout_centerInParent="true"
+
+                ></ImageView>
 
 
-</RelativeLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvDialog_internalStorage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Internal Storage"
+            android:layout_toRightOf="@id/checkbox_internal"
+            android:textSize="16sp"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/gilroy_light"
+            android:layout_marginLeft="25dp"
+            ></TextView>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/storage/emulated/0"
+            android:layout_toRightOf="@id/checkbox_internal"
+            android:layout_below="@id/tvDialog_internalStorage"
+            android:textSize="10sp"
+            android:textColor="@color/text_color"
+            android:fontFamily="@font/gilroy_light"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="25dp"
+            ></TextView>
+
+
+    </RelativeLayout>
 
 
 
@@ -112,7 +111,7 @@ android:foreground="?attr/selectableItemBackground"
 
                 android:background="@drawable/storage_select_bg"
                 android:layout_centerInParent="true"
-android:visibility="gone"
+                android:visibility="gone"
                 ></ImageView>
 
 

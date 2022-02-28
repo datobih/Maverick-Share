@@ -2,6 +2,7 @@ package com.example.maverickfilesender.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
@@ -28,6 +30,7 @@ import kotlin.collections.ArrayList
 
 class HistoryFragment : Fragment() {
 var mContext:Context?=null
+    var mSharedPreferences : SharedPreferences?=null
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -44,6 +47,7 @@ var mContext:Context?=null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mSharedPreferences= mContext!!.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
         ll_fileHistory_mode.setOnClickListener {
 
@@ -87,7 +91,30 @@ fetchGeneralFiles()
     }
 
     fun fetchGeneralFiles(){
-        val fileDir= File("/storage/emulated/0/Download/Maverick")
+
+        var files = ContextCompat.getExternalFilesDirs(mContext!!, null)
+        if(files.size>1){
+
+
+            val sdDirectory=getSDirectory(files[1].path)
+
+
+            if(Constants.currentHistoryLocation!="/storage/emulated/0" && Constants.currentHistoryLocation!=sdDirectory){
+
+                Constants.currentHistoryLocation="/storage/emulated/0"
+
+                val editor=mSharedPreferences!!.edit()
+
+                editor.putString(Constants.SP_HISTORY_LOCATION,"/storage/emulated/0")
+
+
+
+            }
+
+        }
+
+
+        val fileDir= File("${Constants.currentHistoryLocation}/Download/Maverick")
         val receivedFiles=fileDir.listFiles()
         val receivedAppFile=ArrayList<AppFile>()
 
@@ -146,7 +173,30 @@ fetchGeneralFiles()
     }
 
     fun fetchMediaFiles(){
-        val fileDir= File("/storage/emulated/0/DCIM/Maverick")
+
+
+        var files = ContextCompat.getExternalFilesDirs(mContext!!, null)
+        if(files.size>1){
+
+
+            val sdDirectory=getSDirectory(files[1].path)
+
+
+            if(Constants.currentHistoryLocation!="/storage/emulated/0" && Constants.currentHistoryLocation!=sdDirectory){
+
+                Constants.currentHistoryLocation="/storage/emulated/0"
+
+                val editor=mSharedPreferences!!.edit()
+
+                editor.putString(Constants.SP_HISTORY_LOCATION,"/storage/emulated/0")
+
+
+
+            }
+
+        }
+
+        val fileDir= File("${Constants.currentHistoryLocation}/DCIM/Maverick")
         val receivedFiles=fileDir.listFiles()
         val receivedAppFile=ArrayList<AppFile>()
 
@@ -202,6 +252,28 @@ fetchGeneralFiles()
             rv_history.adapter = adapter
         }
         progress_history.visibility=View.GONE
+    }
+
+    fun getSDirectory(path: String): String {
+        var sdPath = ""
+        var count = 0
+
+        for (i in path) {
+
+            if (i == '/') {
+
+                count++
+
+            }
+
+            if (count == 3) {
+                break
+            }
+            sdPath += i
+
+        }
+
+        return sdPath
     }
 
 

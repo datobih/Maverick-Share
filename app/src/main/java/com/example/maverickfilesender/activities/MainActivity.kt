@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity() {
     var appsFragment:AppsFragment?=null
     var videosFragment:VideosFragment?=null
     var musicFragment:MusicFragment?=null
+
 var wifiManager:WifiManager?=null
     var mSharedPreferences : SharedPreferences?=null
 
@@ -123,6 +124,13 @@ Constants.isDarkMode=isDarkMode
 
         mProfilePicEncoded=mSharedPreferences!!.getString(Constants.SP_PROFILE_PIC_DATA,"")
         mProfileName=mSharedPreferences!!.getString(Constants.SP_PROFILE_USERNAME,"")
+var historyLocation=mSharedPreferences!!.getString(Constants.SP_HISTORY_LOCATION,"")
+
+        if(!historyLocation.isNullOrEmpty()){
+
+            Constants.currentHistoryLocation=historyLocation
+
+        }
 
 
         if(!mProfilePicEncoded.isNullOrEmpty()&& mProfilePicEncoded!="pic"){
@@ -140,12 +148,12 @@ editor.putString(Constants.SP_PROFILE_PIC_DATA,"pic")
             editor.putString(Constants.SP_PROFILE_USERNAME,"Guest")
             editor.putBoolean(Constants.SP_DARK_MODE,isDarkMode)
             editor.putString(Constants.SP_STORAGE_LOCATION,"/storage/emulated/0")
-
+editor.putString(Constants.SP_HISTORY_LOCATION,"/storage/emulated/0")
 
 
             editor.apply()
 
-
+            Constants.currentHistoryLocation="/storage/emulated/0"
 
         }
 
@@ -296,7 +304,7 @@ startActivityForResult(Intent(this,ProfileActivity::class.java),Constants.RQ_PRO
 
                R.id.d_menu_settings->{
 
-                   startActivity(Intent(this, SettingsActivity::class.java))
+                   startActivityForResult(Intent(this, SettingsActivity::class.java),Constants.RQ_SETTINGS_ACTIVITY)
                    return@OnNavigationItemSelectedListener true
                }
 
@@ -876,6 +884,7 @@ navUserName!!.text=Constants.userNameOnChanged
 
 
     }
+
 
 
 }
