@@ -214,6 +214,7 @@ filesRemaining=inputStream.readUTF()
                     var availableSpace=getAvailableSpace(Constants.currentDownloadLocation)
                     var fileSpace=fileSize.toLong()/(1024*1024)
                     availableSpace=availableSpace*1024
+                    fileSpace=1
                     if(fileSpace<availableSpace){
                         outputStream.writeUTF("done")
 

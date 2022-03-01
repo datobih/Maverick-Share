@@ -56,9 +56,11 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
                           manager.requestPeers(channel,object :WifiP2pManager.PeerListListener{
                         override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
                             val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
-                            if ((context as MainActivity).p2pDevices != devices) {
-                                (context as MainActivity).p2pDevices=devices
+//                            if ((context as MainActivity).p2pDevices != devices) {
 
+                            if(Constants.scanDevices) {
+                                    Constants.scanDevices=false
+                                (context as MainActivity).p2pDevices = devices
 
 
                                 val dialog = Dialog(context!!)
@@ -70,6 +72,7 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
 
                                 dialog.show()
                             }
+//                            }
                         }
 
                     })

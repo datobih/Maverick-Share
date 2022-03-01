@@ -706,7 +706,7 @@ currentLocation="/storage/emulated/0"
 
                 }
                 else {
-
+Constants.scanDevices=true
                     p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
                         override fun onSuccess() {
                             Toast.makeText(this@MainActivity,"Successful Peer",Toast.LENGTH_SHORT).show()
