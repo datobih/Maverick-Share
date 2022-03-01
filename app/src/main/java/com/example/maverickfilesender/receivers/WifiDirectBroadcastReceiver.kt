@@ -8,6 +8,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.NetworkInfo
 import android.net.wifi.p2p.*
+import android.util.Log
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -18,6 +20,7 @@ import com.example.maverickfilesender.adapters.DevicePeerListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.handlers.ClientThread
 import com.example.maverickfilesender.handlers.ServerThread
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import java.net.ServerSocket
 
@@ -34,7 +37,7 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
 
                 if(state==WifiP2pManager.WIFI_P2P_STATE_ENABLED){
                     //P2P ENABLED
-                    Toast.makeText(activity,"P2P CONNECTED",Toast.LENGTH_SHORT).show()
+                   Log.d("P2PP","Connected")
 
 
 
@@ -44,7 +47,7 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
 
                 else{
                 //P2P DISABLED
-                    Toast.makeText(activity,"P2P DISCONNECTED",Toast.LENGTH_SHORT).show()
+                    Log.d("P2PP","Disconnected")
 
                 }
 
@@ -56,9 +59,10 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
                           manager.requestPeers(channel,object :WifiP2pManager.PeerListListener{
                         override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
                             val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
+
 //                            if ((context as MainActivity).p2pDevices != devices) {
 
-                            if(Constants.scanDevices) {
+                            if(Constants.scanDevices&& devices.isNotEmpty()) {
                                     Constants.scanDevices=false
                                 (context as MainActivity).p2pDevices = devices
 
@@ -70,6 +74,7 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
 
                                 dialog.rv_receiver_ssid.adapter = adapter
 
+                                context.ll_loading.visibility=View.GONE
                                 dialog.show()
                             }
 //                            }
@@ -94,7 +99,7 @@ if(networkInfo!!.isConnected){
 
 
         override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
-
+Toast.makeText(context,"Connected to ${Constants.connectedDevice}",Toast.LENGTH_SHORT).show()
             val groupOwnerAddress=info!!.groupOwnerAddress.hostAddress
 
             if(info.groupFormed && info.isGroupOwner){
@@ -116,7 +121,11 @@ Toast.makeText(context,"THIS IS GROUP OWNER",Toast.LENGTH_SHORT).show()
 
                 Toast.makeText(context,"THIS IS GROUP MEMBER",Toast.LENGTH_SHORT).show()
             }
+else{
 
+                Toast.makeText(context,"COULDNT CONNECT",Toast.LENGTH_SHORT).show()
+
+            }
 
         }
 

@@ -42,7 +42,7 @@ var isMedia=false
 var scanDevices=false
     val CONNECTION_TYPE_HOTSPOT="Hotspot"
     val CONNECTION_TYPE_WIFI="Wifi"
-
+var connectedDevice=""
 
 var isDarkMode=true
     var currentDownloadLocation=""

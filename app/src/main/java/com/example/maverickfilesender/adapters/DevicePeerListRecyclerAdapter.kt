@@ -2,12 +2,14 @@ package com.example.maverickfilesender.adapters
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.wifi.WpsInfo
 import android.net.wifi.p2p.WifiP2pConfig
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
 import android.net.wifi.p2p.WifiP2pManager
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
+import com.example.maverickfilesender.constants.Constants
 import kotlinx.android.synthetic.main.item_ssid.view.*
 
 class DevicePeerListRecyclerAdapter(val context:Context,val deviceList:ArrayList<WifiP2pDevice>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -41,19 +44,21 @@ val device=deviceList[position]
                 deviceAddress=device.deviceAddress
                 groupOwnerIntent=0
                 wps.setup=WpsInfo.PBC
+
             }
 
+
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+
+
                 manager!!.connect(channel,config,object:WifiP2pManager.ActionListener{
                     override fun onSuccess() {
-                        Toast.makeText(
-                                context,
-                                "Connect to ${device.deviceName}",
-                                Toast.LENGTH_SHORT
-                        ).show()
+                       Constants.connectedDevice=device.deviceName
                     }
 
                     override fun onFailure(p0: Int) {
+
                         Toast.makeText(
                               context,
                                 "Connect failed. Retry.",
@@ -61,9 +66,10 @@ val device=deviceList[position]
                         ).show()
                     }
 
-
                 })
             }
+
+
 
 
 

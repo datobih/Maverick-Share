@@ -40,6 +40,7 @@ import com.example.maverickfilesender.fragment.*
 import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.receivers.WifiDirectBroadcastReceiver
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_profile.*
@@ -707,14 +708,26 @@ currentLocation="/storage/emulated/0"
                 }
                 else {
 Constants.scanDevices=true
+                    ll_loading.visibility=View.VISIBLE
                     p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
                         override fun onSuccess() {
-                            Toast.makeText(this@MainActivity,"Successful Peer",Toast.LENGTH_SHORT).show()
+                            Log.d("PEERSS","Successful")
 
                         }
 
                         override fun onFailure(p0: Int) {
-                            Toast.makeText(this@MainActivity,"Failed",Toast.LENGTH_SHORT).show()
+                          showErrorMessage("Failed,restart WIFI and try again")
+
+                            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+                               wifiManager!!.setWifiEnabled(false)
+
+                            } else {
+                               startActivity(Intent(Settings.Panel.ACTION_WIFI))
+
+                            }
+
+                            ll_loading.visibility=View.GONE
+
                         }
 
                     })
@@ -824,6 +837,19 @@ tv_connection_status.text="Not Connected"
         return sdPath
     }
 
+    fun showErrorMessage( message:String){
+        val snackBar= if(Constants.transferActivity!=null){
+            Snackbar.make(Constants.transferActivity!!.findViewById(android.R.id.content),message, Snackbar.LENGTH_SHORT)
+
+        }else{
+            Snackbar.make(findViewById(android.R.id.content),message, Snackbar.LENGTH_SHORT)
+        }
+        snackBar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.maverick_blue))
+        snackBar.show()
+
+
+    }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -896,7 +922,7 @@ navUserName!!.text=Constants.userNameOnChanged
 
     override fun onDestroy() {
 
-        p2pManager!!.removeGroup(p2pChannel,object: WifiP2pManager.ActionListener{
+        p2pManager?.removeGroup(p2pChannel,object: WifiP2pManager.ActionListener{
             override fun onSuccess() {
                 //
             }
