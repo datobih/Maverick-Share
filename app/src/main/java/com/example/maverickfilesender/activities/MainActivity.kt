@@ -708,7 +708,7 @@ currentLocation="/storage/emulated/0"
                 }
                 else {
 Constants.scanDevices=true
-                    ll_loading.visibility=View.VISIBLE
+
                     p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
                         override fun onSuccess() {
                             Log.d("PEERSS","Successful")
@@ -716,17 +716,42 @@ Constants.scanDevices=true
                         }
 
                         override fun onFailure(p0: Int) {
-                          showErrorMessage("Failed,restart WIFI and try again")
 
-                            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
-                               wifiManager!!.setWifiEnabled(false)
 
-                            } else {
-                               startActivity(Intent(Settings.Panel.ACTION_WIFI))
+//                            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+//                               wifiManager!!.setWifiEnabled(false)
+//
+//                            } else {
+//                               startActivity(Intent(Settings.Panel.ACTION_WIFI))
+//
+//                            }
 
-                            }
+                            p2pManager!!.cancelConnect(p2pChannel,object:WifiP2pManager.ActionListener{
+                                override fun onSuccess() {
 
-                            ll_loading.visibility=View.GONE
+                                    p2pManager!!.discoverPeers(p2pChannel,object:WifiP2pManager.ActionListener{
+                                        override fun onSuccess() {
+
+                                        }
+
+                                        override fun onFailure(p0: Int) {
+
+                                        }
+
+
+                                    })
+
+
+                                }
+
+                                override fun onFailure(p0: Int) {
+
+                                }
+
+
+                            })
+
+
 
                         }
 

@@ -1,6 +1,7 @@
 package com.example.maverickfilesender.adapters
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -45,6 +46,7 @@ val device=deviceList[position]
                 groupOwnerIntent=0
                 wps.setup=WpsInfo.PBC
 
+
             }
 
 
@@ -55,6 +57,56 @@ val device=deviceList[position]
                 manager!!.connect(channel,config,object:WifiP2pManager.ActionListener{
                     override fun onSuccess() {
                        Constants.connectedDevice=device.deviceName
+
+                        Thread {
+                            var i = 0
+                            while (i < 4) {
+                                Thread.sleep(1000)
+                                i++
+                            }
+
+                            if(!Constants.p2pConnected){
+                                (context as MainActivity).runOnUiThread {
+                                    Toast.makeText(
+                                            context,
+                                            "Connection failed.",
+                                            Toast.LENGTH_SHORT
+                                    ).show()
+                                    manager!!.cancelConnect(channel,object:WifiP2pManager.ActionListener{
+                                        @SuppressLint("MissingPermission")
+                                        override fun onSuccess() {
+
+                                            manager!!.discoverPeers(channel,object:WifiP2pManager.ActionListener{
+                                                override fun onSuccess() {
+
+                                                }
+
+                                                override fun onFailure(p0: Int) {
+
+                                                }
+
+
+                                            })
+
+
+                                        }
+
+                                        override fun onFailure(p0: Int) {
+
+                                        }
+
+
+                                    })
+                                }
+
+
+                            }
+
+                            Constants.p2pConnected=false
+                        }.start()
+
+
+
                     }
 
                     override fun onFailure(p0: Int) {

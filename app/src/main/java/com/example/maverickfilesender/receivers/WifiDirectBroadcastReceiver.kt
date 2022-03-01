@@ -74,9 +74,11 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
 
                                 dialog.rv_receiver_ssid.adapter = adapter
 
-                                context.ll_loading.visibility=View.GONE
+
                                 dialog.show()
                             }
+
+
 //                            }
                         }
 
@@ -99,6 +101,7 @@ if(networkInfo!!.isConnected){
 
 
         override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
+            Constants.p2pConnected=true
 Toast.makeText(context,"Connected to ${Constants.connectedDevice}",Toast.LENGTH_SHORT).show()
             val groupOwnerAddress=info!!.groupOwnerAddress.hostAddress
 
