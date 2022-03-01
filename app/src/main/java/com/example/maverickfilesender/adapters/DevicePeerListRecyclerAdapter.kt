@@ -102,6 +102,10 @@ val device=deviceList[position]
 
                             }
 
+                            else{
+
+
+                            }
                             Constants.p2pConnected=false
                         }.start()
 

@@ -539,7 +539,17 @@ ll_main_send.startAnimation(transitionDown)
 //
 //
 //            }
+p2pManager!!.removeGroup(p2pChannel,object :WifiP2pManager.ActionListener{
+    override fun onSuccess() {
 
+    }
+
+    override fun onFailure(p0: Int) {
+
+    }
+
+
+})
             Constants.noNetwork=false
             if (verifyLocation()) {
 
@@ -655,6 +665,8 @@ ll_main_send.startAnimation(transitionDown)
 //                }
 //
 //            }
+Constants.isServer=false
+
 
             var files = ContextCompat.getExternalFilesDirs(this, null)
 
@@ -947,7 +959,7 @@ navUserName!!.text=Constants.userNameOnChanged
 
     override fun onDestroy() {
 
-        p2pManager?.removeGroup(p2pChannel,object: WifiP2pManager.ActionListener{
+        p2pManager!!.removeGroup(p2pChannel,object: WifiP2pManager.ActionListener{
             override fun onSuccess() {
                 //
             }

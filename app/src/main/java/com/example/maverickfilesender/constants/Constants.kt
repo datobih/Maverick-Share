@@ -49,6 +49,8 @@ var isDarkMode=true
     var currentDownloadLocation=""
 var currentHistoryLocation=""
 
+
+
     var userPictureOnChanged:Bitmap?=null
     var userNameOnChanged:String=""
 
