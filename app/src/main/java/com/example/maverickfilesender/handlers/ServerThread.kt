@@ -120,11 +120,14 @@ mainContext.tv_connection_status.visibility=View.GONE
 
 
             while (true) {
+
+                Log.d("LoopStart","Starting")
 try {
 
     if (socket!!.isConnected) {
 
         if (Constants.selectedFiles.isNotEmpty()) {
+            Log.d("ITEMMS","NOTEMPTY")
 socket!!.soTimeout=10000
             var dir = ""
             transferFile = Constants.selectedFiles[0]
@@ -192,7 +195,7 @@ socket!!.soTimeout=10000
 
             if(sizeResponse!="done"){
                 showErrorMessage("Failed to send file,the receiver has insufficient storage")
-                Thread.sleep(50)
+                Thread.sleep(100)
                 continue
             }
 

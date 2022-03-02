@@ -50,7 +50,7 @@ android:layout_alignParentEnd="true"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
-
+android:foreground="?attr/selectableItemBackground"
                 ></androidx.appcompat.widget.AppCompatButton>
 
 

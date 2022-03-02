@@ -196,7 +196,7 @@ outputStream.writeUTF("done")
                     Log.d("VERIFY","$fileName fileNameDone")
 
 filesRemaining=inputStream.readUTF()
-                    Log.d("VERIFY","$filesRemaining fileRemaining")
+                    Log.d("VERIFYFILESREMAIN","$filesRemaining fileRemaining")
                     outputStream.flush()
                     outputStream.writeUTF("done")
                     Log.d("VERIFY","FileRemaining")
@@ -214,7 +214,7 @@ filesRemaining=inputStream.readUTF()
                     var availableSpace=getAvailableSpace(Constants.currentDownloadLocation)
                     var fileSpace=fileSize.toLong()/(1024*1024)
                     availableSpace=availableSpace*1024
-                    fileSpace=1
+
                     if(fileSpace<availableSpace){
                         outputStream.writeUTF("done")
 
@@ -223,8 +223,8 @@ filesRemaining=inputStream.readUTF()
                     else{
                         outputStream.writeUTF("insufficient")
 
-                        showErrorMessage("Can't send file due to insufficient storage")
-
+                        showErrorMessage("Can't receive file due to insufficient storage")
+fileName=""
                         continue
                     }
 

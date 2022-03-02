@@ -682,6 +682,10 @@ Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show(
                         p2pManager!!.removeGroup(p2pChannel, object : WifiP2pManager.ActionListener {
                             override fun onSuccess() {
 
+
+
+
+
                             }
 
                             override fun onFailure(p0: Int) {
