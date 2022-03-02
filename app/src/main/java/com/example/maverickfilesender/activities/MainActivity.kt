@@ -15,6 +15,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pDevice
+import android.net.wifi.p2p.WifiP2pInfo
 import android.net.wifi.p2p.WifiP2pManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -539,22 +540,36 @@ ll_main_send.startAnimation(transitionDown)
 //
 //
 //            }
-p2pManager!!.removeGroup(p2pChannel,object :WifiP2pManager.ActionListener{
-    override fun onSuccess() {
 
-    }
-
-    override fun onFailure(p0: Int) {
-
-    }
+    p2pManager!!.requestConnectionInfo(p2pChannel,object:WifiP2pManager.ConnectionInfoListener{
+        override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
+if(info!!.groupFormed) {
 
 
-})
+    p2pManager!!.removeGroup(p2pChannel, object : WifiP2pManager.ActionListener {
+        override fun onSuccess() {
+
+        }
+
+        override fun onFailure(p0: Int) {
+
+        }
+
+
+    })
+}
+
+        }
+
+
+    })
+
+
             Constants.noNetwork=false
             if (verifyLocation()) {
 
 
-                if(!wifiManager!!.isWifiEnabled) {
+                if (!wifiManager!!.isWifiEnabled) {
                     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
                         wifiManager!!.setWifiEnabled(true)
 
@@ -562,36 +577,28 @@ p2pManager!!.removeGroup(p2pChannel,object :WifiP2pManager.ActionListener{
                         startActivity(Intent(android.provider.Settings.Panel.ACTION_WIFI))
 
                     }
-                }
-                else {
-                    Constants.isServer=true
+                } else {
+                    Constants.isServer = true
 
-                    p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
+
+
+                    p2pManager!!.createGroup(p2pChannel, object : WifiP2pManager.ActionListener {
                         override fun onSuccess() {
-
-                            p2pManager!!.createGroup(p2pChannel,object:WifiP2pManager.ActionListener{
-                                override fun onSuccess() {
-
-                                    //INIT SERVER THREAD
-                                }
-
-                                override fun onFailure(p0: Int) {
-
-                                }
-
-
-                            })
-
+Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show()
+                            //INIT SERVER THREAD
                         }
 
                         override fun onFailure(p0: Int) {
-                            Toast.makeText(this@MainActivity,"Failed",Toast.LENGTH_SHORT).show()
+
                         }
+
 
                     })
 
-
                 }
+
+
+
 
 
             } else {
@@ -665,8 +672,34 @@ p2pManager!!.removeGroup(p2pChannel,object :WifiP2pManager.ActionListener{
 //                }
 //
 //            }
-Constants.isServer=false
 
+            p2pManager!!.requestConnectionInfo(p2pChannel,object:WifiP2pManager.ConnectionInfoListener{
+                override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
+
+                    if(info!!.groupFormed) {
+
+
+                        p2pManager!!.removeGroup(p2pChannel, object : WifiP2pManager.ActionListener {
+                            override fun onSuccess() {
+
+                            }
+
+                            override fun onFailure(p0: Int) {
+
+                            }
+
+
+                        })
+                    }
+
+
+                }
+
+
+            })
+
+Constants.isServer=false
+            Constants.connectedDevice=""
 
             var files = ContextCompat.getExternalFilesDirs(this, null)
 
@@ -959,14 +992,29 @@ navUserName!!.text=Constants.userNameOnChanged
 
     override fun onDestroy() {
 
-        p2pManager!!.removeGroup(p2pChannel,object: WifiP2pManager.ActionListener{
-            override fun onSuccess() {
-                //
+
+        p2pManager!!.requestConnectionInfo(p2pChannel,object:WifiP2pManager.ConnectionInfoListener{
+            override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
+
+                if(info!!.groupFormed) {
+
+
+                    p2pManager!!.removeGroup(p2pChannel, object : WifiP2pManager.ActionListener {
+                        override fun onSuccess() {
+
+                        }
+
+                        override fun onFailure(p0: Int) {
+
+                        }
+
+
+                    })
+                }
+
+
             }
 
-            override fun onFailure(p0: Int) {
-              //
-            }
 
         })
         super.onDestroy()
