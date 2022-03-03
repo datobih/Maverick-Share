@@ -374,6 +374,14 @@ var done=true
 Constants.onSelectedMetaData.add(FileMetaData(fileName,fileTotalSize.toLong(),bitmap))
                                   //  Constants.transferActivity!!.adapter!!.fileMetaDataList!!.add()
                                     Constants.transferActivity!!.adapter!!.notifyDataSetChanged()
+
+                                    if(Constants.transferActivity==null){
+
+                                        showErrorMessage("Successfully received $fileName")
+
+                                    }
+
+
                                     fileName=""
                                     filesRemaining=(filesRemaining.toInt()-1).toString()
                                     bytesReceived=0

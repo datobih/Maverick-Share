@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.example.maverickfilesender.R
@@ -227,6 +228,9 @@ ll_historyLocation.setOnClickListener {
 
                 if (Constants.clientThread != null || Constants.serverThread != null) {
                     switch_darkMode.isChecked = !value
+
+                  Toast.makeText(this@SettingsActivity,"Can't switch to dark mode when in a connection",Toast.LENGTH_SHORT).show()
+
                 } else {
 
 

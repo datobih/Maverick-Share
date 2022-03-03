@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.item_ssid.view.*
 
 class DevicePeerListRecyclerAdapter(val context:Context,val deviceList:ArrayList<WifiP2pDevice>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -37,8 +38,11 @@ class DevicePeerListRecyclerAdapter(val context:Context,val deviceList:ArrayList
 
         holder.itemView.btn_item_connect.setOnClickListener {
 //            openWifiLoginInput(holder)
+val mainContext=context as MainActivity
 
-val device=deviceList[position]
+            mainContext.ll_loading.visibility=View.VISIBLE
+            Constants.ssidDialog!!.dismiss()
+            val device=deviceList[position]
 
 
             val config=WifiP2pConfig().apply {
@@ -67,6 +71,7 @@ Thread.sleep(3000)
 
                             if(!Constants.p2pConnected){
                                 (context as MainActivity).runOnUiThread {
+                                    mainContext.ll_loading.visibility=View.GONE
                                     Toast.makeText(
                                             context,
                                             "Connection failed.",

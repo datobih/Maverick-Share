@@ -82,6 +82,8 @@ var selectedFiles=ArrayList<ParseFile>()
 var appSelected=ArrayList<Int>()
 
 
+    var isDevicesAvailable=false
+
 
 
     var serverThread:ServerThread?=null

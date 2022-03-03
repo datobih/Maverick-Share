@@ -10,12 +10,12 @@ app:layout_constraintBottom_toTopOf="@id/guideline2"
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/drawer_user_profile_pic"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginLeft="10dp"
         android:src="@drawable/ic_user_place_holder"
         android:layout_marginTop="50dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tv_main_userName"
         app:layout_constraintLeft_toLeftOf="parent"
 
@@ -32,6 +32,7 @@ app:layout_constraintBottom_toTopOf="@id/guideline2"
         android:textColor="@color/text_color"
         android:fontFamily="@font/gilroy"
         android:layout_marginTop="5dp"
+        android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@id/drawer_user_profile_pic"
         app:layout_constraintLeft_toLeftOf="@id/drawer_user_profile_pic"
         app:layout_constraintRight_toRightOf="@id/drawer_user_profile_pic"
@@ -43,5 +44,5 @@ app:layout_constraintBottom_toTopOf="@id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="160dp" />
+        app:layout_constraintGuide_begin="217dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

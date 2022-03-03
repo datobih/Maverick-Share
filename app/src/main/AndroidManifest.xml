@@ -40,6 +40,11 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaverickFileSender">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6493153452878821~9917940786"/>
+
         <activity android:name=".activities.FeedbackActivity"></activity>
         <activity
             android:name=".activities.SettingsActivity"

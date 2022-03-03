@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   android:id="@+id/main_drawerLayout"
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity"
-android:theme="@style/Theme.MaterialComponents.NoActionBar"
-    android:fitsSystemWindows="true"
-tools:openDrawer="start"
+    android:theme="@style/Theme.MaterialComponents.NoActionBar"
+
+
     >
 <!--    android:background="#f4f4f4"-->
+<androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/main_drawerLayout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start"
+
+    >
+
 
 
     <include
@@ -20,9 +32,10 @@ tools:openDrawer="start"
         ></include>
 
 
+
 <com.google.android.material.navigation.NavigationView
    android:id="@+id/drawer_navigation"
-    android:layout_width="wrap_content"
+    android:layout_width="300dp"
     android:layout_height="match_parent"
 android:fitsSystemWindows="true"
 app:headerLayout="@layout/drawer_header"
@@ -32,10 +45,29 @@ app:itemTextAppearance="@style/gilroyTextViewStyle"
 android:layout_marginBottom="100dp"
 app:itemTextColor="@color/menu_drawer_tint"
     app:itemIconTint="@color/menu_drawer_tint"
-    ></com.google.android.material.navigation.NavigationView>
+
+    >
 
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+
+        app:adSize="MEDIUM_RECTANGLE"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        android:layout_gravity="bottom"></com.google.android.gms.ads.AdView>
+
+</com.google.android.material.navigation.NavigationView>
 
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
+
+
+
+
+
+
+</RelativeLayout>

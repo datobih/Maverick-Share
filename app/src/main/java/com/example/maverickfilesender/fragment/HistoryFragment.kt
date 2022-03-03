@@ -276,14 +276,19 @@ fetchGeneralFiles()
         return sdPath
     }
 
-
-    override fun onResume() {
+    fun refreshUI(){
         if(!Constants.isMedia) {
             fetchGeneralFiles()
         }
         else{
             fetchMediaFiles()
         }
+    }
+
+
+
+    override fun onResume() {
+      refreshUI()
 
         super.onResume()
     }

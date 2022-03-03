@@ -54,7 +54,7 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
 
             }
             WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION->{
-
+Constants.isDevicesAvailable=true
                 if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && !(Constants.isServer)) {
                           manager.requestPeers(channel,object :WifiP2pManager.PeerListListener{
                         override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
@@ -68,6 +68,7 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
 
 
                                 val dialog = Dialog(context!!)
+                                Constants.ssidDialog=dialog
                                 dialog.setContentView(R.layout.dialog_hotspot_receiver)
                                 val adapter = DevicePeerListRecyclerAdapter(context, devices)
                                 dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(context)
@@ -76,6 +77,17 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
 
 
                                 dialog.show()
+
+                                dialog.setOnDismissListener {
+
+                                    Constants.ssidDialog=null
+
+                                }
+                            }
+                            else{
+
+                                Toast.makeText(context,"No devices found",Toast.LENGTH_SHORT).show()
+
                             }
 
 
@@ -102,7 +114,7 @@ if(networkInfo!!.isConnected){
 
         override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
             Constants.p2pConnected=true
-Toast.makeText(context,"Connected to ${Constants.connectedDevice}",Toast.LENGTH_SHORT).show()
+//Toast.makeText(context,"Connected to ${Constants.connectedDevice}",Toast.LENGTH_SHORT).show()
             val groupOwnerAddress=info!!.groupOwnerAddress.hostAddress
 
             if(info.groupFormed && info.isGroupOwner){
@@ -116,7 +128,7 @@ Toast.makeText(context,"THIS IS GROUP OWNER",Toast.LENGTH_SHORT).show()
 
             }
             else if(info.groupFormed){
-
+                (context as MainActivity).ll_loading.visibility=View.GONE
                 if(Constants.clientThread==null) {
                     Constants.clientThread = ClientThread(context!!,groupOwnerAddress)
                     Constants.clientThread!!.start()

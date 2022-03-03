@@ -43,6 +43,9 @@ import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.fragment.*
 import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.receivers.WifiDirectBroadcastReceiver
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -112,9 +115,17 @@ var p2pReceiver:WifiDirectBroadcastReceiver?=null
 
 Constants.mainActivity=this
 
+        MobileAds.initialize(this)
+
+        val adRequest=AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+
         val headerView=drawer_navigation.getHeaderView(0)
          navUserImage=headerView.findViewById<ImageView>(R.id.drawer_user_profile_pic)
          navUserName=headerView.findViewById<TextView>(R.id.tv_main_userName)
+
+
+
 
         mSharedPreferences= getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
@@ -698,7 +709,7 @@ Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show(
 
 
 
-
+Constants.isDevicesAvailable=false
 
 
             Log.d("REMOVEGROUPP","IsServer")
@@ -936,7 +947,18 @@ currentLocation="/storage/emulated/0"
 
                     })
 
+                    Thread {
+                        var i = 0
+                        while (i < 10) {
+                            Thread.sleep(1000)
+                            i++
+                        }
+if(!Constants.isDevicesAvailable){
+runOnUiThread {     Toast.makeText(this,"No devices found",Toast.LENGTH_SHORT).show() }
 
+}
+
+                    }.start()
 
 
                 }
