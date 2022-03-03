@@ -58,7 +58,7 @@ var adapter:VideoFileRecyclerAdapter?=null
 
 
                     view.rv_videos.setHasFixedSize(true)
-                    view.rv_videos.layoutManager= LinearLayoutManager(requireContext())
+                    view.rv_videos.layoutManager= LinearLayoutManager(mContext)
                     view.rv_videos.adapter=adapter
                     view.progress_videos.visibility=View.GONE
                 }

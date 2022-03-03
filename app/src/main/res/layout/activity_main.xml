@@ -55,7 +55,7 @@ app:itemTextColor="@color/menu_drawer_tint"
         android:layout_height="wrap_content"
         android:background="@color/white"
 
-        app:adSize="MEDIUM_RECTANGLE"
+        app:adSize="LARGE_BANNER"
         app:adUnitId="ca-app-pub-3940256099942544/6300978111"
         android:layout_gravity="bottom"></com.google.android.gms.ads.AdView>
 

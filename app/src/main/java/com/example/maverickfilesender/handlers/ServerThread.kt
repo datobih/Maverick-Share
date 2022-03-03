@@ -56,9 +56,10 @@ Constants.serverSocket!!.reuseAddress=true
         }
 
         catch (e:Exception) {
+            Constants.isServerActive=false
 return
         }
-
+     Constants.isServerActive=true
 socket!!.soTimeout=1000000000
 
 
@@ -398,6 +399,7 @@ Log.d("RESPONSEEE",response)
     }
 }
 catch (e:Exception){
+    Constants.isServerActive=false
     Log.d("ERRORR",e.stackTraceToString())
     Constants.serverThread=null
     showErrorMessage("Something went wrong")

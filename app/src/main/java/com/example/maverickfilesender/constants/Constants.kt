@@ -83,7 +83,7 @@ var appSelected=ArrayList<Int>()
 
 
     var isDevicesAvailable=false
-
+var isServerActive=false
 
 
     var serverThread:ServerThread?=null

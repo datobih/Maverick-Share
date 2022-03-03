@@ -226,7 +226,7 @@ ll_historyLocation.setOnClickListener {
 
             override fun onCheckedChanged(p0: CompoundButton?, value: Boolean) {
 
-                if (Constants.clientThread != null || Constants.serverThread != null) {
+                if (Constants.clientThread != null || Constants.isServerActive == true) {
                     switch_darkMode.isChecked = !value
 
                   Toast.makeText(this@SettingsActivity,"Can't switch to dark mode when in a connection",Toast.LENGTH_SHORT).show()
