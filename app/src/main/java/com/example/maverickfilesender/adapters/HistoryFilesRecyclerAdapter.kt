@@ -114,7 +114,20 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
                             .into(holder.itemView.imv_history_fileIcon)
 
 
-                } else if (appFileList[position].file.name.endsWith(".pdf") ||
+                }
+
+                else if (appFileList[position].file.name.endsWith(".mp3")) {
+
+                    Glide.with(context)
+                            .load(R.drawable.audio_icon)
+                            .centerCrop()
+                            .into(holder.itemView.imv_history_fileIcon)
+
+
+                }
+
+
+                else if (appFileList[position].file.name.endsWith(".pdf") ||
                         appFileList[position].file.name.endsWith(".PDF")) {
 
                     Glide.with(context)

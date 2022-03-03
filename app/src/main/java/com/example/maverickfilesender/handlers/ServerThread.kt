@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_transfer.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.io.*
 import java.lang.Exception
+import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
 import java.text.DecimalFormat
@@ -34,10 +35,14 @@ import java.text.DecimalFormat
 lateinit var outputStream: DataOutputStream
 lateinit var inputStream: DataInputStream
 //lateinit var serverSocket: ServerSocket
+
+
+
  override fun run() {
     if(Constants.serverSocket==null) {
-        Constants.serverSocket = ServerSocket(9999)
-
+        Constants.serverSocket = ServerSocket()
+Constants.serverSocket!!.reuseAddress=true
+        Constants.serverSocket!!.bind(InetSocketAddress(9999))
 
     }
 
@@ -47,7 +52,7 @@ lateinit var inputStream: DataInputStream
 
         try {
              socket = Constants.serverSocket!!.accept()
-socket!!.keepAlive=true
+
         }
 
         catch (e:Exception) {
@@ -98,7 +103,7 @@ outputStream.write(tempData,0,tempData.size)
 
             val userBitmap=BitmapFactory.decodeByteArray(tempByteArray,0,tempByteArray.size)
 
-            socket!!.soTimeout=1000
+            socket!!.soTimeout=1500
 
             val media= MediaPlayer.create(context,R.raw.connected)
             media.start()
@@ -304,7 +309,7 @@ socket!!.soTimeout=10000
 
             }
 
-            socket!!.soTimeout=1000
+            socket!!.soTimeout=1500
 //    if(transferFile!!.name.endsWith("apk")){
 //dir=context.getExternalFilesDir(null)!!.path+"/Apps"
 //
@@ -394,6 +399,7 @@ Log.d("RESPONSEEE",response)
 }
 catch (e:Exception){
     Log.d("ERRORR",e.stackTraceToString())
+    Constants.serverThread=null
     showErrorMessage("Something went wrong")
 //
 //val j=socket!!.isClosed
@@ -435,16 +441,7 @@ if(!socket!!.isClosed) {
 
 
 
-    mainContext.p2pManager!!.removeGroup(mainContext.p2pChannel,object: WifiP2pManager.ActionListener{
-        override fun onSuccess() {
-            //
-        }
 
-        override fun onFailure(p0: Int) {
-            //
-        }
-
-    })
 
 
     var q=false
@@ -460,7 +457,7 @@ if(!socket!!.isClosed) {
     }
 //        fileSize = 0
 //        bytesTransferred = 0
-    Constants.serverThread=null
+
     return
 
 }

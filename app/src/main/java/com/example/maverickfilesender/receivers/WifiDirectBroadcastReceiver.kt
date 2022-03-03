@@ -56,33 +56,33 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
             WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION->{
 
                 if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && !(Constants.isServer)) {
-                          manager.requestPeers(channel,object :WifiP2pManager.PeerListListener{
-                        override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
-                            val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
-
-//                            if ((context as MainActivity).p2pDevices != devices) {
-
-                            if(Constants.scanDevices&& devices.isNotEmpty()) {
-                                    Constants.scanDevices=false
-                                (context as MainActivity).p2pDevices = devices
-
-
-                                val dialog = Dialog(context!!)
-                                dialog.setContentView(R.layout.dialog_hotspot_receiver)
-                                val adapter = DevicePeerListRecyclerAdapter(context, devices)
-                                dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(context)
-
-                                dialog.rv_receiver_ssid.adapter = adapter
-
-
-                                dialog.show()
-                            }
-
-
+//                          manager.requestPeers(channel,object :WifiP2pManager.PeerListListener{
+//                        override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
+//                            val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
+//
+////                            if ((context as MainActivity).p2pDevices != devices) {
+//
+//                            if(Constants.scanDevices&& devices.isNotEmpty()) {
+//                                    Constants.scanDevices=false
+//                                (context as MainActivity).p2pDevices = devices
+//
+//
+//                                val dialog = Dialog(context!!)
+//                                dialog.setContentView(R.layout.dialog_hotspot_receiver)
+//                                val adapter = DevicePeerListRecyclerAdapter(context, devices)
+//                                dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(context)
+//
+//                                dialog.rv_receiver_ssid.adapter = adapter
+//
+//
+//                                dialog.show()
 //                            }
-                        }
-
-                    })
+//
+//
+////                            }
+//                        }
+//
+//                    })
                 }
 
 

@@ -147,7 +147,7 @@ inputStream.readFully(tempByteArray,0,tempByteArray.size)
             val userBitmap=BitmapFactory.decodeByteArray(tempByteArray,0,tempByteArray.size)
 
 
-            socket!!.soTimeout=1000
+            socket!!.soTimeout=1500
 
             var bufferedInputStream = BufferedInputStream(socket!!.getInputStream())
 
@@ -407,19 +407,10 @@ outputStream.writeUTF("done")
                 catch (e:Exception){
                     Log.d("ERRORR",e.stackTraceToString())
                    showErrorMessage("Something went wrong")
+                    Constants.clientThread=null
 
 
 
-                    mainContext.p2pManager!!.removeGroup(mainContext.p2pChannel,object: WifiP2pManager.ActionListener{
-                        override fun onSuccess() {
-                            //
-                        }
-
-                        override fun onFailure(p0: Int) {
-                            //
-                        }
-
-                    })
 
 
 //                    try {
@@ -450,7 +441,7 @@ q=true
 while(!q){
 
 }
-Constants.clientThread=null
+
                     return
 
                 }

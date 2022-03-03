@@ -15,6 +15,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.WifiP2pDevice
+import android.net.wifi.p2p.WifiP2pDeviceList
 import android.net.wifi.p2p.WifiP2pInfo
 import android.net.wifi.p2p.WifiP2pManager
 import androidx.appcompat.app.AppCompatActivity
@@ -34,7 +35,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.adapters.DevicePeerListRecyclerAdapter
 import com.example.maverickfilesender.adapters.MainPagerFragmentAdapter
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.fragment.*
@@ -231,6 +234,12 @@ startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ
             addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
             addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
         }
+
+
+
+
+
+
 
         val appTab = tab_main.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
         val historyTab=tab_main.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24)
@@ -548,11 +557,25 @@ if(info!!.groupFormed) {
 
     p2pManager!!.removeGroup(p2pChannel, object : WifiP2pManager.ActionListener {
         override fun onSuccess() {
+Log.d("REMOVESUCCESS","Success")
+
+            p2pManager!!.createGroup(p2pChannel, object : WifiP2pManager.ActionListener {
+                override fun onSuccess() {
+                    Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show()
+                    //INIT SERVER THREAD
+                }
+
+                override fun onFailure(p0: Int) {
+
+                }
+
+
+            })
 
         }
 
         override fun onFailure(p0: Int) {
-
+            Log.d("REMOVESUCCESS","Failure")
         }
 
 
@@ -580,7 +603,7 @@ if(info!!.groupFormed) {
                 } else {
                     Constants.isServer = true
 
-
+                    Thread.sleep(100)
 
                     p2pManager!!.createGroup(p2pChannel, object : WifiP2pManager.ActionListener {
                         override fun onSuccess() {
@@ -673,6 +696,11 @@ Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show(
 //
 //            }
 
+
+
+
+
+
             p2pManager!!.requestConnectionInfo(p2pChannel,object:WifiP2pManager.ConnectionInfoListener{
                 override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
 
@@ -761,7 +789,33 @@ Constants.scanDevices=true
                     p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
                         override fun onSuccess() {
                             Log.d("PEERSS","Successful")
+                            p2pManager!!.requestPeers(p2pChannel,object :WifiP2pManager.PeerListListener{
+                                override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
+                                    val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
 
+//                            if ((context as MainActivity).p2pDevices != devices) {
+
+                                    if(Constants.scanDevices&& devices.isNotEmpty()) {
+                                        Constants.scanDevices=false
+                                     p2pDevices = devices
+
+
+                                        val dialog = Dialog(this@MainActivity)
+                                        dialog.setContentView(R.layout.dialog_hotspot_receiver)
+                                        val adapter = DevicePeerListRecyclerAdapter(this@MainActivity, devices)
+                                        dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(this@MainActivity)
+
+                                        dialog.rv_receiver_ssid.adapter = adapter
+
+
+                                        dialog.show()
+                                    }
+
+
+//                            }
+                                }
+
+                            })
                         }
 
                         override fun onFailure(p0: Int) {
