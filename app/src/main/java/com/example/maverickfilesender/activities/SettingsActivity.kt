@@ -217,30 +217,37 @@ ll_historyLocation.setOnClickListener {
 
 }
 
+
+
+
         switch_darkMode.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
             val editor = sharedPreferences.edit()
 
             override fun onCheckedChanged(p0: CompoundButton?, value: Boolean) {
 
-
-                clearSelectedFiles()
-
-
-
-                if (value == false) {
-
-                    editor.putBoolean(Constants.SP_DARK_MODE, false)
-
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    Constants.isDarkMode=false
+                if (Constants.clientThread != null || Constants.serverThread != null) {
+                    switch_darkMode.isChecked = !value
                 } else {
-                    editor.putBoolean(Constants.SP_DARK_MODE, true)
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    Constants.isDarkMode=true
-                }
-                editor.apply()
-            }
 
+
+                    clearSelectedFiles()
+
+
+
+                    if (value == false) {
+
+                        editor.putBoolean(Constants.SP_DARK_MODE, false)
+
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        Constants.isDarkMode = false
+                    } else {
+                        editor.putBoolean(Constants.SP_DARK_MODE, true)
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        Constants.isDarkMode = true
+                    }
+                    editor.apply()
+                }
+            }
 
         })
     }
