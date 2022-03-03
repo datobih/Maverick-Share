@@ -701,35 +701,7 @@ Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show(
 
 
 
-            p2pManager!!.requestConnectionInfo(p2pChannel,object:WifiP2pManager.ConnectionInfoListener{
-                override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
-
-                    if(info!!.groupFormed) {
-
-
-                        p2pManager!!.removeGroup(p2pChannel, object : WifiP2pManager.ActionListener {
-                            override fun onSuccess() {
-
-
-
-
-
-                            }
-
-                            override fun onFailure(p0: Int) {
-
-                            }
-
-
-                        })
-                    }
-
-
-                }
-
-
-            })
-
+            Log.d("REMOVEGROUPP","IsServer")
 Constants.isServer=false
             Constants.connectedDevice=""
 
@@ -784,41 +756,52 @@ currentLocation="/storage/emulated/0"
 
                 }
                 else {
-Constants.scanDevices=true
 
-                    p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
-                        override fun onSuccess() {
-                            Log.d("PEERSS","Successful")
-                            p2pManager!!.requestPeers(p2pChannel,object :WifiP2pManager.PeerListListener{
-                                override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
-                                    val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
+                    p2pManager!!.requestConnectionInfo(p2pChannel,object:WifiP2pManager.ConnectionInfoListener{
+                        override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
 
-//                            if ((context as MainActivity).p2pDevices != devices) {
-
-                                    if(Constants.scanDevices&& devices.isNotEmpty()) {
-                                        Constants.scanDevices=false
-                                     p2pDevices = devices
+                            if(info!!.groupFormed) {
 
 
-                                        val dialog = Dialog(this@MainActivity)
-                                        dialog.setContentView(R.layout.dialog_hotspot_receiver)
-                                        val adapter = DevicePeerListRecyclerAdapter(this@MainActivity, devices)
-                                        dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(this@MainActivity)
+                                p2pManager!!.removeGroup(p2pChannel, object : WifiP2pManager.ActionListener {
+                                    override fun onSuccess() {
 
-                                        dialog.rv_receiver_ssid.adapter = adapter
+                                        Log.d("REMOVEGROUPP","Success")
+                                        Constants.scanDevices=true
 
+                                        p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
+                                            override fun onSuccess() {
+                                                Log.d("PEERSS","Successful")
+//                                                p2pManager!!.requestPeers(p2pChannel,object :WifiP2pManager.PeerListListener{
+//                                                    override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
+//                                                        val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
+//
+////                            if ((context as MainActivity).p2pDevices != devices) {
+//
+//                                                        if(Constants.scanDevices&& devices.isNotEmpty()) {
+//                                                            Constants.scanDevices=false
+//                                                            p2pDevices = devices
+//
+//
+//                                                            val dialog = Dialog(this@MainActivity)
+//                                                            dialog.setContentView(R.layout.dialog_hotspot_receiver)
+//                                                            val adapter = DevicePeerListRecyclerAdapter(this@MainActivity, devices)
+//                                                            dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(this@MainActivity)
+//
+//                                                            dialog.rv_receiver_ssid.adapter = adapter
+//
+//
+//                                                            dialog.show()
+//                                                        }
+//
+//
+////                            }
+//                                                    }
+//
+//                                                })
+                                            }
 
-                                        dialog.show()
-                                    }
-
-
-//                            }
-                                }
-
-                            })
-                        }
-
-                        override fun onFailure(p0: Int) {
+                                            override fun onFailure(p0: Int) {
 
 
 //                            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
@@ -829,36 +812,133 @@ Constants.scanDevices=true
 //
 //                            }
 
-                            p2pManager!!.cancelConnect(p2pChannel,object:WifiP2pManager.ActionListener{
-                                override fun onSuccess() {
+                                                p2pManager!!.cancelConnect(p2pChannel,object:WifiP2pManager.ActionListener{
+                                                    override fun onSuccess() {
 
-                                    p2pManager!!.discoverPeers(p2pChannel,object:WifiP2pManager.ActionListener{
-                                        override fun onSuccess() {
+                                                        p2pManager!!.discoverPeers(p2pChannel,object:WifiP2pManager.ActionListener{
+                                                            override fun onSuccess() {
 
-                                        }
+                                                            }
 
-                                        override fun onFailure(p0: Int) {
+                                                            override fun onFailure(p0: Int) {
 
-                                        }
-
-
-                                    })
+                                                            }
 
 
-                                }
-
-                                override fun onFailure(p0: Int) {
-
-                                }
+                                                        })
 
 
-                            })
+                                                    }
+
+                                                    override fun onFailure(p0: Int) {
+
+                                                    }
 
 
+                                                })
+
+
+
+                                            }
+
+                                        })
+
+                                    }
+
+                                    override fun onFailure(p0: Int) {
+                                        Log.d("REMOVEGROUPP","Fail")
+
+                                    }
+
+
+                                })
+                            }
+                            else{
+                                Constants.scanDevices=true
+
+                                p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
+                                    override fun onSuccess() {
+                                        Log.d("PEERSS","Successful")
+//                                        p2pManager!!.requestPeers(p2pChannel,object :WifiP2pManager.PeerListListener{
+//                                            override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
+//                                                val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
+//
+////                            if ((context as MainActivity).p2pDevices != devices) {
+//
+//                                                if(Constants.scanDevices&& devices.isNotEmpty()) {
+//                                                    Constants.scanDevices=false
+//                                                    p2pDevices = devices
+//
+//
+//                                                    val dialog = Dialog(this@MainActivity)
+//                                                    dialog.setContentView(R.layout.dialog_hotspot_receiver)
+//                                                    val adapter = DevicePeerListRecyclerAdapter(this@MainActivity, devices)
+//                                                    dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(this@MainActivity)
+//
+//                                                    dialog.rv_receiver_ssid.adapter = adapter
+//
+//
+//                                                    dialog.show()
+//                                                }
+//
+//
+////                            }
+//                                            }
+//
+//                                        })
+                                    }
+
+                                    override fun onFailure(p0: Int) {
+
+
+//                            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+//                               wifiManager!!.setWifiEnabled(false)
+//
+//                            } else {
+//                               startActivity(Intent(Settings.Panel.ACTION_WIFI))
+//
+//                            }
+
+                                        p2pManager!!.cancelConnect(p2pChannel,object:WifiP2pManager.ActionListener{
+                                            override fun onSuccess() {
+
+                                                p2pManager!!.discoverPeers(p2pChannel,object:WifiP2pManager.ActionListener{
+                                                    override fun onSuccess() {
+
+                                                    }
+
+                                                    override fun onFailure(p0: Int) {
+
+                                                    }
+
+
+                                                })
+
+
+                                            }
+
+                                            override fun onFailure(p0: Int) {
+
+                                            }
+
+
+                                        })
+
+
+
+                                    }
+
+                                })
+                            }
 
                         }
 
+
                     })
+
+
+
+
                 }
 
 

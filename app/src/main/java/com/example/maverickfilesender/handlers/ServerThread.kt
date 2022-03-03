@@ -441,7 +441,16 @@ if(!socket!!.isClosed) {
 
 
 
+    mainContext.p2pManager!!.removeGroup(mainContext.p2pChannel,object: WifiP2pManager.ActionListener{
+        override fun onSuccess() {
+            //
+        }
 
+        override fun onFailure(p0: Int) {
+            //
+        }
+
+    })
 
 
     var q=false

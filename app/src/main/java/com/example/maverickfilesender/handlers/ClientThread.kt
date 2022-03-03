@@ -410,7 +410,16 @@ outputStream.writeUTF("done")
                     Constants.clientThread=null
 
 
+                    mainContext.p2pManager!!.removeGroup(mainContext.p2pChannel,object: WifiP2pManager.ActionListener{
+                        override fun onSuccess() {
+                            //
+                        }
 
+                        override fun onFailure(p0: Int) {
+                            //
+                        }
+
+                    })
 
 
 //                    try {
