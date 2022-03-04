@@ -84,11 +84,7 @@ context.ll_loading.visibility=View.GONE
 
                                 }
                             }
-                            else{
-
-                                Toast.makeText(context,"No devices found",Toast.LENGTH_SHORT).show()
-
-                            }
+                        
 
 
 //                            }
