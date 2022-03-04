@@ -157,8 +157,12 @@ class MediaHandler(val context: Context) {
              */
 
 
+try{
+    musicList.add(Music(contentUri, id, name, artist,album, bitmap, duration, size,pathData,false,null))
+}catch (e:Exception){
 
-                musicList.add(Music(contentUri, id, name, artist,album, bitmap, duration, size,pathData,false,null))
+}
+
             }
 
 
@@ -231,8 +235,13 @@ val contentUri=ContentUris.withAppendedId( MediaStore.Images.Media.getContentUri
 //
 // }
 
-imageList.add(Image(id,name,size,date,contentUri,path,null,false))
 
+     try{
+         imageList.add(Image(id, name, size, date, contentUri, path, null, false))
+     }
+     catch (e:Exception) {
+
+     }
 
  }
 

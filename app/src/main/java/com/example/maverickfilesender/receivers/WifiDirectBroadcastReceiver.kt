@@ -75,7 +75,7 @@ Constants.isDevicesAvailable=true
 
                                 dialog.rv_receiver_ssid.adapter = adapter
 
-
+context.ll_loading.visibility=View.GONE
                                 dialog.show()
 
                                 dialog.setOnDismissListener {

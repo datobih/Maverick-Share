@@ -30,6 +30,9 @@ val SHARED_PREFERENCES_NAME="maverick_file_sender"
     val RQ_PROFILE_ACTIVITY=4
     val RQ_PROFILE_PIC=5
     val RQ_SETTINGS_ACTIVITY=6
+    var isRequestWifi=false
+    var isFindPeer=false
+
 
 var isServer=false
 

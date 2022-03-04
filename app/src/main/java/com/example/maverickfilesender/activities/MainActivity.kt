@@ -561,42 +561,7 @@ ll_main_send.startAnimation(transitionDown)
 //
 //            }
 
-    p2pManager!!.requestConnectionInfo(p2pChannel,object:WifiP2pManager.ConnectionInfoListener{
-        override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
-if(info!!.groupFormed) {
 
-
-    p2pManager!!.removeGroup(p2pChannel, object : WifiP2pManager.ActionListener {
-        override fun onSuccess() {
-Log.d("REMOVESUCCESS","Success")
-
-            p2pManager!!.createGroup(p2pChannel, object : WifiP2pManager.ActionListener {
-                override fun onSuccess() {
-                    Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show()
-                    //INIT SERVER THREAD
-                }
-
-                override fun onFailure(p0: Int) {
-
-                }
-
-
-            })
-
-        }
-
-        override fun onFailure(p0: Int) {
-            Log.d("REMOVESUCCESS","Failure")
-        }
-
-
-    })
-}
-
-        }
-
-
-    })
 
 
             Constants.noNetwork=false
@@ -608,26 +573,13 @@ Log.d("REMOVESUCCESS","Success")
                         wifiManager!!.setWifiEnabled(true)
 
                     } else {
+                        Constants.isRequestWifi=true
                         startActivity(Intent(android.provider.Settings.Panel.ACTION_WIFI))
 
                     }
                 } else {
-                    Constants.isServer = true
 
-                    Thread.sleep(100)
-
-                    p2pManager!!.createGroup(p2pChannel, object : WifiP2pManager.ActionListener {
-                        override fun onSuccess() {
-Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show()
-                            //INIT SERVER THREAD
-                        }
-
-                        override fun onFailure(p0: Int) {
-
-                        }
-
-
-                    })
+createGroup()
 
                 }
 
@@ -760,206 +712,16 @@ currentLocation="/storage/emulated/0"
                         wifiManager!!.setWifiEnabled(true)
 
                     } else {
+                        Constants.isFindPeer=true
                         startActivity(Intent(android.provider.Settings.Panel.ACTION_WIFI))
 
                     }
 
 
+
                 }
                 else {
-
-                    p2pManager!!.requestConnectionInfo(p2pChannel,object:WifiP2pManager.ConnectionInfoListener{
-                        override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
-
-                            if(info!!.groupFormed) {
-
-
-                                p2pManager!!.removeGroup(p2pChannel, object : WifiP2pManager.ActionListener {
-                                    override fun onSuccess() {
-
-                                        Log.d("REMOVEGROUPP","Success")
-                                        Constants.scanDevices=true
-
-                                        p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
-                                            override fun onSuccess() {
-                                                Log.d("PEERSS","Successful")
-//                                                p2pManager!!.requestPeers(p2pChannel,object :WifiP2pManager.PeerListListener{
-//                                                    override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
-//                                                        val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
-//
-////                            if ((context as MainActivity).p2pDevices != devices) {
-//
-//                                                        if(Constants.scanDevices&& devices.isNotEmpty()) {
-//                                                            Constants.scanDevices=false
-//                                                            p2pDevices = devices
-//
-//
-//                                                            val dialog = Dialog(this@MainActivity)
-//                                                            dialog.setContentView(R.layout.dialog_hotspot_receiver)
-//                                                            val adapter = DevicePeerListRecyclerAdapter(this@MainActivity, devices)
-//                                                            dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(this@MainActivity)
-//
-//                                                            dialog.rv_receiver_ssid.adapter = adapter
-//
-//
-//                                                            dialog.show()
-//                                                        }
-//
-//
-////                            }
-//                                                    }
-//
-//                                                })
-                                            }
-
-                                            override fun onFailure(p0: Int) {
-
-
-//                            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
-//                               wifiManager!!.setWifiEnabled(false)
-//
-//                            } else {
-//                               startActivity(Intent(Settings.Panel.ACTION_WIFI))
-//
-//                            }
-
-                                                p2pManager!!.cancelConnect(p2pChannel,object:WifiP2pManager.ActionListener{
-                                                    override fun onSuccess() {
-
-                                                        p2pManager!!.discoverPeers(p2pChannel,object:WifiP2pManager.ActionListener{
-                                                            override fun onSuccess() {
-
-                                                            }
-
-                                                            override fun onFailure(p0: Int) {
-
-                                                            }
-
-
-                                                        })
-
-
-                                                    }
-
-                                                    override fun onFailure(p0: Int) {
-
-                                                    }
-
-
-                                                })
-
-
-
-                                            }
-
-                                        })
-
-                                    }
-
-                                    override fun onFailure(p0: Int) {
-                                        Log.d("REMOVEGROUPP","Fail")
-
-                                    }
-
-
-                                })
-                            }
-                            else{
-                                Constants.scanDevices=true
-
-                                p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
-                                    override fun onSuccess() {
-                                        Log.d("PEERSS","Successful")
-//                                        p2pManager!!.requestPeers(p2pChannel,object :WifiP2pManager.PeerListListener{
-//                                            override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
-//                                                val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
-//
-////                            if ((context as MainActivity).p2pDevices != devices) {
-//
-//                                                if(Constants.scanDevices&& devices.isNotEmpty()) {
-//                                                    Constants.scanDevices=false
-//                                                    p2pDevices = devices
-//
-//
-//                                                    val dialog = Dialog(this@MainActivity)
-//                                                    dialog.setContentView(R.layout.dialog_hotspot_receiver)
-//                                                    val adapter = DevicePeerListRecyclerAdapter(this@MainActivity, devices)
-//                                                    dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(this@MainActivity)
-//
-//                                                    dialog.rv_receiver_ssid.adapter = adapter
-//
-//
-//                                                    dialog.show()
-//                                                }
-//
-//
-////                            }
-//                                            }
-//
-//                                        })
-                                    }
-
-                                    override fun onFailure(p0: Int) {
-
-
-//                            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
-//                               wifiManager!!.setWifiEnabled(false)
-//
-//                            } else {
-//                               startActivity(Intent(Settings.Panel.ACTION_WIFI))
-//
-//                            }
-
-                                        p2pManager!!.cancelConnect(p2pChannel,object:WifiP2pManager.ActionListener{
-                                            override fun onSuccess() {
-
-                                                p2pManager!!.discoverPeers(p2pChannel,object:WifiP2pManager.ActionListener{
-                                                    override fun onSuccess() {
-
-                                                    }
-
-                                                    override fun onFailure(p0: Int) {
-
-                                                    }
-
-
-                                                })
-
-
-                                            }
-
-                                            override fun onFailure(p0: Int) {
-
-                                            }
-
-
-                                        })
-
-
-
-                                    }
-
-                                })
-                            }
-
-                        }
-
-
-                    })
-
-                    Thread {
-                        var i = 0
-                        while (i < 10) {
-                            Thread.sleep(1000)
-                            i++
-                        }
-if(!Constants.isDevicesAvailable){
-runOnUiThread {     Toast.makeText(this,"No devices found",Toast.LENGTH_SHORT).show() }
-
-}
-
-                    }.start()
-
+findPeers()
 
                 }
 
@@ -1081,6 +843,275 @@ tv_connection_status.text="Not Connected"
     }
 
 
+    @SuppressLint("MissingPermission")
+    fun createGroup(){
+
+
+        p2pManager!!.requestConnectionInfo(p2pChannel,object:WifiP2pManager.ConnectionInfoListener{
+            override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
+                if(info!!.groupFormed) {
+
+
+                    p2pManager!!.removeGroup(p2pChannel, object : WifiP2pManager.ActionListener {
+                        @SuppressLint("MissingPermission")
+                        override fun onSuccess() {
+                            Log.d("REMOVESUCCESS","Success")
+
+                            p2pManager!!.createGroup(p2pChannel, object : WifiP2pManager.ActionListener {
+                                override fun onSuccess() {
+                                    Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show()
+                                    //INIT SERVER THREAD
+                                }
+
+                                override fun onFailure(p0: Int) {
+
+                                }
+
+
+                            })
+
+                        }
+
+                        override fun onFailure(p0: Int) {
+                            Log.d("REMOVESUCCESS","Failure")
+                        }
+
+
+                    })
+                }
+
+            }
+
+
+        })
+
+
+
+
+
+        Constants.isServer = true
+
+        Thread.sleep(100)
+
+        p2pManager!!.createGroup(p2pChannel, object : WifiP2pManager.ActionListener {
+            override fun onSuccess() {
+                Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show()
+                //INIT SERVER THREAD
+            }
+
+            override fun onFailure(p0: Int) {
+
+            }
+
+
+        })
+
+    }
+
+    fun findPeers(){
+        ll_loading.visibility=View.VISIBLE
+        p2pManager!!.requestConnectionInfo(p2pChannel,object:WifiP2pManager.ConnectionInfoListener{
+            @SuppressLint("MissingPermission")
+            override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
+
+                if(info!!.groupFormed) {
+
+
+                    p2pManager!!.removeGroup(p2pChannel, object : WifiP2pManager.ActionListener {
+                        override fun onSuccess() {
+
+                            Log.d("REMOVEGROUPP","Success")
+                            Constants.scanDevices=true
+
+                            p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
+                                override fun onSuccess() {
+                                    Log.d("PEERSS","Successful")
+//                                                p2pManager!!.requestPeers(p2pChannel,object :WifiP2pManager.PeerListListener{
+//                                                    override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
+//                                                        val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
+//
+////                            if ((context as MainActivity).p2pDevices != devices) {
+//
+//                                                        if(Constants.scanDevices&& devices.isNotEmpty()) {
+//                                                            Constants.scanDevices=false
+//                                                            p2pDevices = devices
+//
+//
+//                                                            val dialog = Dialog(this@MainActivity)
+//                                                            dialog.setContentView(R.layout.dialog_hotspot_receiver)
+//                                                            val adapter = DevicePeerListRecyclerAdapter(this@MainActivity, devices)
+//                                                            dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(this@MainActivity)
+//
+//                                                            dialog.rv_receiver_ssid.adapter = adapter
+//
+//
+//                                                            dialog.show()
+//                                                        }
+//
+//
+////                            }
+//                                                    }
+//
+//                                                })
+                                }
+
+                                override fun onFailure(p0: Int) {
+
+
+//                            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+//                               wifiManager!!.setWifiEnabled(false)
+//
+//                            } else {
+//                               startActivity(Intent(Settings.Panel.ACTION_WIFI))
+//
+//                            }
+
+                                    p2pManager!!.cancelConnect(p2pChannel,object:WifiP2pManager.ActionListener{
+                                        override fun onSuccess() {
+
+                                            p2pManager!!.discoverPeers(p2pChannel,object:WifiP2pManager.ActionListener{
+                                                override fun onSuccess() {
+
+                                                }
+
+                                                override fun onFailure(p0: Int) {
+
+                                                }
+
+
+                                            })
+
+
+                                        }
+
+                                        override fun onFailure(p0: Int) {
+
+                                        }
+
+
+                                    })
+
+
+
+                                }
+
+                            })
+
+                        }
+
+                        override fun onFailure(p0: Int) {
+
+                            Log.d("REMOVEGROUPP","Fail")
+
+                        }
+
+
+                    })
+                }
+                else{
+                    Constants.scanDevices=true
+
+                    p2pManager!!.discoverPeers(p2pChannel,object: WifiP2pManager.ActionListener{
+                        override fun onSuccess() {
+                            Log.d("PEERSS","Successful")
+//                                        p2pManager!!.requestPeers(p2pChannel,object :WifiP2pManager.PeerListListener{
+//                                            override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
+//                                                val devices = ArrayList<WifiP2pDevice>(peerList!!.deviceList)
+//
+////                            if ((context as MainActivity).p2pDevices != devices) {
+//
+//                                                if(Constants.scanDevices&& devices.isNotEmpty()) {
+//                                                    Constants.scanDevices=false
+//                                                    p2pDevices = devices
+//
+//
+//                                                    val dialog = Dialog(this@MainActivity)
+//                                                    dialog.setContentView(R.layout.dialog_hotspot_receiver)
+//                                                    val adapter = DevicePeerListRecyclerAdapter(this@MainActivity, devices)
+//                                                    dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(this@MainActivity)
+//
+//                                                    dialog.rv_receiver_ssid.adapter = adapter
+//
+//
+//                                                    dialog.show()
+//                                                }
+//
+//
+////                            }
+//                                            }
+//
+//                                        })
+                        }
+
+                        override fun onFailure(p0: Int) {
+
+
+//                            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+//                               wifiManager!!.setWifiEnabled(false)
+//
+//                            } else {
+//                               startActivity(Intent(Settings.Panel.ACTION_WIFI))
+//
+//                            }
+
+                            p2pManager!!.cancelConnect(p2pChannel,object:WifiP2pManager.ActionListener{
+                                override fun onSuccess() {
+
+                                    p2pManager!!.discoverPeers(p2pChannel,object:WifiP2pManager.ActionListener{
+                                        override fun onSuccess() {
+
+                                        }
+
+                                        override fun onFailure(p0: Int) {
+
+                                        }
+
+
+                                    })
+
+
+                                }
+
+                                override fun onFailure(p0: Int) {
+
+                                }
+
+
+                            })
+
+
+
+                        }
+
+                    })
+                }
+
+            }
+
+
+        })
+
+        Thread {
+            var i = 0
+            while (i < 10) {
+                Thread.sleep(1000)
+                i++
+            }
+            if(!Constants.isDevicesAvailable){
+                runOnUiThread {     Toast.makeText(this,"No devices found",Toast.LENGTH_SHORT).show()
+                ll_loading.visibility=View.GONE
+
+                }
+
+            }
+
+        }.start()
+
+
+
+    }
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -1142,7 +1173,6 @@ navUserName!!.text=Constants.userNameOnChanged
     }
 
 
-
 }
 
 
@@ -1189,6 +1219,28 @@ unregisterReceiver(p2pReceiver)
     override fun onResume() {
         super.onResume()
         registerReceiver(p2pReceiver,p2pIntentFilter)
+        if(Constants.isRequestWifi){
+            if(wifiManager!!.isWifiEnabled){
+                Constants.isRequestWifi=false
+                createGroup()
+            }
+            else{
+                showErrorMessage("Turn on your wifi and try again.")
+            }
+
+
+        }
+        else if(Constants.isFindPeer){
+
+            if(wifiManager!!.isWifiEnabled) {
+                Constants.isFindPeer = false
+                findPeers()
+            }
+            else{
+                showErrorMessage("Turn on your wifi and try again.")
+            }
+        }
+
     }
 
     override fun onBackPressed() {
