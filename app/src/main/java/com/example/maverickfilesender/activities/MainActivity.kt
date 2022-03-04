@@ -36,6 +36,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.adapters.DevicePeerListRecyclerAdapter
 import com.example.maverickfilesender.adapters.MainPagerFragmentAdapter
@@ -100,6 +101,7 @@ var p2pReceiver:WifiDirectBroadcastReceiver?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         setTheme(R.style.Theme_MaverickFileSender)
         setContentView(R.layout.activity_main)
 
@@ -110,6 +112,14 @@ var p2pReceiver:WifiDirectBroadcastReceiver?=null
 //       val valid= Testdir!!.mkdirs()
 //
 
+
+        mSharedPreferences= getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+
+        val isDarkMode=mSharedPreferences!!.getBoolean(Constants.SP_DARK_MODE,true)
+
+        if(!isDarkMode){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
 
 
 
@@ -126,14 +136,6 @@ Constants.mainActivity=this
 
 
 
-
-        mSharedPreferences= getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-
-        val isDarkMode=mSharedPreferences!!.getBoolean(Constants.SP_DARK_MODE,true)
-
-if(!isDarkMode){
-    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-}
 
 
 Constants.isDarkMode=isDarkMode
@@ -192,7 +194,7 @@ startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ
 
             vp_main.adapter = adapter
             vp_main.offscreenPageLimit=4
-            vp_main.isUserInputEnabled = false
+vp_main.isUserInputEnabled=false
 
 
 
@@ -254,31 +256,35 @@ startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ
 
         val appTab = tab_main.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
         val historyTab=tab_main.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24)
+        val imageTab=tab_main.newTab().setText("Images").setIcon(R.drawable.ic_outline_image_24)
+        val videoTab=tab_main.newTab().setText("Videos").setIcon(R.drawable.ic_outline_video_library_24)
+        val audioTab=tab_main.newTab().setText("Audio").setIcon(R.drawable.ic_outline_audiotrack_24)
+        val filesTab=tab_main.newTab().setText("Files").setIcon(R.drawable.ic_baseline_folder_24)
+
+
+        val tabArray= arrayOf(appTab,historyTab,imageTab,videoTab,audioTab,filesTab)
+
         tab_main.addTab(historyTab)
         tab_main.addTab(appTab)
 
-        tab_main.addTab(tab_main.newTab().setText("Images").setIcon(R.drawable.ic_outline_image_24))
-        tab_main.addTab(tab_main.newTab().setText("Videos").setIcon(R.drawable.ic_outline_video_library_24))
-        tab_main.addTab(tab_main.newTab().setText("Audio").setIcon(R.drawable.ic_outline_audiotrack_24))
-        tab_main.addTab(tab_main.newTab().setText("Files").setIcon(R.drawable.ic_baseline_folder_24))
+        tab_main.addTab(imageTab)
+        tab_main.addTab(videoTab)
+        tab_main.addTab(audioTab)
+        tab_main.addTab(filesTab)
 //
 //        tab_main.selectTab(appTab)
 //        vp_main.currentItem=1
 
 tab_main.selectTab(historyTab)
-        val receiveAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_recieve)
-        val sendAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_send)
+        vp_main.currentItem=0
+//        val receiveAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_recieve)
+//        val sendAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_send)
          transitionDown=AnimationUtils.loadAnimation(this,R.anim.transition_down)
         animationMoveUp = AnimationUtils.loadAnimation(this,R.anim.transition_up)
         val bounceAnimation=AnimationUtils.loadAnimation(this,R.anim.bounce_loop)
         val transferAnimation=AnimationUtils.loadAnimation(this,R.anim.righttoleft)
 
 
-
-        mHandler!!.postDelayed(Runnable {      btn_receiver.startAnimation(receiveAnimation)
-            btn_sender.startAnimation(sendAnimation)
-
-        },400)
 
 
 
@@ -577,7 +583,13 @@ ll_main_send.startAnimation(transitionDown)
                         startActivity(Intent(android.provider.Settings.Panel.ACTION_WIFI))
 
                     }
-                } else {
+                }
+
+                if(!isLocationEnabled()){
+
+                }
+
+                else {
 
 createGroup()
 
@@ -711,7 +723,12 @@ currentLocation="/storage/emulated/0"
                     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
                         wifiManager!!.setWifiEnabled(true)
 
-                    } else {
+                    }
+
+
+
+
+                    else {
                         Constants.isFindPeer=true
                         startActivity(Intent(android.provider.Settings.Panel.ACTION_WIFI))
 
@@ -719,8 +736,23 @@ currentLocation="/storage/emulated/0"
 
 
 
+
                 }
-                else {
+
+                if(!isLocationEnabled()){
+                    Toast.makeText(
+                            this,
+                            "You need to enable your Location on your device.",
+                            Toast.LENGTH_SHORT
+                    ).show()
+                    var intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivity(intent)
+
+
+                }
+
+
+               if(wifiManager!!.isWifiEnabled && isLocationEnabled()) {
 findPeers()
 
                 }

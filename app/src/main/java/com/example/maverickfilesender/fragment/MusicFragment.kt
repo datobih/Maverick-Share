@@ -54,7 +54,7 @@ var mContext:Context?=null
 
                   audioList=MediaHandler(mContext!!).getMediaFromDevice()
 
-                  (context as MainActivity).runOnUiThread {
+                  (mContext as MainActivity).runOnUiThread {
                       adapter = AudioFileRecyclerAdapter(mContext!!, audioList)
                       view.rv_audio.layoutManager = LinearLayoutManager(mContext)
                       view.rv_audio.adapter = adapter

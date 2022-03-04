@@ -54,7 +54,7 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
 
             }
             WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION->{
-Constants.isDevicesAvailable=true
+
                 if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && !(Constants.isServer)) {
                           manager.requestPeers(channel,object :WifiP2pManager.PeerListListener{
                         override fun onPeersAvailable(peerList: WifiP2pDeviceList?) {
@@ -63,6 +63,7 @@ Constants.isDevicesAvailable=true
 //                            if ((context as MainActivity).p2pDevices != devices) {
 
                             if(Constants.scanDevices&& devices.isNotEmpty()) {
+                                Constants.isDevicesAvailable=true
                                     Constants.scanDevices=false
                                 (context as MainActivity).p2pDevices = devices
 
@@ -84,7 +85,7 @@ context.ll_loading.visibility=View.GONE
 
                                 }
                             }
-                        
+
 
 
 //                            }
