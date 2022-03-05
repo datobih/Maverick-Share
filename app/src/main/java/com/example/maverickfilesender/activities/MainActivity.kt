@@ -101,9 +101,19 @@ var p2pReceiver:WifiDirectBroadcastReceiver?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mSharedPreferences= getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
+//        val isDarkMode=mSharedPreferences!!.getBoolean(Constants.SP_DARK_MODE,true)
+//        setTheme(R.style.Theme_MaverickFileSender)
         setTheme(R.style.Theme_MaverickFileSender)
+
+
+
         setContentView(R.layout.activity_main)
+
+
+
+
 
 //
 //
@@ -113,13 +123,6 @@ var p2pReceiver:WifiDirectBroadcastReceiver?=null
 //
 
 
-        mSharedPreferences= getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-
-        val isDarkMode=mSharedPreferences!!.getBoolean(Constants.SP_DARK_MODE,true)
-
-        if(!isDarkMode){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
 
 
 
@@ -138,7 +141,7 @@ Constants.mainActivity=this
 
 
 
-Constants.isDarkMode=isDarkMode
+
 
         mProfilePicEncoded=mSharedPreferences!!.getString(Constants.SP_PROFILE_PIC_DATA,"")
         mProfileName=mSharedPreferences!!.getString(Constants.SP_PROFILE_USERNAME,"")
@@ -164,7 +167,7 @@ navUserImage!!.setImageBitmap(profileBitmap)
             val editor=mSharedPreferences!!.edit()
 editor.putString(Constants.SP_PROFILE_PIC_DATA,"pic")
             editor.putString(Constants.SP_PROFILE_USERNAME,"Guest")
-            editor.putBoolean(Constants.SP_DARK_MODE,isDarkMode)
+            editor.putBoolean(Constants.SP_DARK_MODE,true)
             editor.putString(Constants.SP_STORAGE_LOCATION,"/storage/emulated/0")
 editor.putString(Constants.SP_HISTORY_LOCATION,"/storage/emulated/0")
 
@@ -181,6 +184,7 @@ editor.putString(Constants.SP_HISTORY_LOCATION,"/storage/emulated/0")
        navUserName!!.text = mProfileName
 
         }
+
 
         if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
