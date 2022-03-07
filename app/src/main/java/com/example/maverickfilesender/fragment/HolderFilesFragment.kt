@@ -44,7 +44,7 @@ class HolderFilesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+Constants.holderFilesFragment=this
 
 
        this.childFragmentManager?.beginTransaction().apply {
@@ -62,7 +62,7 @@ this.setReorderingAllowed(true)
 
     override fun onDestroy() {
 
-
+Constants.holderFilesFragment=null
 
 
         super.onDestroy()

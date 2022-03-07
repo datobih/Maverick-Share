@@ -219,17 +219,32 @@ android:visibility="gone"
         android:layout_centerHorizontal="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="100dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="5dp"
 
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:fontFamily="@font/gilroy_light"
 android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/ll_main_send"
+        app:layout_constraintBottom_toTopOf="@id/tv_sender"
         app:layout_constraintRight_toRightOf="parent"
         ></ImageButton>
 
 
+
+
+    <TextView
+        android:id="@+id/tv_sender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Send"
+        android:fontFamily="@font/gilroy"
+        android:textColor="@color/text_color"
+        app:layout_constraintLeft_toLeftOf="@id/btn_sender"
+        app:layout_constraintRight_toRightOf="@id/btn_sender"
+        app:layout_constraintBottom_toTopOf="@id/ll_main_send"
+        android:layout_marginBottom="10dp"
+        ></TextView>
 
 
 
@@ -244,17 +259,28 @@ android:foreground="?attr/selectableItemBackground"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="100dp"
 
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="5dp"
 
-        android:textAllCaps="false"
-        android:textColor="@color/white"
 
-        android:fontFamily="@font/gilroy_light"
 
-android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/ll_main_send"
+        app:layout_constraintBottom_toTopOf="@id/tv_receiver"
         app:layout_constraintLeft_toLeftOf="parent"
         ></ImageButton>
+
+
+    <TextView
+        android:id="@+id/tv_receiver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+android:text="Receive"
+        android:fontFamily="@font/gilroy"
+        android:textColor="@color/text_color"
+        app:layout_constraintLeft_toLeftOf="@id/btn_receiver"
+        app:layout_constraintRight_toRightOf="@id/btn_receiver"
+app:layout_constraintBottom_toTopOf="@id/ll_main_send"
+        android:layout_marginBottom="10dp"
+        ></TextView>
 
 
 

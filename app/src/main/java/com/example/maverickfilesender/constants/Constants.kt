@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.widget.ImageView
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.activities.TransferActivity
+import com.example.maverickfilesender.fragment.HolderFilesFragment
 import com.example.maverickfilesender.handlers.ClientThread
 import com.example.maverickfilesender.handlers.ServerThread
 import com.example.maverickfilesender.model.FileMetaData
@@ -32,7 +33,7 @@ val SHARED_PREFERENCES_NAME="maverick_file_sender"
     val RQ_SETTINGS_ACTIVITY=6
     var isRequestWifi=false
     var isFindPeer=false
-
+var holderFilesFragment:HolderFilesFragment?=null
 var turnOnLocation=false
 var isServer=false
 

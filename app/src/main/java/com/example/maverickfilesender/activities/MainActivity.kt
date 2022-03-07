@@ -209,7 +209,7 @@ vp_main.isUserInputEnabled=false
 
         }
 
-        
+
         wifiManager =
                 applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
 
@@ -440,10 +440,10 @@ Constants.sendCount=0
             }
 
 
-            supportFragmentManager.beginTransaction().apply {
+            Constants.holderFilesFragment?.childFragmentManager?.beginTransaction().apply {
 
-                replace(R.id.holder_files_fragment,StorageDirectoryFragment())
-                    .commit()
+                this?.replace(R.id.holder_files_fragment,StorageDirectoryFragment())
+                        ?.commit()
 
 
 
@@ -825,6 +825,8 @@ findPeers()
 fun setupUIconnected(){
     btn_receiver.visibility=View.GONE
     btn_sender.visibility=View.GONE
+    tv_receiver.visibility=View.GONE
+    tv_sender.visibility=View.GONE
 btn_disconnect.visibility=View.VISIBLE
 
 
@@ -832,8 +834,11 @@ btn_disconnect.visibility=View.VISIBLE
 
     fun setupUIdisconnected(){
         btn_disconnect.visibility=View.GONE
+
         btn_receiver.visibility=View.VISIBLE
         btn_sender.visibility=View.VISIBLE
+        tv_sender.visibility=View.VISIBLE
+        tv_receiver.visibility=View.VISIBLE
 tv_connection_status.text="Not Connected"
     }
 
@@ -1023,10 +1028,10 @@ Constants.sendCount=0
             }
 
 
-            supportFragmentManager.beginTransaction().apply {
+            Constants.holderFilesFragment?.childFragmentManager?.beginTransaction().apply {
 
-                replace(R.id.holder_files_fragment,StorageDirectoryFragment())
-                    .commit()
+                this?.replace(R.id.holder_files_fragment,StorageDirectoryFragment())
+                        ?.commit()
 
 
 
