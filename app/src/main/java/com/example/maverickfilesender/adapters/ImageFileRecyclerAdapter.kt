@@ -99,10 +99,16 @@ var bitmap:Bitmap?=getBitmapFromDrawable(holder.itemView.imv_itemImage.drawable)
 
 
                     Constants.sendCount++
-                    if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
-                        (context as MainActivity).ll_main_send.visibility = View.VISIBLE
-                        (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
+                    if(Constants.clientThread==null) {
+
+
+                        if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
+                            (context as MainActivity).ll_main_send.visibility = View.VISIBLE
+                            (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
+                        }
+
                     }
+
                 } else {
 
 

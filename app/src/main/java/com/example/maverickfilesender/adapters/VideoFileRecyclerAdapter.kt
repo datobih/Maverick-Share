@@ -115,11 +115,16 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
 
                     Constants.tempSelectedFiles.add(ParseFile( File(videoList[position].path),data,"",null))
 
-                    if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
+                    if(Constants.clientThread==null) {
 
-                        (context as MainActivity).ll_main_send.visibility = View.VISIBLE
-                        (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
 
+                        if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
+
+                            (context as MainActivity).ll_main_send.visibility = View.VISIBLE
+                            (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
+
+
+                        }
 
                     }
 
