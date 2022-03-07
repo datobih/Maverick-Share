@@ -129,7 +129,7 @@ while(true){
     if((Constants.heirarchyFiles.isEmpty())||(Constants.heirarchyFiles.lastIndex==position-1)){
         if(Constants.tempSelectedFiles.isEmpty()){
             (mContext as MainActivity).ll_main_send.startAnimation((mContext as MainActivity).transitionDown)
-            (mContext as MainActivity).ll_main_send.visibility=View.INVISIBLE
+            (mContext as MainActivity).ll_main_send.visibility=View.GONE
         }
         break
     }
@@ -290,7 +290,7 @@ return list
         if(Constants.tempSelectedFiles.isEmpty() && (context as MainActivity).ll_main_send.visibility==View.VISIBLE){
 
             (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-            (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
+            (context as MainActivity).ll_main_send.visibility=View.GONE
         }
 filesAdapter=FilesRecyclerAdapter(mContext!!,appFileList)
         filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
@@ -337,7 +337,7 @@ Constants.parentFiles.removeAt(Constants.parentFiles.lastIndex)
            Constants.sendCount=0
 
            (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-           (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
+           (context as MainActivity).ll_main_send.visibility=View.GONE
 
        }
 

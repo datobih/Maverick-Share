@@ -63,12 +63,17 @@ if(appFileList[position].onSelect!!){
 
     holder.itemView.imb_file_onSelect.setOnClickListener {
 val mainContext=context as MainActivity
-        if(mainContext.ll_main_send.visibility==View.INVISIBLE){
 
-            mainContext.ll_main_send.visibility=View.VISIBLE
-mainContext.ll_main_send.startAnimation(animationMoveUp)
+        if(Constants.clientThread==null) {
+
+
+            if (mainContext.ll_main_send.visibility == View.GONE) {
+
+                mainContext.ll_main_send.visibility = View.VISIBLE
+                mainContext.ll_main_send.startAnimation(animationMoveUp)
+            }
+
         }
-
 
 appFileList[position].onSelect = !appFileList[position].onSelect!!
 
@@ -87,7 +92,7 @@ try {
 catch (e:Exception){
     appFileList[position].onSelect= !appFileList[position].onSelect!!
     data=null
-    mainContext.ll_main_send.visibility=View.INVISIBLE
+    mainContext.ll_main_send.visibility=View.GONE
 }
 if(data!=null) {
     Constants.sendCount++
@@ -118,7 +123,7 @@ if(data!=null) {
 
             if(Constants.tempSelectedFiles.isEmpty()){
                 (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-                (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
+                (context as MainActivity).ll_main_send.visibility=View.GONE
             }
 
         }

@@ -33,7 +33,7 @@ val SHARED_PREFERENCES_NAME="maverick_file_sender"
     var isRequestWifi=false
     var isFindPeer=false
 
-
+var turnOnLocation=false
 var isServer=false
 
 var isClose=false

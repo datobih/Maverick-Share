@@ -94,12 +94,15 @@ fetchGeneralFiles()
 
         var files = ContextCompat.getExternalFilesDirs(mContext!!, null)
         if(files.size>1){
+var sdDirectory=""
+try {
+  sdDirectory = getSDirectory(files[1].path)
+}
+catch (e:Exception){
+   sdDirectory=""
+}
 
-
-            val sdDirectory=getSDirectory(files[1].path)
-
-
-            if(Constants.currentHistoryLocation!="/storage/emulated/0" && Constants.currentHistoryLocation!=sdDirectory){
+            if(Constants.currentHistoryLocation!="/storage/emulated/0" && Constants.currentHistoryLocation!=sdDirectory && sdDirectory.isNotEmpty()){
 
                 Constants.currentHistoryLocation="/storage/emulated/0"
 

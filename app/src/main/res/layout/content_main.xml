@@ -185,6 +185,7 @@ app:layout_constraintBottom_toBottomOf="parent"
     </FrameLayout>
 
 
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_disconnect"
         android:layout_width="wrap_content"
@@ -196,7 +197,7 @@ app:layout_constraintBottom_toBottomOf="parent"
 app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/ll_main_send"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="25dp"
         android:text="Disconnect"
         android:textAllCaps="false"
         android:textColor="@color/white"
@@ -208,48 +209,53 @@ android:visibility="gone"
         ></androidx.appcompat.widget.AppCompatButton>
 
 
-    <androidx.appcompat.widget.AppCompatButton
+    <ImageButton
         android:id="@+id/btn_sender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_bg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_cloud_upload"
+        android:foreground="?attr/selectableItemBackground"
 
         android:layout_centerHorizontal="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="70dp"
-        android:layout_marginBottom="15dp"
-        android:text="Sender"
+        android:layout_marginRight="100dp"
+        android:layout_marginBottom="30dp"
+
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:fontFamily="@font/gilroy_light"
 android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/ll_main_send"
         app:layout_constraintRight_toRightOf="parent"
-        ></androidx.appcompat.widget.AppCompatButton>
+        ></ImageButton>
 
 
 
-    <androidx.appcompat.widget.AppCompatButton
+
+
+
+    <ImageButton
         android:id="@+id/btn_receiver"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_bg"
-
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_cloud_download"
+android:foreground="?attr/selectableItemBackground"
 
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="70dp"
+        android:layout_marginLeft="100dp"
 
-        android:layout_marginBottom="15dp"
-        android:text="Reciever"
+        android:layout_marginBottom="30dp"
+
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:layout_above="@id/ll_main_send"
+
         android:fontFamily="@font/gilroy_light"
 
 android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/ll_main_send"
         app:layout_constraintLeft_toLeftOf="parent"
-        ></androidx.appcompat.widget.AppCompatButton>
+        ></ImageButton>
+
 
 
 
@@ -261,8 +267,8 @@ android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#1b1b1b"
-app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="invisible"
+app:layout_constraintBottom_toTopOf="@id/main_adView"
+        android:visibility="gone"
         tools:visibility="visible"
         >
 
@@ -308,6 +314,20 @@ app:layout_constraintBottom_toBottomOf="parent"
             ></com.google.android.material.bottomnavigation.BottomNavigationView>
 
     -->
+
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/main_adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"></com.google.android.gms.ads.AdView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout

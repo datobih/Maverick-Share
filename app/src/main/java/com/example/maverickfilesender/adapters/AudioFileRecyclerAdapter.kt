@@ -80,14 +80,18 @@ val bitmap=getBitmapFromDrawable(holder.itemView.imv_audioCover.drawable)
             audioList[position].data=data
 
             Constants.tempSelectedFiles.add(ParseFile( File(audioList[position].path),data,"",null))
-
-            if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
-
-                (context as MainActivity).ll_main_send.visibility = View.VISIBLE
-                (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
+if(Constants.clientThread==null) {
 
 
-            }
+    if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
+
+        (context as MainActivity).ll_main_send.visibility = View.VISIBLE
+        (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
+
+
+    }
+
+}
 
         } else {
             Constants.sendCount--
@@ -96,7 +100,7 @@ val bitmap=getBitmapFromDrawable(holder.itemView.imv_audioCover.drawable)
 
             if (Constants.tempSelectedFiles.isEmpty()) {
                 (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-                (context as MainActivity).ll_main_send.visibility = View.INVISIBLE
+                (context as MainActivity).ll_main_send.visibility = View.GONE
             }
 
         }

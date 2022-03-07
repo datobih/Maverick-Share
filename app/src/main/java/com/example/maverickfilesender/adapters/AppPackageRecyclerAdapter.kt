@@ -37,10 +37,15 @@ class AppPackageRecyclerAdapter(val context: Context,val appPackagePackageList:M
 
         if(appPackagePackageList[position].onSelect){
 Constants.appSelected.add(position)
-            holder.itemView.imv_appPackageSelect.visibility=View.VISIBLE
-            if((context as MainActivity).ll_main_send.visibility!=View.VISIBLE) {
-                (context as MainActivity).ll_main_send.visibility = View.VISIBLE
-                (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
+            if(Constants.clientThread==null) {
+
+
+                holder.itemView.imv_appPackageSelect.visibility = View.VISIBLE
+                if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
+                    (context as MainActivity).ll_main_send.visibility = View.VISIBLE
+                    (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
+                }
+
             }
 
            onClick=false
@@ -51,7 +56,7 @@ Constants.appSelected.add(position)
 
             if(Constants.tempSelectedFiles.isEmpty()){
                 (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-                (context as MainActivity).ll_main_send.visibility=View.INVISIBLE
+                (context as MainActivity).ll_main_send.visibility=View.GONE
             }
         }
 

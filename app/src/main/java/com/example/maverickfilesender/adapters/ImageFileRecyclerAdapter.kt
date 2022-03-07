@@ -111,7 +111,7 @@ var bitmap:Bitmap?=getBitmapFromDrawable(holder.itemView.imv_itemImage.drawable)
 
                     if (Constants.tempSelectedFiles.isEmpty()) {
                         (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-                        (context as MainActivity).ll_main_send.visibility = View.INVISIBLE
+                        (context as MainActivity).ll_main_send.visibility = View.GONE
                     }
                 }
 

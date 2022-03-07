@@ -130,7 +130,7 @@ class VideoFileRecyclerAdapter(val context: Context, val videoList: ArrayList<Vi
 
                     if (Constants.tempSelectedFiles.isEmpty()) {
                         (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-                        (context as MainActivity).ll_main_send.visibility = View.INVISIBLE
+                        (context as MainActivity).ll_main_send.visibility = View.GONE
                     }
 
                 }

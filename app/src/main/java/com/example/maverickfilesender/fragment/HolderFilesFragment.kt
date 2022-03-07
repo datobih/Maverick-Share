@@ -104,7 +104,7 @@ this.setReorderingAllowed(true)
             Constants.sendCount=0
             if( (context as MainActivity).ll_main_send.visibility==View.VISIBLE) {
                 (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-                (context as MainActivity).ll_main_send.visibility = View.INVISIBLE
+                (context as MainActivity).ll_main_send.visibility = View.GONE
 
             }
         }

@@ -96,7 +96,7 @@ var p2pReceiver:WifiDirectBroadcastReceiver?=null
     var p2pIntentFilter:IntentFilter?=null
     var p2pDevices=ArrayList<WifiP2pDevice>()
 
-
+    var historyTab:TabLayout.Tab?=null
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,7 +131,12 @@ Constants.mainActivity=this
         MobileAds.initialize(this)
 
         val adRequest=AdRequest.Builder().build()
+
+
+
+        main_adView.loadAd(adRequest)
         adView.loadAd(adRequest)
+
 
         val headerView=drawer_navigation.getHeaderView(0)
          navUserImage=headerView.findViewById<ImageView>(R.id.drawer_user_profile_pic)
@@ -259,7 +264,7 @@ vp_main.isUserInputEnabled=false
 
 
         val appTab = tab_main.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
-        val historyTab=tab_main.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24)
+        historyTab=tab_main.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24)
         val imageTab=tab_main.newTab().setText("Images").setIcon(R.drawable.ic_outline_image_24)
         val videoTab=tab_main.newTab().setText("Videos").setIcon(R.drawable.ic_outline_video_library_24)
         val audioTab=tab_main.newTab().setText("Audio").setIcon(R.drawable.ic_outline_audiotrack_24)
@@ -268,7 +273,7 @@ vp_main.isUserInputEnabled=false
 
         val tabArray= arrayOf(appTab,historyTab,imageTab,videoTab,audioTab,filesTab)
 
-        tab_main.addTab(historyTab)
+        tab_main.addTab(historyTab!!)
         tab_main.addTab(appTab)
 
         tab_main.addTab(imageTab)
@@ -448,7 +453,7 @@ Constants.sendCount=0
 if(ll_main_send.visibility==View.VISIBLE){
 
     ll_main_send.startAnimation(transitionDown)
-    ll_main_send.visibility=View.INVISIBLE
+    ll_main_send.visibility=View.GONE
 
 }
 tab_main.selectTab(historyTab)
@@ -457,7 +462,7 @@ tab_main.selectTab(historyTab)
 
         btn_send_close.setOnClickListener {
 ll_main_send.startAnimation(transitionDown)
-            ll_main_send.visibility=View.INVISIBLE
+            ll_main_send.visibility=View.GONE
 
 
         }
@@ -591,12 +596,22 @@ ll_main_send.startAnimation(transitionDown)
 
                 if(!isLocationEnabled()){
 
+                    Toast.makeText(
+                            this,
+                            "You need to enable your Location on your device.",
+                            Toast.LENGTH_SHORT
+                    ).show()
+                    var intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivity(intent)
+
+
                 }
 
                 else {
 
-createGroup()
-
+                    if(wifiManager!!.isWifiEnabled) {
+                        createGroup()
+                    }
                 }
 
 
@@ -677,6 +692,12 @@ createGroup()
 
 
 
+
+
+
+clearSelected()
+
+
 Constants.isDevicesAvailable=false
 
 
@@ -744,6 +765,7 @@ currentLocation="/storage/emulated/0"
                 }
 
                 if(!isLocationEnabled()){
+                    Constants.isFindPeer=true
                     Toast.makeText(
                             this,
                             "You need to enable your Location on your device.",
@@ -943,6 +965,84 @@ tv_connection_status.text="Not Connected"
         })
 
     }
+
+
+    fun clearSelected(){
+
+
+
+
+
+
+            Constants.tempSelectedFiles.clear()
+
+
+
+
+Constants.heirarchyFiles.clear()
+Constants.sendCount=0
+
+
+
+
+                    while (Constants.imagesSelected.isNotEmpty()) {
+
+                        imageFragment!!.adapter!!.imageList[Constants.imagesSelected[0]].onSelect=false
+                        imageFragment!!.adapter!!.notifyItemChanged(Constants.imagesSelected[0])
+                        Constants.imagesSelected.removeAt(0)
+                    }
+
+
+
+            while (Constants.audioSelected.isNotEmpty()) {
+
+                musicFragment!!.adapter!!.audioList[Constants.audioSelected[0]].onSelect=false
+              musicFragment!!.adapter!!.notifyItemChanged(Constants.audioSelected[0])
+                Constants.audioSelected.removeAt(0)
+            }
+
+
+
+            while (Constants.appSelected.isNotEmpty()){
+
+                appsFragment!!.adapter!!.appPackagePackageList[Constants.appSelected[0]].onSelect=false
+                appsFragment!!.adapter!!.notifyItemChanged(Constants.appSelected[0])
+                Constants.appSelected.removeAt(0)
+
+
+            }
+
+            while(Constants.videosSelected.isNotEmpty()){
+
+
+
+                videosFragment!!.adapter!!.videoList[Constants.videosSelected[0]].onSelect=false
+                videosFragment!!.adapter!!.notifyItemChanged(Constants.videosSelected[0])
+                Constants.videosSelected.removeAt(0)
+
+            }
+
+
+            supportFragmentManager.beginTransaction().apply {
+
+                replace(R.id.holder_files_fragment,StorageDirectoryFragment())
+                    .commit()
+
+
+
+            }
+        if(ll_main_send.visibility==View.VISIBLE){
+
+            ll_main_send.startAnimation(transitionDown)
+            ll_main_send.visibility=View.GONE
+
+        }
+
+
+tab_main.selectTab(historyTab)
+
+    }
+
 
     fun findPeers(){
         ll_loading.visibility=View.VISIBLE
@@ -1261,6 +1361,7 @@ unregisterReceiver(p2pReceiver)
                 createGroup()
             }
             else{
+
                 showErrorMessage("Turn on your wifi and try again.")
             }
 
@@ -1268,12 +1369,20 @@ unregisterReceiver(p2pReceiver)
         }
         else if(Constants.isFindPeer){
 
-            if(wifiManager!!.isWifiEnabled) {
+
+         if(isLocationEnabled() && wifiManager!!.isWifiEnabled){
                 Constants.isFindPeer = false
                 findPeers()
             }
+
             else{
-                showErrorMessage("Turn on your wifi and try again.")
+Constants.isFindPeer=false
+                if(!isLocationEnabled()){
+                    showErrorMessage("Turn on your location and try again.")
+                }
+                else {
+                    showErrorMessage("Turn on your wifi and try again.")
+                }
             }
         }
 
