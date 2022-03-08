@@ -37,6 +37,13 @@ var profileBitmap:Bitmap?=null
 mProfileName=mSharedPreferences!!.getString(Constants.SP_PROFILE_USERNAME,"")
 
 
+        btn_profile_back.setOnClickListener {
+
+            onBackPressed()
+
+        }
+
+
 if(!mProfilePicEncoded.isNullOrEmpty()&&mProfilePicEncoded!="pic"){
 val userPictureByteArray=Base64.decode(mProfilePicEncoded,Base64.DEFAULT)
 profileBitmap=BitmapFactory.decodeByteArray(userPictureByteArray,0,userPictureByteArray.size)

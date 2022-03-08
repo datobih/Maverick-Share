@@ -157,9 +157,12 @@ socket!!.soTimeout=10000
 
             val fileSizeUnit = deriveUnits(transferFile!!.file.length().toInt()).toString()
             var fileInputStream: BufferedInputStream? = null
+
+
             if (transferFile!!.path.isEmpty()) {
                 fileInputStream =
                         BufferedInputStream(FileInputStream(transferFile!!.file.path))
+
             } else {
                 fileInputStream =
                         BufferedInputStream(FileInputStream(transferFile!!.path))

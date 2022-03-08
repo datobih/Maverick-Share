@@ -62,9 +62,14 @@ if(appFileList[position].onSelect!!){
     }
 
     holder.itemView.imb_file_onSelect.setOnClickListener {
-val mainContext=context as MainActivity
+        val mainContext = context as MainActivity
 
-        if(Constants.clientThread==null) {
+        if (Constants.clientThread == null) {
+
+
+            if (!appFileList[position]!!.file.isDirectory) {
+
+
 
 
             if (mainContext.ll_main_send.visibility == View.GONE) {
@@ -73,62 +78,68 @@ val mainContext=context as MainActivity
                 mainContext.ll_main_send.startAnimation(animationMoveUp)
             }
 
-        }
 
-appFileList[position].onSelect = !appFileList[position].onSelect!!
 
-        if(appFileList[position].onSelect!!){
 
-            var data:ByteArray?=null
+
+            appFileList[position].onSelect = !appFileList[position].onSelect!!
+
+            if (appFileList[position].onSelect!!) {
+
+                var data: ByteArray? = null
 
 //if(appFileList[position].drawable!=null){
-try {
-    val bitmap = getBitmapFromDrawable(holder.itemView.imv_fileIcon.drawable)
-    val stream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-    data = stream.toByteArray()
-    appFileList[position].data = data
-}
-catch (e:Exception){
-    appFileList[position].onSelect= !appFileList[position].onSelect!!
-    data=null
-    mainContext.ll_main_send.visibility=View.GONE
-}
-if(data!=null) {
-    Constants.sendCount++
+                try {
+                    val bitmap = getBitmapFromDrawable(holder.itemView.imv_fileIcon.drawable)
+                    val stream = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                    data = stream.toByteArray()
+                    appFileList[position].data = data
+                } catch (e: Exception) {
+                    appFileList[position].onSelect = !appFileList[position].onSelect!!
+                    data = null
+                    mainContext.ll_main_send.visibility = View.GONE
+                }
+                if (data != null) {
+                    Constants.sendCount++
 
 //}
 
-    Constants.tempSelectedFiles.add(ParseFile(appFileList[position].file, appFileList[position].data, "", null))
+                    Constants.tempSelectedFiles.add(ParseFile(appFileList[position].file, appFileList[position].data, "", null))
 
-    if (Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
-        Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1
-        Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].add(ParseFile(appFileList[position].file, data, appFileList[position].file.path, null))
-    } else {
-        Constants.parentFiles.add(ParseFile(appFileList[position].file, data, "", null))
-    }
-}
-        }
-        else{
-            Constants.sendCount--
-            Constants.tempSelectedFiles.remove(ParseFile(appFileList[position].file,appFileList[position].data,"",null))
+                    if (Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
+                        Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] + 1
+                        Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].add(ParseFile(appFileList[position].file, data, appFileList[position].file.path, null))
+                    } else {
+                        Constants.parentFiles.add(ParseFile(appFileList[position].file, data, "", null))
+                    }
+                }
+            } else {
+                Constants.sendCount--
+                Constants.tempSelectedFiles.remove(ParseFile(appFileList[position].file, appFileList[position].data, "", null))
 
-            if(Constants.countList.isNotEmpty()&& Constants.heirarchyFiles.isNotEmpty()) {
-                Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] - 1
-                Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].remove(ParseFile(appFileList[position].file,appFileList[position].data,"",null))
+                if (Constants.countList.isNotEmpty() && Constants.heirarchyFiles.isNotEmpty()) {
+                    Constants.countList[Constants.countList.lastIndex] = Constants.countList[Constants.countList.lastIndex] - 1
+                    Constants.heirarchyFiles[Constants.heirarchyFiles.lastIndex].remove(ParseFile(appFileList[position].file, appFileList[position].data, "", null))
+                } else {
+                    Constants.parentFiles.remove(ParseFile(appFileList[position].file, appFileList[position].data, "", null))
+                }
+
+                if (Constants.tempSelectedFiles.isEmpty()) {
+                    (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
+                    (context as MainActivity).ll_main_send.visibility = View.GONE
+                }
+
             }
+
+            this.notifyItemChanged(position)
+
+
+        }
             else{
-                Constants.parentFiles.remove(ParseFile(appFileList[position].file,appFileList[position].data,"",null))
+                mainContext.showErrorMessage("Can't send directories.")
             }
-
-            if(Constants.tempSelectedFiles.isEmpty()){
-                (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-                (context as MainActivity).ll_main_send.visibility=View.GONE
-            }
-
-        }
-
-        this.notifyItemChanged(position)
+    }
 
 
     }

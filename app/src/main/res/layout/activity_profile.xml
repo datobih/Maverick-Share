@@ -6,8 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".activities.ProfileActivity"
     android:background="@color/background_color">
-    
-    
+
+    <ImageView
+        android:id="@+id/btn_profile_back"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_round_arrow_back_ios_24"
+        android:layout_centerVertical="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        ></ImageView>
     
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_user_profile"

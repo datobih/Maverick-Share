@@ -110,35 +110,36 @@ if(networkInfo!!.isConnected){
 
 
         override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
-            Constants.p2pConnected=true
+
 //Toast.makeText(context,"Connected to ${Constants.connectedDevice}",Toast.LENGTH_SHORT).show()
-            val groupOwnerAddress=info!!.groupOwnerAddress.hostAddress
+            if (info?.groupOwnerAddress != null) {
+                Constants.p2pConnected = true
 
-            if(info.groupFormed && info.isGroupOwner){
+            val groupOwnerAddress = info!!.groupOwnerAddress?.hostAddress
 
-                if(Constants.serverThread==null) {
+            if (info!!.groupFormed && info!!.isGroupOwner) {
+
+                if (Constants.serverThread == null) {
                     Constants.serverThread = ServerThread(context!!)
                     Constants.serverThread!!.start()
+                    (context as MainActivity).showErrorMessage("Session Created")
                 }
 
-Toast.makeText(context,"THIS IS GROUP OWNER",Toast.LENGTH_SHORT).show()
 
-            }
-            else if(info.groupFormed){
-                (context as MainActivity).ll_loading.visibility=View.GONE
-                if(Constants.clientThread==null) {
-                    Constants.clientThread = ClientThread(context!!,groupOwnerAddress)
+
+            } else if (info.groupFormed) {
+                (context as MainActivity).ll_loading.visibility = View.GONE
+                if (Constants.clientThread == null) {
+                    Constants.clientThread = ClientThread(context!!, groupOwnerAddress!!)
                     Constants.clientThread!!.start()
                 }
 
-                Toast.makeText(context,"THIS IS GROUP MEMBER",Toast.LENGTH_SHORT).show()
-            }
-else{
+            } else {
 
-                Toast.makeText(context,"COULDNT CONNECT",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Could not connect", Toast.LENGTH_SHORT).show()
 
             }
-
+        }
         }
 
 

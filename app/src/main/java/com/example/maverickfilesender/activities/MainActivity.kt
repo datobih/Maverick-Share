@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
     var appsFragment:AppsFragment?=null
     var videosFragment:VideosFragment?=null
     var musicFragment:MusicFragment?=null
-
+var historyFragment:HistoryFragment?=null
 var wifiManager:WifiManager?=null
     var mSharedPreferences : SharedPreferences?=null
 
@@ -899,7 +899,7 @@ tv_connection_status.text="Not Connected"
         }else{
             Snackbar.make(findViewById(android.R.id.content),message, Snackbar.LENGTH_SHORT)
         }
-        snackBar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.maverick_blue))
+
         snackBar.show()
 
 
@@ -922,7 +922,7 @@ tv_connection_status.text="Not Connected"
 
                             p2pManager!!.createGroup(p2pChannel, object : WifiP2pManager.ActionListener {
                                 override fun onSuccess() {
-                                    Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show()
+                                 //   Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show()
                                     //INIT SERVER THREAD
                                 }
 
@@ -958,7 +958,7 @@ tv_connection_status.text="Not Connected"
 
         p2pManager!!.createGroup(p2pChannel, object : WifiP2pManager.ActionListener {
             override fun onSuccess() {
-                Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show()
+            //    Toast.makeText(this@MainActivity,"Creation successful",Toast.LENGTH_SHORT).show()
                 //INIT SERVER THREAD
             }
 

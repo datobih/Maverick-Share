@@ -366,20 +366,16 @@ Log.d("TRANSFER",bytesReceived.toString())
                         if(bytesReceived>=fileSize.toInt()){
 tempDir=""
 var done=true
+                            Constants.onSelectedMetaData.add(FileMetaData(fileName,fileTotalSize.toLong(),bitmap))
                             if(Constants.transferActivity!=null) {
                                 done=false
                                 handler.post {
-
+ 
                                  Constants.transferActivity?.transferViewModel?.isFileTransferring?.value=false
-Constants.onSelectedMetaData.add(FileMetaData(fileName,fileTotalSize.toLong(),bitmap))
+
                                   //  Constants.transferActivity!!.adapter!!.fileMetaDataList!!.add()
                                     Constants.transferActivity!!.adapter!!.notifyDataSetChanged()
 
-                                    if(Constants.transferActivity==null){
-
-                                        showErrorMessage("Successfully received $fileName")
-
-                                    }
 
 
                                     fileName=""
@@ -394,6 +390,14 @@ done=true
 
 
                             }else{
+
+                                if(Constants.transferActivity==null){
+
+                                    showErrorMessage("Successfully received $fileName")
+mainContext.historyFragment?.refreshUI()
+                                }
+
+
                                 fileName=""
                                 filesRemaining=(filesRemaining.toInt()-1).toString()
                                 bytesReceived=0

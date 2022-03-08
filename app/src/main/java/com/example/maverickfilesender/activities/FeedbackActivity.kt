@@ -13,6 +13,12 @@ class FeedbackActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feedback)
 
+        btn_feedback_back.setOnClickListener {
+
+            onBackPressed()
+
+        }
+
 btn_sendFeedback.setOnClickListener {
 
     if(!et_feedback_subject.text.toString().isNullOrEmpty() && !et_feedback_message.text.toString().isNullOrEmpty()){

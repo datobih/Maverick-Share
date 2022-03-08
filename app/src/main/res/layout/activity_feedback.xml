@@ -22,11 +22,12 @@
         <ImageView
             android:id="@+id/btn_feedback_back"
             android:layout_width="30dp"
-            android:layout_height="20dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="19dp"
-            android:src="@drawable/ic_round_arrow_back_ios_24"
+  android:background="@drawable/ic_white_arrow_back_ios_24"
 android:layout_centerVertical="true"
+
             ></ImageView>
 
 
@@ -40,7 +41,7 @@ android:layout_centerVertical="true"
     android:layout_toRightOf="@id/btn_feedback_back"
     android:layout_marginLeft="30dp"
 
-    android:textSize="20sp"
+    android:textSize="17sp"
 
     ></TextView>
 

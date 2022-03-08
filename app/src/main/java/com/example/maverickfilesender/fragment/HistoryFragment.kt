@@ -47,6 +47,7 @@ var mContext:Context?=null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (context as MainActivity).historyFragment=this
         mSharedPreferences= mContext!!.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
         ll_fileHistory_mode.setOnClickListener {
@@ -288,7 +289,11 @@ catch (e:Exception){
         }
     }
 
+    override fun onDestroy() {
 
+        (context as MainActivity).historyFragment=null
+        super.onDestroy()
+    }
 
     override fun onResume() {
       refreshUI()

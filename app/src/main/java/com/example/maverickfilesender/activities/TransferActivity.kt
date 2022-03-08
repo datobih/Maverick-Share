@@ -29,6 +29,8 @@ var transferViewModel:TransferViewModel?=null
         setContentView(R.layout.activity_transfer)
 
 
+
+
          transferViewModel=ViewModelProvider(this).get(TransferViewModel::class.java)
         transferViewModel!!.mutableLiveData!!.observe(this,{
      tv_item_incomingFile_currentSize?.text = deriveUnits(it)
@@ -58,6 +60,7 @@ var transferViewModel:TransferViewModel?=null
         })
 
 
+
         var isSender:Boolean = Constants.clientThread == null
         if(isSender){
 
@@ -69,6 +72,12 @@ var transferViewModel:TransferViewModel?=null
             rv_queue.layoutManager=LinearLayoutManager(this)
         rv_queue.adapter=adapter
 
+
+        imv_transfer_back.setOnClickListener {
+
+            onBackPressed()
+
+        }
 
         Constants.transferActivity= this
 

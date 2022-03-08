@@ -20,6 +20,13 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        btn_settings_back.setOnClickListener {
+
+            onBackPressed()
+
+        }
+
 var isInternal=true
         val sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 var persistentDirectory=sharedPreferences.getString(Constants.SP_STORAGE_LOCATION,"")
