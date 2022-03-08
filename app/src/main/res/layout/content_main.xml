@@ -349,7 +349,7 @@ app:layout_constraintBottom_toTopOf="@id/main_adView"
         android:background="@color/white"
 
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:adUnitId="ca-app-pub-6493153452878821/3477930605"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"></com.google.android.gms.ads.AdView>

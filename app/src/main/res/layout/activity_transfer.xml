@@ -38,7 +38,7 @@ android:foreground="?attr/selectableItemBackground"
     android:textColor="@color/white"
     android:layout_toRightOf="@id/imv_transfer_back"
     android:layout_centerVertical="true"
-    android:textSize="18sp"
+    android:textSize="17sp"
     android:fontFamily="@font/gilroy_light"
 
     android:layout_marginLeft="30dp"

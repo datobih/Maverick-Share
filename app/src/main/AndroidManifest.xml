@@ -29,6 +29,7 @@
     </queries>
 
     <application
+
         android:name=".receivers.ApplicationReceiver"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -45,26 +46,32 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6493153452878821~9917940786"/>
 
-        <activity android:name=".activities.FeedbackActivity"></activity>
+        <activity android:name=".activities.FeedbackActivity"
+            android:exported="true"></activity>
         <activity
             android:name=".activities.SettingsActivity"
-            android:theme="@style/Theme.MaverickFileSender" />
+            android:theme="@style/Theme.MaverickFileSender"
+            android:exported="true"/>
         <activity
             android:name=".activities.ProfileActivity"
             android:theme="@style/Theme.MaverickFileSender"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true"/>
         <activity
             android:name=".activities.PermissionsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
         <activity
             android:name=".activities.TransferActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
         <activity
             android:name=".activities.MainActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@style/splashScreenTheme">
+            android:theme="@style/splashScreenTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -74,12 +81,13 @@
 
         <meta-data
             android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+            android:resource="@array/preloaded_fonts"
+            />
 
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.maverickfilesender.fileprovider"
-            android:exported="false"
+            android:exported="true"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
