@@ -1,13 +1,13 @@
 
 # Maverick Share
 
-A Android app file sharing app that utilizes WiFi Direct(P2P technology)
+A Android app file sharing app that utilizes WiFi Direct(P2P technology) to transfer files using sockets
 
 ## Functionalities
 
--Send and receive files of any type 
+- Send and receive files of any type 
 
--Reads and organizes all files in form of a file manager on the device
+- Reads and organizes all files in form of a file manager on the device
 
 
 ## Acknowledgements
