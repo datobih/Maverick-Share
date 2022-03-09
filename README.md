@@ -3,7 +3,7 @@
 
 A Android app file sharing app that utilizes WiFi Direct(P2P technology)
 
-Functionalities:
+##Functionalities:
 
 -Send and receive files of any type 
 
@@ -16,7 +16,10 @@ Functionalities:
  - [Hdodenhof CircleImageView](https://github.com/hdodenhof/CircleImageView)
 
 
+
+
 ![Logo](https://github.com/anga35/MaverickFileSender/blob/master/app/src/main/res/drawable-v24/maverick_logo.png)
+
 
 
 ## Screenshots
