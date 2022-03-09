@@ -285,6 +285,12 @@ vp_main.isUserInputEnabled=false
 //        vp_main.currentItem=1
 
 tab_main.selectTab(historyTab)
+
+        if(Constants.vpCurrentPosition!=-1){
+
+            vp_main.currentItem=Constants.vpCurrentPosition
+        }
+
         vp_main.currentItem=0
 //        val receiveAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_recieve)
 //        val sendAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_send)
@@ -294,6 +300,17 @@ tab_main.selectTab(historyTab)
         val transferAnimation=AnimationUtils.loadAnimation(this,R.anim.righttoleft)
 
 
+
+
+        vp_main.registerOnPageChangeCallback(object:ViewPager2.OnPageChangeCallback(){
+
+            override fun onPageSelected(position: Int) {
+
+                Constants.vpCurrentPosition=position
+                super.onPageSelected(position)
+            }
+
+        })
 
 
 

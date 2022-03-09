@@ -21,7 +21,7 @@ val SHARED_PREFERENCES_NAME="maverick_file_sender"
     val SP_STORAGE_LOCATION="maverick_storage_location"
     val SP_HISTORY_LOCATION="maverick_history_location"
 
-
+var vpCurrentPosition=-1
 
   val SP_PROFILE_PIC_DATA="profile_pic"
     val SP_PROFILE_USERNAME="profile_username"
