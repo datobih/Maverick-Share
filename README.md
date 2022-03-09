@@ -3,7 +3,7 @@
 
 A Android app file sharing app that utilizes WiFi Direct(P2P technology)
 
-##Functionalities:
+## Functionalities
 
 -Send and receive files of any type 
 
