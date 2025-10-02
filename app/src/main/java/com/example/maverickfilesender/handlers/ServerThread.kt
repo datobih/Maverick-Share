@@ -16,8 +16,6 @@ import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.ParseFile
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_transfer.*
-import kotlinx.android.synthetic.main.content_main.*
 import java.io.*
 import java.lang.Exception
 import java.net.InetSocketAddress
@@ -112,12 +110,12 @@ outputStream.write(tempData,0,tempData.size)
 
             val handler = android.os.Handler(Looper.getMainLooper())
             handler!!.post {
-mainContext.tv_connection_status.visibility=View.GONE
-                mainContext.civ_connected_profile.visibility=View.VISIBLE
-                mainContext.civ_connected_profile.setImageBitmap(userBitmap)
+mainContext.getContentBinding().tvConnectionStatus.visibility=View.GONE
+                mainContext.getContentBinding().civConnectedProfile.visibility=View.VISIBLE
+                mainContext.getContentBinding().civConnectedProfile.setImageBitmap(userBitmap)
 
-                mainContext.tv_connected_userName.visibility=View.VISIBLE
-                mainContext.tv_connected_userName.text = "Connected to $userName"
+                mainContext.getContentBinding().tvConnectedUserName.visibility=View.VISIBLE
+                mainContext.getContentBinding().tvConnectedUserName.text = "Connected to $userName"
 
 
 
@@ -177,7 +175,7 @@ socket!!.soTimeout=10000
 
                 val packageManager = context!!.packageManager
                 val packageInfo = packageManager.getPackageArchiveInfo(transferFile!!.file.path, 0)
-                fileName = packageInfo!!.applicationInfo.loadLabel(packageManager).toString() + ".apk"
+                fileName = packageInfo?.applicationInfo?.loadLabel(packageManager).toString() + ".apk"
 
             }
 
@@ -251,13 +249,13 @@ socket!!.soTimeout=10000
                     (context as MainActivity).runOnUiThread {
                         Log.d("UITEST", "Inside")
 
-                        if (Constants.transferActivity?.vf_transfer_state?.displayedChild == 0) {
+                        if (Constants.transferActivity?.getBinding()?.vfTransferState?.displayedChild == 0) {
                             Constants.transferActivity?.transferViewModel?.isFileTransferring?.value = true
-                            Constants.transferActivity?.pb_incoming_file?.max = transferFile!!.file.length().toInt()
-                            Constants.transferActivity?.imv_incoming_file?.setImageDrawable(transferFile!!.drawable)
-                            Constants.transferActivity?.tv_incomingFile_name?.text = fileName
-                            Constants.transferActivity?.tv_item_incomingFile_totalSize?.text = "/$fileSizeUnit"
-                            Constants.transferActivity!!.tv_transfer_toolbar_status.text = "Sending ${Constants.selectedFiles.lastIndex + 2} remaining files"
+                            Constants.transferActivity?.getBinding()?.pbIncomingFile?.max = transferFile!!.file.length().toInt()
+                            Constants.transferActivity?.getBinding()?.imvIncomingFile?.setImageDrawable(transferFile!!.drawable)
+                            Constants.transferActivity?.getBinding()?.tvIncomingFileName?.text = fileName
+                            Constants.transferActivity?.getBinding()?.tvItemIncomingFileTotalSize?.text = "/$fileSizeUnit"
+                            Constants.transferActivity!!.getBinding().tvTransferToolbarStatus.text = "Sending ${Constants.selectedFiles.lastIndex + 2} remaining files"
 
                         }
 
@@ -279,7 +277,7 @@ socket!!.soTimeout=10000
                     handler.post {
                         Constants.transferActivity?.transferViewModel?.isFileTransferring?.value = false
                         if (Constants.selectedFiles.isEmpty()) {
-                            Constants.transferActivity!!.tv_transfer_toolbar_status.text = "No files remaining"
+                            Constants.transferActivity!!.getBinding().tvTransferToolbarStatus.text = "No files remaining"
                         }
                         bytesTransferred = 0
                         Log.i("TransferComplete", "Successful")
@@ -386,9 +384,9 @@ Log.d("RESPONSEEE",response)
 
         var q=false
         handler.post {
-            (context as MainActivity).civ_connected_profile.visibility=View.GONE
-            (context as MainActivity).tv_connected_userName.visibility=View.GONE
-            (context as MainActivity).tv_connection_status.visibility=View.VISIBLE
+            (context as MainActivity).getContentBinding().civConnectedProfile.visibility=View.GONE
+            (context as MainActivity).getContentBinding().tvConnectedUserName.visibility=View.GONE
+            (context as MainActivity).getContentBinding().tvConnectionStatus.visibility=View.VISIBLE
             (context as MainActivity).setupUIdisconnected()
             q=true
         }
@@ -461,9 +459,9 @@ if(!socket!!.isClosed) {
     var q=false
     handler.post {
         (context as MainActivity).setupUIdisconnected()
-        (context as MainActivity).civ_connected_profile.visibility=View.GONE
-        (context as MainActivity).tv_connected_userName.visibility=View.GONE
-        (context as MainActivity).tv_connection_status.visibility=View.VISIBLE
+        (context as MainActivity).getContentBinding().civConnectedProfile.visibility=View.GONE
+        (context as MainActivity).getContentBinding().tvConnectedUserName.visibility=View.GONE
+        (context as MainActivity).getContentBinding().tvConnectionStatus.visibility=View.VISIBLE
         q=true
     }
     while(!q){
@@ -510,21 +508,16 @@ if(!socket!!.isClosed) {
     }
 
     fun noFiles(){
-
-
-        Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.VISIBLE
-        Constants.transferActivity?.tv_fileTransfer_status?.text="No Files Incoming"
-
-        Constants.transferActivity?.ll_transfer_stack?.visibility=View.INVISIBLE
-
-
-
+        // These views are now managed by ViewFlipper in TransferActivity
+        // Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.VISIBLE
+        // Constants.transferActivity?.tv_fileTransfer_status?.text="No Files Incoming"
+        // Constants.transferActivity?.ll_transfer_stack?.visibility=View.INVISIBLE
     }
 
     fun filesSending(){
-        Constants.transferActivity?.ll_transfer_stack?.visibility=View.VISIBLE
-        Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.INVISIBLE
-
+        // These views are now managed by ViewFlipper in TransferActivity
+        // Constants.transferActivity?.ll_transfer_stack?.visibility=View.VISIBLE
+        // Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.INVISIBLE
     }
 
 

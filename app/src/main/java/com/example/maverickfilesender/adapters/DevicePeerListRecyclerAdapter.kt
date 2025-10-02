@@ -20,27 +20,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.item_ssid.view.*
+import com.example.maverickfilesender.databinding.ItemSsidBinding
 
-class DevicePeerListRecyclerAdapter(val context:Context,val deviceList:ArrayList<WifiP2pDevice>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DevicePeerListRecyclerAdapter(val context:Context,val deviceList:ArrayList<WifiP2pDevice>):RecyclerView.Adapter<DevicePeerListRecyclerAdapter.DeviceViewHolder>() {
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return SSIDListRecyclerAdapter.SSIDViewHolder(LayoutInflater.from(context).inflate(R.layout.item_ssid, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
+        val binding = ItemSsidBinding.inflate(LayoutInflater.from(context), parent, false)
+        return DeviceViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
         val manager=   (context as MainActivity).p2pManager
         val channel=   (context as MainActivity).p2pChannel
-        holder.itemView.tv_item_ssid.text =deviceList[position].deviceName
+        holder.binding.tvItemSsid.text =deviceList[position].deviceName
 
 
-        holder.itemView.btn_item_connect.setOnClickListener {
+        holder.binding.btnItemConnect.setOnClickListener {
 //            openWifiLoginInput(holder)
 val mainContext=context as MainActivity
 
-            mainContext.ll_loading.visibility=View.VISIBLE
+            mainContext.showLoading()
             Constants.ssidDialog!!.dismiss()
             val device=deviceList[position]
 
@@ -71,7 +71,7 @@ Thread.sleep(3000)
 
                             if(!Constants.p2pConnected){
                                 (context as MainActivity).runOnUiThread {
-                                    mainContext.ll_loading.visibility=View.GONE
+                                    mainContext.hideLoading()
                                     Toast.makeText(
                                             context,
                                             "Connection failed.",
@@ -158,24 +158,26 @@ fun connect(){
 
 }
 
-    fun openWifiLoginInput(ssidViewHolder: RecyclerView.ViewHolder) {
+    fun openWifiLoginInput(ssidViewHolder: DeviceViewHolder) {
 
-        ssidViewHolder.itemView.btn_item_connect.visibility = View.GONE
-        ssidViewHolder.itemView.imb_item_ssid_close.visibility = View.VISIBLE
-        ssidViewHolder.itemView.view_item_ssid_divider.visibility = View.VISIBLE
-        ssidViewHolder.itemView.et_wifi_password.visibility = View.VISIBLE
-        ssidViewHolder.itemView.btn_itemPassword_connect.visibility = View.VISIBLE
+        ssidViewHolder.binding.btnItemConnect.visibility = View.GONE
+        ssidViewHolder.binding.imbItemSsidClose.visibility = View.VISIBLE
+        ssidViewHolder.binding.viewItemSsidDivider.visibility = View.VISIBLE
+        ssidViewHolder.binding.etWifiPassword.visibility = View.VISIBLE
+        ssidViewHolder.binding.btnItemPasswordConnect.visibility = View.VISIBLE
 
     }
 
-    fun closeWifiLoginInput(ssidViewHolder: RecyclerView.ViewHolder) {
-        ssidViewHolder.itemView.imb_item_ssid_close.visibility = View.GONE
-        ssidViewHolder.itemView.btn_item_connect.visibility = View.VISIBLE
-        ssidViewHolder.itemView.view_item_ssid_divider.visibility = View.GONE
-        ssidViewHolder.itemView.et_wifi_password.text?.clear()
-        ssidViewHolder.itemView.et_wifi_password.visibility = View.GONE
-        ssidViewHolder.itemView.btn_itemPassword_connect.visibility = View.GONE
+    fun closeWifiLoginInput(ssidViewHolder: DeviceViewHolder) {
+        ssidViewHolder.binding.imbItemSsidClose.visibility = View.GONE
+        ssidViewHolder.binding.btnItemConnect.visibility = View.VISIBLE
+        ssidViewHolder.binding.viewItemSsidDivider.visibility = View.GONE
+        ssidViewHolder.binding.etWifiPassword.text?.clear()
+        ssidViewHolder.binding.etWifiPassword.visibility = View.GONE
+        ssidViewHolder.binding.btnItemPasswordConnect.visibility = View.GONE
     }
+
+    class DeviceViewHolder(val binding: ItemSsidBinding) : RecyclerView.ViewHolder(binding.root)
 
 }
 

@@ -15,12 +15,14 @@ import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.adapters.ImageFileRecyclerAdapter
 import com.example.maverickfilesender.handlers.MediaHandler
 import com.example.maverickfilesender.model.Image
-import kotlinx.android.synthetic.main.fragment_images.*
-import kotlinx.android.synthetic.main.fragment_images.view.*
+import com.example.maverickfilesender.databinding.FragmentImagesBinding
 import java.util.concurrent.TimeUnit
 
 
 class ImageFragment : Fragment() {
+
+    private var _binding: FragmentImagesBinding? = null
+    private val binding get() = _binding!!
 
 var mContext:Context?=null
     override fun onAttach(context: Context) {
@@ -29,13 +31,13 @@ var mContext:Context?=null
 
     }
 
-var adapter:ImageFileRecyclerAdapter?=null
+    var adapter: ImageFileRecyclerAdapter? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_images, container, false)
+        _binding = FragmentImagesBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,34 +45,25 @@ var adapter:ImageFileRecyclerAdapter?=null
         (mContext as MainActivity).imageFragment=this
 var images=ArrayList<Image>()
         var handler=(requireContext() as MainActivity).mHandler
-val imageThread=Thread(object :Runnable{
-    override fun run() {
+        val imageThread = Thread {
+            images = MediaHandler(mContext!!).fetchImageFiles()
+            adapter = ImageFileRecyclerAdapter(mContext!!, images)
 
-
-        images=MediaHandler(mContext!!).fetchImageFiles()
-
-         adapter=ImageFileRecyclerAdapter(mContext!!,images)
-
-
-        (mContext as MainActivity).runOnUiThread {
-
-            view.rv_images.layoutManager=GridLayoutManager(mContext,3)
-            view.rv_images.adapter=adapter
-            view.rv_images.setHasFixedSize(true)
-            view.progress_images.visibility=View.GONE
+            (mContext as MainActivity).runOnUiThread {
+                binding.rvImages.layoutManager = GridLayoutManager(mContext, 3)
+                binding.rvImages.adapter = adapter
+                binding.rvImages.setHasFixedSize(true)
+                binding.progressImages.visibility = View.GONE
+            }
         }
+        imageThread.start()
 
 
     }
 
-
-
-
-
-
-}).start()
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 

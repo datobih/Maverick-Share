@@ -20,6 +20,8 @@ import android.net.wifi.p2p.WifiP2pInfo
 import android.net.wifi.p2p.WifiP2pManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Build
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
@@ -44,23 +46,24 @@ import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.fragment.*
 import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.receivers.WifiDirectBroadcastReceiver
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
-import kotlinx.android.synthetic.main.dialog_hotspot_sender.*
-import kotlinx.android.synthetic.main.drawer_header.*
-import kotlinx.android.synthetic.main.drawer_header.view.*
+import com.example.maverickfilesender.databinding.ActivityMainBinding
+import com.example.maverickfilesender.databinding.ContentMainBinding
+import com.example.maverickfilesender.databinding.DialogHotspotReceiverBinding
+import com.example.maverickfilesender.databinding.DialogHotspotSenderBinding
+import com.example.maverickfilesender.databinding.DrawerHeaderBinding
 import kotlin.reflect.typeOf
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var contentBinding: ContentMainBinding
+    
+    // Expose bindings for handler classes
+    fun getBinding() = binding
+    fun getContentBinding() = contentBinding
+    
     var ssid: String = ""
     var password: String = ""
     var mReservation: WifiManager.LocalOnlyHotspotReservation? = null
@@ -107,9 +110,9 @@ var p2pReceiver:WifiDirectBroadcastReceiver?=null
 //        setTheme(R.style.Theme_MaverickFileSender)
         setTheme(R.style.Theme_MaverickFileSender)
 
-
-
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        contentBinding = binding.contentMain!!
+        setContentView(binding.root)
 
 
 
@@ -128,17 +131,7 @@ var p2pReceiver:WifiDirectBroadcastReceiver?=null
 
 Constants.mainActivity=this
 
-        MobileAds.initialize(this)
-
-        val adRequest=AdRequest.Builder().build()
-
-
-
-        main_adView.loadAd(adRequest)
-        adView.loadAd(adRequest)
-
-
-        val headerView=drawer_navigation.getHeaderView(0)
+        val headerView=binding.drawerNavigation.getHeaderView(0)
          navUserImage=headerView.findViewById<ImageView>(R.id.drawer_user_profile_pic)
          navUserName=headerView.findViewById<TextView>(R.id.tv_main_userName)
 
@@ -191,19 +184,17 @@ editor.putString(Constants.SP_HISTORY_LOCATION,"/storage/emulated/0")
         }
 
 
-        if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-
-startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ_PERMISSION_ACTIVITY)
-
+        // Check permissions using version-aware logic
+        if (!hasRequiredPermissions()) {
+            startActivityForResult(Intent(this,PermissionsActivity::class.java),Constants.RQ_PERMISSION_ACTIVITY)
         }
         else{
 
             val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
 
-            vp_main.adapter = adapter
-            vp_main.offscreenPageLimit=4
-vp_main.isUserInputEnabled=false
+            contentBinding.vpMain.adapter = adapter
+            contentBinding.vpMain.offscreenPageLimit=4
+contentBinding.vpMain.isUserInputEnabled=false
 
 
 
@@ -216,13 +207,13 @@ vp_main.isUserInputEnabled=false
 
 
 
-        imv_drawer.setOnClickListener {
+        contentBinding.imvDrawer.setOnClickListener {
 
-            if(!main_drawerLayout.isDrawerOpen(GravityCompat.START)){
-                main_drawerLayout.openDrawer(GravityCompat.START)
+            if(!binding.mainDrawerLayout.isDrawerOpen(GravityCompat.START)){
+                binding.mainDrawerLayout.openDrawer(GravityCompat.START)
 
             }else{
-                main_drawerLayout.closeDrawer(GravityCompat.START)
+                binding.mainDrawerLayout.closeDrawer(GravityCompat.START)
             }
 
 
@@ -263,35 +254,35 @@ vp_main.isUserInputEnabled=false
 
 
 
-        val appTab = tab_main.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
-        historyTab=tab_main.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24)
-        val imageTab=tab_main.newTab().setText("Images").setIcon(R.drawable.ic_outline_image_24)
-        val videoTab=tab_main.newTab().setText("Videos").setIcon(R.drawable.ic_outline_video_library_24)
-        val audioTab=tab_main.newTab().setText("Audio").setIcon(R.drawable.ic_outline_audiotrack_24)
-        val filesTab=tab_main.newTab().setText("Files").setIcon(R.drawable.ic_baseline_folder_24)
+        val appTab = contentBinding.tabMain.newTab().setText("Apps").setIcon(R.drawable.ic_baseline_android_24)
+        historyTab=contentBinding.tabMain.newTab().setText("History").setIcon(R.drawable.ic_baseline_history_24)
+        val imageTab=contentBinding.tabMain.newTab().setText("Images").setIcon(R.drawable.ic_outline_image_24)
+        val videoTab=contentBinding.tabMain.newTab().setText("Videos").setIcon(R.drawable.ic_outline_video_library_24)
+        val audioTab=contentBinding.tabMain.newTab().setText("Audio").setIcon(R.drawable.ic_outline_audiotrack_24)
+        val filesTab=contentBinding.tabMain.newTab().setText("Files").setIcon(R.drawable.ic_baseline_folder_24)
 
 
         val tabArray= arrayOf(appTab,historyTab,imageTab,videoTab,audioTab,filesTab)
 
-        tab_main.addTab(historyTab!!)
-        tab_main.addTab(appTab)
+        contentBinding.tabMain.addTab(historyTab!!)
+        contentBinding.tabMain.addTab(appTab)
 
-        tab_main.addTab(imageTab)
-        tab_main.addTab(videoTab)
-        tab_main.addTab(audioTab)
-        tab_main.addTab(filesTab)
+        contentBinding.tabMain.addTab(imageTab)
+        contentBinding.tabMain.addTab(videoTab)
+        contentBinding.tabMain.addTab(audioTab)
+        contentBinding.tabMain.addTab(filesTab)
 //
 //        tab_main.selectTab(appTab)
 //        vp_main.currentItem=1
 
-tab_main.selectTab(historyTab)
+contentBinding.tabMain.selectTab(historyTab)
 
         if(Constants.vpCurrentPosition!=-1){
 
-            vp_main.currentItem=Constants.vpCurrentPosition
+            contentBinding.vpMain.currentItem=Constants.vpCurrentPosition
         }
 
-        vp_main.currentItem=0
+        contentBinding.vpMain.currentItem=0
 //        val receiveAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_recieve)
 //        val sendAnimation=AnimationUtils.loadAnimation(this,R.anim.spawn_send)
          transitionDown=AnimationUtils.loadAnimation(this,R.anim.transition_down)
@@ -302,7 +293,7 @@ tab_main.selectTab(historyTab)
 
 
 
-        vp_main.registerOnPageChangeCallback(object:ViewPager2.OnPageChangeCallback(){
+        contentBinding.vpMain.registerOnPageChangeCallback(object:ViewPager2.OnPageChangeCallback(){
 
             override fun onPageSelected(position: Int) {
 
@@ -315,7 +306,7 @@ tab_main.selectTab(historyTab)
 
 
 
-        btn_disconnect.setOnClickListener {
+        contentBinding.btnDisconnect.setOnClickListener {
 
 
             if(!Constants.isServer) {
@@ -347,7 +338,7 @@ Constants.serverThread!!.socket!!.close()
 
 
 
-        drawer_navigation.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener {
+        binding.drawerNavigation.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.d_menu_profile->{
 startActivityForResult(Intent(this,ProfileActivity::class.java),Constants.RQ_PROFILE_ACTIVITY)
@@ -381,7 +372,7 @@ startActivityForResult(Intent(this,ProfileActivity::class.java),Constants.RQ_PRO
 
         })
 
-        ll_transfering.setOnClickListener {
+        contentBinding.llTransfering.setOnClickListener {
 var intent=Intent(this,TransferActivity::class.java)
             intent.putExtra(Constants.TRANSFER_EXTRA,connectionType)
 
@@ -390,7 +381,7 @@ var intent=Intent(this,TransferActivity::class.java)
         }
 
 
-        btn_send.setOnClickListener {
+        contentBinding.btnSend.setOnClickListener {
             val list=ArrayList<FileMetaData>()
             for(i in Constants.tempSelectedFiles){
                 list.add(FileMetaData(i.file.name,i.file.length(), BitmapFactory.decodeByteArray(i.data,0,i.data!!.size)))
@@ -406,9 +397,9 @@ var intent=Intent(this,TransferActivity::class.java)
 
             Constants.tempSelectedFiles.clear()
 
-ll_transfering.visibility=View.VISIBLE
-            ll_transfering.startAnimation(transferAnimation)
-            imv_downloading.startAnimation(bounceAnimation)
+contentBinding.llTransfering.visibility=View.VISIBLE
+            contentBinding.llTransfering.startAnimation(transferAnimation)
+            contentBinding.imvDownloading.startAnimation(bounceAnimation)
 
             for(i in Constants.selectedFiles)   Log.i("SendingFiles",i.file.name)
 
@@ -467,27 +458,27 @@ Constants.sendCount=0
             }
 
 
-if(ll_main_send.visibility==View.VISIBLE){
+if(contentBinding.llMainSend.visibility==View.VISIBLE){
 
-    ll_main_send.startAnimation(transitionDown)
-    ll_main_send.visibility=View.GONE
+    contentBinding.llMainSend.startAnimation(transitionDown)
+    contentBinding.llMainSend.visibility=View.GONE
 
 }
-tab_main.selectTab(historyTab)
+contentBinding.tabMain.selectTab(historyTab)
         }
 
 
-        btn_send_close.setOnClickListener {
-ll_main_send.startAnimation(transitionDown)
-            ll_main_send.visibility=View.GONE
+        contentBinding.btnSendClose.setOnClickListener {
+contentBinding.llMainSend.startAnimation(transitionDown)
+            contentBinding.llMainSend.visibility=View.GONE
 
 
         }
 
-        tab_main.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        contentBinding.tabMain.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
 
-                vp_main.currentItem = tab!!.position
+                contentBinding.vpMain.currentItem = tab!!.position
 
 
             }
@@ -507,7 +498,7 @@ ll_main_send.startAnimation(transitionDown)
 
 
 
-        btn_sender.setOnClickListener {
+        contentBinding.btnSender.setOnClickListener {
 
 //            if (verifyLocation()) {
 //
@@ -663,7 +654,7 @@ ll_main_send.startAnimation(transitionDown)
         }
 
 
-        btn_receiver.setOnClickListener {
+        contentBinding.btnReceiver.setOnClickListener {
 //            Constants.noNetwork=false
 //            if (verifyLocation()) {
 //
@@ -840,23 +831,23 @@ findPeers()
 
 
 fun setupUIconnected(){
-    btn_receiver.visibility=View.GONE
-    btn_sender.visibility=View.GONE
-    tv_receiver.visibility=View.GONE
-    tv_sender.visibility=View.GONE
-btn_disconnect.visibility=View.VISIBLE
+    contentBinding.btnReceiver.visibility=View.GONE
+    contentBinding.btnSender.visibility=View.GONE
+    contentBinding.tvReceiver.visibility=View.GONE
+    contentBinding.tvSender.visibility=View.GONE
+contentBinding.btnDisconnect.visibility=View.VISIBLE
 
 
 }
 
     fun setupUIdisconnected(){
-        btn_disconnect.visibility=View.GONE
+        contentBinding.btnDisconnect.visibility=View.GONE
 
-        btn_receiver.visibility=View.VISIBLE
-        btn_sender.visibility=View.VISIBLE
-        tv_sender.visibility=View.VISIBLE
-        tv_receiver.visibility=View.VISIBLE
-tv_connection_status.text="Not Connected"
+        contentBinding.btnReceiver.visibility=View.VISIBLE
+        contentBinding.btnSender.visibility=View.VISIBLE
+        contentBinding.tvSender.visibility=View.VISIBLE
+        contentBinding.tvReceiver.visibility=View.VISIBLE
+contentBinding.tvConnectionStatus.text="Not Connected"
     }
 
 
@@ -869,6 +860,28 @@ tv_connection_status.text="Not Connected"
         return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.GPS_PROVIDER
         )
+    }
+
+    fun hasRequiredPermissions(): Boolean {
+        // Check storage permissions based on Android version
+        val storageGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+ - Check media permissions
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED
+        } else {
+            // Android 12 and below
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        }
+        
+        // Check MANAGE_EXTERNAL_STORAGE for Android 11+
+        val manageStorageGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            true // Not needed for Android 10 and below
+        }
+        
+        return storageGranted && manageStorageGranted
     }
 
 
@@ -1053,21 +1066,21 @@ Constants.sendCount=0
 
 
             }
-        if(ll_main_send.visibility==View.VISIBLE){
+        if(contentBinding.llMainSend.visibility==View.VISIBLE){
 
-            ll_main_send.startAnimation(transitionDown)
-            ll_main_send.visibility=View.GONE
+            contentBinding.llMainSend.startAnimation(transitionDown)
+            contentBinding.llMainSend.visibility=View.GONE
 
         }
 
 
-tab_main.selectTab(historyTab)
+contentBinding.tabMain.selectTab(historyTab)
 
     }
 
 
     fun findPeers(){
-        ll_loading.visibility=View.VISIBLE
+        contentBinding.llLoading.visibility=View.VISIBLE
         p2pManager!!.requestConnectionInfo(p2pChannel,object:WifiP2pManager.ConnectionInfoListener{
             @SuppressLint("MissingPermission")
             override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
@@ -1257,7 +1270,7 @@ tab_main.selectTab(historyTab)
             }
             if(!Constants.isDevicesAvailable){
                 runOnUiThread {     Toast.makeText(this,"No devices found",Toast.LENGTH_SHORT).show()
-                ll_loading.visibility=View.GONE
+                contentBinding.llLoading.visibility=View.GONE
 
                 }
 
@@ -1307,9 +1320,9 @@ if(resultCode==Activity.RESULT_OK){
 
         val adapter = MainPagerFragmentAdapter(supportFragmentManager, lifecycle)
 
-        vp_main.adapter = adapter
-        vp_main.offscreenPageLimit=4
-        vp_main.isUserInputEnabled = false
+        contentBinding.vpMain.adapter = adapter
+        contentBinding.vpMain.offscreenPageLimit=4
+        contentBinding.vpMain.isUserInputEnabled = false
 
 
     }
@@ -1412,7 +1425,7 @@ Constants.isFindPeer=false
 
     override fun onBackPressed() {
         val f=supportFragmentManager.findFragmentById(R.id.holder_files_fragment)
-if(Constants.mRelativePath.size>1 && vp_main.currentItem==5){
+if(Constants.mRelativePath.size>1 && contentBinding.vpMain.currentItem==5){
 
 
 
@@ -1429,7 +1442,7 @@ if(Constants.mRelativePath.size>1 && vp_main.currentItem==5){
 
         else {
 
-     if(Constants.mRelativePath.size==1 && vp_main.currentItem==5){
+     if(Constants.mRelativePath.size==1 && contentBinding.vpMain.currentItem==5){
 
 if( f is FilesDirectoryFragment)
 f.onFinalStack(this)
@@ -1441,8 +1454,31 @@ f.onFinalStack(this)
     super.onBackPressed()
 }
 
-
     }
 
+    // Helper methods for adapters and fragments to access UI elements
+    fun showSendPanel() {
+        if (contentBinding.llMainSend.visibility != View.VISIBLE) {
+            contentBinding.llMainSend.visibility = View.VISIBLE
+            animationMoveUp?.let { contentBinding.llMainSend.startAnimation(it) }
+        }
+    }
+
+    fun hideSendPanel() {
+        transitionDown?.let { contentBinding.llMainSend.startAnimation(it) }
+        contentBinding.llMainSend.visibility = View.GONE
+    }
+
+    fun isSendPanelVisible(): Boolean {
+        return contentBinding.llMainSend.visibility == View.VISIBLE
+    }
+
+    fun showLoading() {
+        contentBinding.llLoading.visibility = View.VISIBLE
+    }
+
+    fun hideLoading() {
+        contentBinding.llLoading.visibility = View.GONE
+    }
 
 }

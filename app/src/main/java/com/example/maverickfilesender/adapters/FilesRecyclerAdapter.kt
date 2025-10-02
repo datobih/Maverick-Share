@@ -19,16 +19,14 @@ import com.bumptech.glide.request.target.Target
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.databinding.ItemFileBinding
 import com.example.maverickfilesender.listeners.FileOnClickListener
 import com.example.maverickfilesender.model.AppFile
 import com.example.maverickfilesender.model.ParseFile
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.item_file.view.*
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
-class FilesRecyclerAdapter(val context: Context,val appFileList:ArrayList<AppFile>):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FilesRecyclerAdapter(val context: Context,val appFileList:ArrayList<AppFile>):RecyclerView.Adapter<FilesRecyclerAdapter.FilesViewHolder>() {
 
     var mFileOnClickListener:FileOnClickListener?=null
 val animation=AnimationUtils.loadAnimation(context,R.anim.bounce)
@@ -37,31 +35,29 @@ val animation=AnimationUtils.loadAnimation(context,R.anim.bounce)
 
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
-        return FilesViewHolder(LayoutInflater.from(context).inflate(R.layout.item_file,parent,false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilesViewHolder {
+        val binding = ItemFileBinding.inflate(LayoutInflater.from(context), parent, false)
+        return FilesViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FilesViewHolder, position: Int) {
 
-if(holder is FilesViewHolder){
-
-Constants.filesIconView.add(holder.itemView.imv_fileIcon)
+Constants.filesIconView.add(holder.binding.imvFileIcon)
 
 
 if(appFileList[position].onSelect!!){
 
-    holder.itemView.imb_file_onSelect.background=ContextCompat.getDrawable(context,R.drawable.circle_selected)
+    holder.binding.imbFileOnSelect.background=ContextCompat.getDrawable(context,R.drawable.circle_selected)
     if(this.position!=-1 && position==this.position) {
-        holder.itemView.imb_file_onSelect.startAnimation(animation)
+        holder.binding.imbFileOnSelect.startAnimation(animation)
         this.position=-1
     }
 }
     else{
-    holder.itemView.imb_file_onSelect.background=ContextCompat.getDrawable(context,R.drawable.circle_selector)
+    holder.binding.imbFileOnSelect.background=ContextCompat.getDrawable(context,R.drawable.circle_selector)
     }
 
-    holder.itemView.imb_file_onSelect.setOnClickListener {
+    holder.binding.imbFileOnSelect.setOnClickListener {
         val mainContext = context as MainActivity
 
         if (Constants.clientThread == null) {
@@ -72,10 +68,8 @@ if(appFileList[position].onSelect!!){
 
 
 
-            if (mainContext.ll_main_send.visibility == View.GONE) {
-
-                mainContext.ll_main_send.visibility = View.VISIBLE
-                mainContext.ll_main_send.startAnimation(animationMoveUp)
+            if (!mainContext.isSendPanelVisible()) {
+                mainContext.showSendPanel()
             }
 
 
@@ -90,7 +84,7 @@ if(appFileList[position].onSelect!!){
 
 //if(appFileList[position].drawable!=null){
                 try {
-                    val bitmap = getBitmapFromDrawable(holder.itemView.imv_fileIcon.drawable)
+                    val bitmap = getBitmapFromDrawable(holder.binding.imvFileIcon.drawable)
                     val stream = ByteArrayOutputStream()
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
                     data = stream.toByteArray()
@@ -98,7 +92,7 @@ if(appFileList[position].onSelect!!){
                 } catch (e: Exception) {
                     appFileList[position].onSelect = !appFileList[position].onSelect!!
                     data = null
-                    mainContext.ll_main_send.visibility = View.GONE
+                    mainContext.hideSendPanel()
                 }
                 if (data != null) {
                     Constants.sendCount++
@@ -126,8 +120,7 @@ if(appFileList[position].onSelect!!){
                 }
 
                 if (Constants.tempSelectedFiles.isEmpty()) {
-                    (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-                    (context as MainActivity).ll_main_send.visibility = View.GONE
+                    (context as MainActivity).hideSendPanel()
                 }
 
             }
@@ -145,12 +138,12 @@ if(appFileList[position].onSelect!!){
     }
 
 
-    holder.itemView.tv_item_fileName.text = appFileList[position].file.name
+    holder.binding.tvItemFileName.text = appFileList[position].file.name
     if(appFileList[position].file.isDirectory) {
 
-    holder.itemView.imv_fileIcon.setImageResource(R.drawable.folder_icon)
+    holder.binding.imvFileIcon.setImageResource(R.drawable.folder_icon)
 
-        holder.itemView.ll_itemFile.setOnClickListener {
+        holder.binding.llItemFile.setOnClickListener {
 
 mFileOnClickListener!!.onClick(appFileList[position].file)
 
@@ -170,7 +163,7 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
          Glide.with(context)
                  .load(appFileList[position].file)
                  .centerCrop()
-                 .into(holder.itemView.imv_fileIcon)
+                 .into(holder.binding.imvFileIcon)
 
 
 
@@ -183,7 +176,7 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
          Glide.with(context)
                  .load(R.drawable.video_icon)
                  .centerCrop()
-                 .into(holder.itemView.imv_fileIcon)
+                 .into(holder.binding.imvFileIcon)
 
 
      }
@@ -194,7 +187,7 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
             Glide.with(context)
                     .load(R.drawable.pdf_icon)
                     .centerCrop()
-                    .into(holder.itemView.imv_fileIcon)
+                    .into(holder.binding.imvFileIcon)
 
 
 
@@ -209,7 +202,7 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
          Glide.with(context)
                  .load(R.drawable.zip_icon)
                  .centerCrop()
-                 .into(holder.itemView.imv_fileIcon)
+                 .into(holder.binding.imvFileIcon)
 
 
      }
@@ -220,7 +213,7 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
          Glide.with(context)
                  .load(R.drawable.docx_icon)
                  .centerCrop()
-                 .into(holder.itemView.imv_fileIcon)
+                 .into(holder.binding.imvFileIcon)
 
 
 
@@ -230,7 +223,7 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
          Glide.with(context)
                  .load(R.drawable.ppt_icon)
                  .centerCrop()
-                 .into(holder.itemView.imv_fileIcon)
+                 .into(holder.binding.imvFileIcon)
 
 
      }
@@ -240,7 +233,7 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
          Glide.with(context)
                  .load(R.drawable.xlsx_icon)
                  .centerCrop()
-                 .into(holder.itemView.imv_fileIcon)
+                 .into(holder.binding.imvFileIcon)
 
 
 
@@ -253,37 +246,20 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
             Glide.with(context)
                     .load(appFileList[position].drawable)
                     .centerCrop()
-                    .into(holder.itemView.imv_fileIcon)
+                    .into(holder.binding.imvFileIcon)
 
 
 
 
         }
-        else if(Constants.isDarkMode){
-
-
-         Glide.with(context)
-                 .load(R.drawable.ic_round_light_insert_drive_file_24)
-                 .centerCrop()
-                 .into(holder.itemView.imv_fileIcon)
-
-
-
-     }
         else{
-         Glide.with(context)
-                 .load(R.drawable.ic_round_dark_insert_drive_file_24)
-                 .centerCrop()
-                 .into(holder.itemView.imv_fileIcon)
-
+         holder.binding.imvFileIcon.setImageResource(R.drawable.ic_twotone_file_24)
 
      }
 
 
 }
 
-
-}
     }
 
 
@@ -305,6 +281,6 @@ mFileOnClickListener!!.onClick(appFileList[position].file)
         return appFileList.size
     }
 
-    class FilesViewHolder(val view: View):RecyclerView.ViewHolder(view)
+    class FilesViewHolder(val binding: ItemFileBinding):RecyclerView.ViewHolder(binding.root)
 
 }

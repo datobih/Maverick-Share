@@ -48,17 +48,6 @@ app:itemTextColor="@color/menu_drawer_tint"
 
     >
 
-
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-
-        app:adSize="LARGE_BANNER"
-        app:adUnitId="ca-app-pub-6493153452878821/6842460542"
-        android:layout_gravity="bottom"></com.google.android.gms.ads.AdView>
-
 </com.google.android.material.navigation.NavigationView>
 
 

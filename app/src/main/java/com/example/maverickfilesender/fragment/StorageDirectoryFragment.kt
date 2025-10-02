@@ -8,258 +8,183 @@ import android.os.Environment
 import android.os.StatFs
 import android.provider.Settings
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_holder_files.view.*
-import kotlinx.android.synthetic.main.fragment_storage_directory.view.*
+import com.example.maverickfilesender.databinding.FragmentStorageDirectoryBinding
 import java.io.File
 import java.text.DecimalFormat
-import java.util.concurrent.TimeUnit
-
 
 class StorageDirectoryFragment : Fragment() {
 
-    var mContext: Context? = null
+    private var _binding: FragmentStorageDirectoryBinding? = null
+    private val binding get() = _binding!!
+
+    private var mainActivity: MainActivity? = null
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mContext = context
-
+        mainActivity = context as? MainActivity
     }
-
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_storage_directory, container, false)
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentStorageDirectoryBinding.inflate(inflater, container, false)
+        return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             if (!Environment.isExternalStorageManager()) {
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                val uri = Uri.fromParts("package", mContext!!.packageName, null)
-                intent.setData(uri)
+                val uri = Uri.fromParts("package", requireContext().packageName, null)
+                intent.data = uri
                 startActivity(intent)
-
             }
-
         }
 
+        val files = ContextCompat.getExternalFilesDirs(requireContext(), null)
 
-        var files = ContextCompat.getExternalFilesDirs(mContext!!, null)
-
-        var sdPath: String = ""
-        var sdTotalSize = 0f
-        var sdAvailableSpace = 0f
-        var sdUsedSpace = 0f
+        var sdPath = ""
         if (files.size > 1) {
-            try {
-                sdPath = getSDirectory(files[1].path)
-            } catch (e: Exception) {
-                sdPath = ""
-            }
-
-
+            sdPath = runCatching { getSDirectory(files[1].path) }.getOrDefault("")
         }
 
-        val inStoragePath = "/storage/emulated/0"
+        val internalStoragePath = "/storage/emulated/0"
+        ensureMaverickDirectoryExists(internalStoragePath)
 
-        val dcim=inStoragePath+"/Download/Maverick"
-        val tesFile=File(dcim)
-
-        if(!tesFile.exists()){
-           val result= tesFile.mkdirs()
-
-            Log.d("TESTOS","File Created")
-
-        }
-
-
-        var internalTotalSize = getTotalSpace(inStoragePath)
-
-
-        var internalAvailableSpace = getAvailableSpace(inStoragePath)
-        var internalUsedSpace = internalTotalSize - internalAvailableSpace
-
-        if (internalTotalSize >= 1000) {
-            val internalTotalSizeTB = internalTotalSize / 1024
-
-            view.tv_intenalUsed.text =
-                    if (internalUsedSpace < 1000) roundToTwoDecimals(internalUsedSpace).toString() + "GB"
-                    else roundToTwoDecimals(internalUsedSpace / 1024f).toString() + "TB"
-            view.tv_internalTotalSize.text =
-                    roundToTwoDecimals(internalTotalSizeTB).toString() + "TB"
-
-        } else {
-            view.tv_intenalUsed.text = roundToTwoDecimals(internalUsedSpace).toString() + "GB"
-            view.tv_internalTotalSize.text = roundToTwoDecimals(internalTotalSize).toString() + "GB"
-        }
-
-
-        view.progress_internalStorage.progress =
-                ((internalUsedSpace / internalTotalSize) * 100).toInt()
-//        val animation = AnimationUtils.loadAnimation(mContext!!, R.anim.bounce)
-//        view.ll_internalStorage.startAnimation(animation)
+        updateInternalStorageUi(internalStoragePath)
 
         if (sdPath.isNotEmpty()) {
-            view.ll_SD_storage.visibility = View.VISIBLE
-            sdTotalSize = getTotalSpace(sdPath)
-            sdAvailableSpace = getAvailableSpace(sdPath)
-            sdUsedSpace = sdTotalSize - sdAvailableSpace
-
-            if (sdTotalSize >= 1000) {
-                val sdTotalSizeTB = sdTotalSize / 1024
-                view.tv_sdUsed.text =
-                        if (sdUsedSpace < 1000) roundToTwoDecimals(sdUsedSpace).toString() + "GB"
-                        else roundToTwoDecimals(sdUsedSpace / 1024f).toString() + "TB"
-
-                view.tv_SD_totalSize.text = roundToTwoDecimals(sdTotalSizeTB).toString() + "TB"
-
-
-            } else {
-                view.tv_sdUsed.text = roundToTwoDecimals(sdUsedSpace).toString() + "GB"
-                view.tv_SD_totalSize.text = roundToTwoDecimals(sdTotalSize).toString() + "GB"
-            }
-
-
-
-            view.progress_SD.progress = ((sdUsedSpace / sdTotalSize) * 100).toInt()
-//            val animation = AnimationUtils.loadAnimation(mContext!!, R.anim.bounce)
-//            view.ll_SD_storage.startAnimation(animation)
+            binding.llSDStorage.visibility = View.VISIBLE
+            updateSdStorageUi(sdPath)
+        } else {
+            binding.llSDStorage.visibility = View.GONE
         }
 
-
-        view.ll_internalStorage.setOnClickListener {
-
-            val bundle = Bundle()
-
-            bundle.putString(Constants.BUNDLE_STORAGE_DIRECTORY, inStoragePath)
-
-
-            val directoryFragment = FilesDirectoryFragment()
-            directoryFragment.arguments = bundle
-
-
-
-            Constants.mainActivity!!.supportFragmentManager.beginTransaction().apply {
-
-                addToBackStack(null)
-                replace(R.id.holder_files_fragment, directoryFragment)
-
-
-                commit()
-
-            }
-
-
+        binding.llInternalStorage.setOnClickListener {
+            navigateToDirectory(internalStoragePath)
         }
 
-        view.ll_SD_storage.setOnClickListener {
-
-            val bundle = Bundle()
-
-            bundle.putString(Constants.BUNDLE_STORAGE_DIRECTORY, sdPath)
-
-
-            val directoryFragment = FilesDirectoryFragment()
-            directoryFragment.arguments = bundle
-
-
-
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-
-                addToBackStack(null)
-                replace(R.id.holder_files_fragment, directoryFragment)
-
-
-                commit()
-
+        binding.llSDStorage.setOnClickListener {
+            if (sdPath.isNotEmpty()) {
+                navigateToDirectory(sdPath)
             }
-
-
         }
-
-
     }
 
+    private fun ensureMaverickDirectoryExists(basePath: String) {
+        val directory = File("$basePath/Download/Maverick")
+        if (!directory.exists()) {
+            val created = directory.mkdirs()
+            Log.d("StorageDirectoryFragment", "Maverick directory created: $created")
+        }
+    }
+
+    private fun updateInternalStorageUi(path: String) {
+        val total = getTotalSpace(path)
+        val available = getAvailableSpace(path)
+        val used = total - available
+
+        if (total >= 1000) {
+            val totalTb = total / 1024
+            binding.tvIntenalUsed.text =
+                if (used < 1000) formatSize(used, "GB") else formatSize(used / 1024f, "TB")
+            binding.tvInternalTotalSize.text = formatSize(totalTb, "TB")
+        } else {
+            binding.tvIntenalUsed.text = formatSize(used, "GB")
+            binding.tvInternalTotalSize.text = formatSize(total, "GB")
+        }
+
+        binding.progressInternalStorage.progress = ((used / total) * 100).toInt()
+    }
+
+    private fun updateSdStorageUi(path: String) {
+        val total = getTotalSpace(path)
+        val available = getAvailableSpace(path)
+        val used = total - available
+
+        if (total >= 1000) {
+            val totalTb = total / 1024
+            binding.tvSdUsed.text =
+                if (used < 1000) formatSize(used, "GB") else formatSize(used / 1024f, "TB")
+            binding.tvSDTotalSize.text = formatSize(totalTb, "TB")
+        } else {
+            binding.tvSdUsed.text = formatSize(used, "GB")
+            binding.tvSDTotalSize.text = formatSize(total, "GB")
+        }
+
+        binding.progressSD.progress = ((used / total) * 100).toInt()
+    }
+
+    private fun navigateToDirectory(path: String) {
+        val bundle = Bundle().apply {
+            putString(Constants.BUNDLE_STORAGE_DIRECTORY, path)
+        }
+
+        val directoryFragment = FilesDirectoryFragment().apply {
+            arguments = bundle
+        }
+
+        mainActivity?.supportFragmentManager?.beginTransaction()?.apply {
+            addToBackStack(null)
+            replace(R.id.holder_files_fragment, directoryFragment)
+            commit()
+        }
+    }
+
+    private fun formatSize(value: Float, unit: String): String {
+        return "${roundToTwoDecimals(value)}$unit"
+    }
 
     fun roundToTwoDecimals(value: Float): Float {
         val df = DecimalFormat("#.##")
-
-
-
         return df.format(value).toFloat()
     }
 
-
     fun getSDirectory(path: String): String {
         var sdPath = ""
-        var count = 0
-
-        for (i in path) {
-
-            if (i == '/') {
-
-                count++
-
+        var separators = 0
+        for (char in path) {
+            if (char == '/') {
+                separators++
             }
-
-            if (count == 3) {
+            if (separators == 3) {
                 break
             }
-            sdPath += i
-
+            sdPath += char
         }
-
         return sdPath
     }
 
-
     fun getTotalSpace(path: String): Float {
-
-        val iPath: File = File(path)
-        val iStat = StatFs(iPath.path)
-        val iBlockSize = iStat.blockSizeLong
-        val iTotalBlocks = iStat.blockCountLong
-        val iTotalSpace = iTotalBlocks * iBlockSize
-
-
-        val spaceKB = iTotalSpace.toFloat() / 1024f
-        val spaceMB = spaceKB / 1024f
-
-
-        return spaceMB / 1024f
+        val stat = StatFs(File(path).path)
+        val totalSpace = stat.blockCountLong * stat.blockSizeLong
+        val spaceKb = totalSpace.toFloat() / 1024f
+        val spaceMb = spaceKb / 1024f
+        return spaceMb / 1024f
     }
 
     fun getAvailableSpace(path: String): Float {
-
-        val iPath: File = File(path)
-        val iStat = StatFs(iPath.path)
-        val iBlockSize = iStat.blockSizeLong
-        val iAvailableBlocks = iStat.availableBlocksLong
-        val iAvailableSpace = iAvailableBlocks * iBlockSize
-
-
-        val spaceKB = iAvailableSpace.toFloat() / 1024f
-        val spaceMB = spaceKB / 1024f
-
-
-        return spaceMB / 1024f
+        val stat = StatFs(File(path).path)
+        val availableSpace = stat.availableBlocksLong * stat.blockSizeLong
+        val spaceKb = availableSpace.toFloat() / 1024f
+        val spaceMb = spaceKb / 1024f
+        return spaceMb / 1024f
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

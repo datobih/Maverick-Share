@@ -12,16 +12,18 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.constants.Constants
-import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.dialog_download_location.*
+import com.example.maverickfilesender.databinding.ActivitySettingsBinding
+import com.example.maverickfilesender.databinding.DialogDownloadLocationBinding
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySettingsBinding
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        btn_settings_back.setOnClickListener {
+        binding.btnSettingsBack.setOnClickListener {
 
             onBackPressed()
 
@@ -33,7 +35,7 @@ var persistentDirectory=sharedPreferences.getString(Constants.SP_STORAGE_LOCATIO
         val isDarkMode = sharedPreferences.getBoolean(Constants.SP_DARK_MODE, true)
 var historyDirectory=sharedPreferences.getString(Constants.SP_HISTORY_LOCATION,"")
 var isHistoryInternal=true
-        switch_darkMode.isChecked = isDarkMode
+        binding.switchDarkMode.isChecked = isDarkMode
 
         var sdDirectory=""
 
@@ -69,7 +71,7 @@ var isHistoryInternal=true
         }
 
         if(persistentDirectory!="/storage/emulated/0"){
-            tv_current_StorageLocation.text="SD Storage"
+            binding.tvCurrentStorageLocation.text="SD Storage"
         }
 
 
@@ -88,37 +90,38 @@ var isHistoryInternal=true
 
         if(historyDirectory=="/storage/emulated/0"){
             isHistoryInternal=true
-            tv_current_historyLocation.text="Internal Storage"
+            binding.tvCurrentHistoryLocation.text="Internal Storage"
         }
         else{
 isHistoryInternal=false
-            tv_current_historyLocation.text="SD Storage"
+            binding.tvCurrentHistoryLocation.text="SD Storage"
         }
 
 
 
-        ll_downloadLocation.setOnClickListener {
+        binding.llDownloadLocation.setOnClickListener {
 
 
 
 
 var dialog=Dialog(this)
-            dialog.setContentView(R.layout.dialog_download_location)
+            val dialogBinding = DialogDownloadLocationBinding.inflate(layoutInflater)
+            dialog.setContentView(dialogBinding.root)
 
             if(!sdDirectory.isNullOrEmpty()) {
-                dialog.ll_Dialog_sdStorage.visibility=View.VISIBLE
-                dialog.tvDialog_sdDirectory.text = sdDirectory
+                dialogBinding.llDialogSdStorage.visibility=View.VISIBLE
+                dialogBinding.tvDialogSdDirectory.text = sdDirectory
             }
             if(isInternal){
-                dialog.imv_internalStorage_check.visibility=View.VISIBLE
+                dialogBinding.imvInternalStorageCheck.visibility=View.VISIBLE
             }
             else{
-                dialog.imv_internalStorage_check.visibility=View.GONE
-                dialog.imv_sdStorage_check.visibility=View.VISIBLE
+                dialogBinding.imvInternalStorageCheck.visibility=View.GONE
+                dialogBinding.imvSdStorageCheck.visibility=View.VISIBLE
             }
 
 
-            dialog.ll_Dialog_internalStorage.setOnClickListener {
+            dialogBinding.llDialogInternalStorage.setOnClickListener {
 
                 if(!isInternal){
                     val editor=sharedPreferences.edit()
@@ -127,16 +130,16 @@ var dialog=Dialog(this)
                     isInternal=true
                     Constants.currentDownloadLocation="/storage/emulated/0"
 
-                    tv_current_StorageLocation.text="Internal Storage"
-                    dialog.imv_internalStorage_check.visibility=View.VISIBLE
-                    dialog.imv_sdStorage_check.visibility=View.GONE
+                    binding.tvCurrentStorageLocation.text="Internal Storage"
+                    dialogBinding.imvInternalStorageCheck.visibility=View.VISIBLE
+                    dialogBinding.imvSdStorageCheck.visibility=View.GONE
 
                 }
 
 
             }
 
-            dialog.ll_Dialog_sdStorage.setOnClickListener {
+            dialogBinding.llDialogSdStorage.setOnClickListener {
 
 
                 if(isInternal){
@@ -146,10 +149,10 @@ var dialog=Dialog(this)
                     editor.apply()
                     isInternal=false
                     Constants.currentDownloadLocation=sdDirectory
-                    tv_current_StorageLocation.text="SD Storage"
+                    binding.tvCurrentStorageLocation.text="SD Storage"
 
-                    dialog.imv_internalStorage_check.visibility=View.GONE
-                    dialog.imv_sdStorage_check.visibility=View.VISIBLE
+                    dialogBinding.imvInternalStorageCheck.visibility=View.GONE
+                    dialogBinding.imvSdStorageCheck.visibility=View.VISIBLE
                 }
 
             }
@@ -162,27 +165,28 @@ var dialog=Dialog(this)
 
         }
 
-ll_historyLocation.setOnClickListener {
+binding.llHistoryLocation.setOnClickListener {
 
     var dialog=Dialog(this)
-    dialog.setContentView(R.layout.dialog_download_location)
-    dialog.tv_dialog_storageLocation.text="History Location"
+    val dialogBinding = DialogDownloadLocationBinding.inflate(layoutInflater)
+    dialog.setContentView(dialogBinding.root)
+    dialogBinding.tvDialogStorageLocation.text="History Location"
 
     if(!sdDirectory.isNullOrEmpty()) {
-        dialog.ll_Dialog_sdStorage.visibility=View.VISIBLE
-        dialog.tvDialog_sdDirectory.text = sdDirectory
+        dialogBinding.llDialogSdStorage.visibility=View.VISIBLE
+        dialogBinding.tvDialogSdDirectory.text = sdDirectory
     }
 
 
     if(isHistoryInternal){
-        dialog.imv_internalStorage_check.visibility=View.VISIBLE
+        dialogBinding.imvInternalStorageCheck.visibility=View.VISIBLE
     }
     else{
-        dialog.imv_internalStorage_check.visibility=View.GONE
-        dialog.imv_sdStorage_check.visibility=View.VISIBLE
+        dialogBinding.imvInternalStorageCheck.visibility=View.GONE
+        dialogBinding.imvSdStorageCheck.visibility=View.VISIBLE
     }
 
-    dialog.ll_Dialog_internalStorage.setOnClickListener {
+    dialogBinding.llDialogInternalStorage.setOnClickListener {
 
         if(!isHistoryInternal){
             val editor=sharedPreferences.edit()
@@ -191,9 +195,9 @@ ll_historyLocation.setOnClickListener {
             isHistoryInternal=true
             Constants.currentHistoryLocation="/storage/emulated/0"
 
-            tv_current_historyLocation.text="Internal Storage"
-            dialog.imv_internalStorage_check.visibility=View.VISIBLE
-            dialog.imv_sdStorage_check.visibility=View.GONE
+            binding.tvCurrentHistoryLocation.text="Internal Storage"
+            dialogBinding.imvInternalStorageCheck.visibility=View.VISIBLE
+            dialogBinding.imvSdStorageCheck.visibility=View.GONE
 
         }
 
@@ -201,7 +205,7 @@ ll_historyLocation.setOnClickListener {
     }
 
 
-    dialog.ll_Dialog_sdStorage.setOnClickListener {
+    dialogBinding.llDialogSdStorage.setOnClickListener {
 
         if(isHistoryInternal){
             val editor=sharedPreferences.edit()
@@ -210,9 +214,9 @@ ll_historyLocation.setOnClickListener {
             isHistoryInternal=false
             Constants.currentHistoryLocation=sdDirectory
 
-            tv_current_historyLocation.text="SD Storage"
-            dialog.imv_internalStorage_check.visibility=View.GONE
-            dialog.imv_sdStorage_check.visibility=View.VISIBLE
+            binding.tvCurrentHistoryLocation.text="SD Storage"
+            dialogBinding.imvInternalStorageCheck.visibility=View.GONE
+            dialogBinding.imvSdStorageCheck.visibility=View.VISIBLE
 
         }
 
@@ -228,13 +232,11 @@ ll_historyLocation.setOnClickListener {
 
 
 
-        switch_darkMode.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
+        binding.switchDarkMode.setOnCheckedChangeListener { p0: CompoundButton?, value: Boolean ->
             val editor = sharedPreferences.edit()
 
-            override fun onCheckedChanged(p0: CompoundButton?, value: Boolean) {
-
                 if (Constants.clientThread != null || Constants.isServerActive == true) {
-                    switch_darkMode.isChecked = !value
+                    binding.switchDarkMode.isChecked = !value
 
                   Toast.makeText(this@SettingsActivity,"Can't switch to dark mode when in a connection",Toast.LENGTH_SHORT).show()
 
@@ -258,9 +260,8 @@ ll_historyLocation.setOnClickListener {
                     }
                     editor.apply()
                 }
-            }
-
-        })
+            
+        }
     }
 
 

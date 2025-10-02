@@ -18,13 +18,14 @@ import com.example.maverickfilesender.adapters.VideoFileRecyclerAdapter
 import com.example.maverickfilesender.handlers.MediaHandler
 import com.example.maverickfilesender.model.Image
 import com.example.maverickfilesender.model.Video
-import kotlinx.android.synthetic.main.fragment_images.*
-import kotlinx.android.synthetic.main.fragment_videos.*
-import kotlinx.android.synthetic.main.fragment_videos.view.*
+import com.example.maverickfilesender.databinding.FragmentVideosBinding
 import java.util.concurrent.TimeUnit
 
 
 class VideosFragment : Fragment() {
+
+    private var _binding: FragmentVideosBinding? = null
+    private val binding get() = _binding!!
 
     var mContext: Context?=null
     override fun onAttach(context: Context) {
@@ -35,45 +36,35 @@ class VideosFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_videos, container, false)
+        _binding = FragmentVideosBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-var adapter:VideoFileRecyclerAdapter?=null
+    var adapter: VideoFileRecyclerAdapter? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (mContext as MainActivity).videosFragment=this
         var videos=ArrayList<Video>()
         var handler=Handler(Looper.getMainLooper())
-        val videoThread=Thread(object :Runnable{
-            override fun run() {
+        val videoThread = Thread {
+            videos = MediaHandler(requireContext()).fetchVideoFiles()
+            adapter = VideoFileRecyclerAdapter(requireContext(), videos)
 
-
-                videos= MediaHandler(requireContext()).fetchVideoFiles()
-
-                adapter= VideoFileRecyclerAdapter(requireContext(),videos)
-
-
-                (mContext as MainActivity).runOnUiThread{
-
-
-                    view.rv_videos.setHasFixedSize(true)
-                    view.rv_videos.layoutManager= LinearLayoutManager(mContext)
-                    view.rv_videos.adapter=adapter
-                    view.progress_videos.visibility=View.GONE
-                }
-
-
+            (mContext as MainActivity).runOnUiThread {
+                binding.rvVideos.setHasFixedSize(true)
+                binding.rvVideos.layoutManager = LinearLayoutManager(mContext)
+                binding.rvVideos.adapter = adapter
+                binding.progressVideos.visibility = View.GONE
             }
+        }
+        videoThread.start()
 
 
+    }
 
-
-
-
-        }).start()
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

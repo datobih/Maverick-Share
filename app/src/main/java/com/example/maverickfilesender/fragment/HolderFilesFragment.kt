@@ -14,16 +14,15 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.fragment_holder_files.*
-import kotlinx.android.synthetic.main.fragment_holder_files.view.*
+import com.example.maverickfilesender.databinding.FragmentHolderFilesBinding
 import java.io.File
 import java.text.DecimalFormat
 import kotlin.concurrent.fixedRateTimer
 
 class HolderFilesFragment : Fragment() {
 
+    private var _binding: FragmentHolderFilesBinding? = null
+    private val binding get() = _binding!!
 
     var mContext: Context?=null
     override fun onAttach(context: Context) {
@@ -37,8 +36,8 @@ class HolderFilesFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_holder_files, container, false)
+        _binding = FragmentHolderFilesBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 
@@ -47,17 +46,19 @@ class HolderFilesFragment : Fragment() {
 Constants.holderFilesFragment=this
 
 
-       this.childFragmentManager?.beginTransaction().apply {
-this.setReorderingAllowed(true)
-
-
-            this.replace(view.holder_files_fragment.id,StorageDirectoryFragment())
+       this.childFragmentManager.beginTransaction().apply {
+            this.setReorderingAllowed(true)
+            this.replace(binding.holderFilesFragment.id,StorageDirectoryFragment())
             this.commitAllowingStateLoss()
-
         }
 
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onDestroy() {
@@ -102,9 +103,8 @@ Constants.holderFilesFragment=null
         if(Constants.selectedFiles.isEmpty()){
 
             Constants.sendCount=0
-            if( (context as MainActivity).ll_main_send.visibility==View.VISIBLE) {
-                (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-                (context as MainActivity).ll_main_send.visibility = View.GONE
+            if( (context as MainActivity).isSendPanelVisible()) {
+                (context as MainActivity).hideSendPanel()
 
             }
         }

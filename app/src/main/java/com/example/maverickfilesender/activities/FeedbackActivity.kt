@@ -5,25 +5,28 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.maverickfilesender.R
-import kotlinx.android.synthetic.main.activity_feedback.*
+import com.example.maverickfilesender.databinding.ActivityFeedbackBinding
 import javax.security.auth.Subject
 
 class FeedbackActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityFeedbackBinding
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_feedback)
+        binding = ActivityFeedbackBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        btn_feedback_back.setOnClickListener {
+        binding.btnFeedbackBack.setOnClickListener {
 
             onBackPressed()
 
         }
 
-btn_sendFeedback.setOnClickListener {
+binding.btnSendFeedback.setOnClickListener {
 
-    if(!et_feedback_subject.text.toString().isNullOrEmpty() && !et_feedback_message.text.toString().isNullOrEmpty()){
-val subject=et_feedback_subject.text.toString()
-        val body=et_feedback_message.text.toString()
+    if(!binding.etFeedbackSubject.text.toString().isNullOrEmpty() && !binding.etFeedbackMessage.text.toString().isNullOrEmpty()){
+val subject=binding.etFeedbackSubject.text.toString()
+        val body=binding.etFeedbackMessage.text.toString()
 sendEmail(arrayOf("dayodele89@gmail.com"),subject,body)
 
 

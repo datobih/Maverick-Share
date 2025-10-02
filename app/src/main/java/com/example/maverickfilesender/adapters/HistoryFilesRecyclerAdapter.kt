@@ -10,32 +10,28 @@ import android.view.ViewGroup
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.maverickfilesender.BuildConfig
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.databinding.ItemHistoryFileBinding
 import com.example.maverickfilesender.model.AppFile
-import kotlinx.android.synthetic.main.item_file.view.*
-import kotlinx.android.synthetic.main.item_history_file.view.*
 
-class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayList<AppFile>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return HistoryViewHolder(LayoutInflater.from(context).inflate(R.layout.item_history_file, parent, false))
+class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayList<AppFile>) : RecyclerView.Adapter<HistoryFilesRecyclerAdapter.HistoryViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
+        val binding = ItemHistoryFileBinding.inflate(LayoutInflater.from(context), parent, false)
+        return HistoryViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
 
 
-        if (holder is HistoryViewHolder) {
+            holder.binding.tvItemHistoryFileName.text = appFileList[position].file.name
 
 
-            holder.itemView.tv_item_history_fileName.text = appFileList[position].file.name
-
-
-            holder.itemView.ll_historyItemFile.setOnClickListener {
+            holder.binding.llHistoryItemFile.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW)
 
                 val mUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", appFileList[position].file)
+                    FileProvider.getUriForFile(context, "com.dayo.maverickfilesender.fileprovider", appFileList[position].file)
                 } else {
                     Uri.fromFile(appFileList[position].file)
                 }
@@ -82,7 +78,7 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
 
             if (appFileList[position].file.isDirectory) {
 
-                holder.itemView.imv_history_fileIcon.setImageResource(R.drawable.folder_icon)
+                holder.binding.imvHistoryFileIcon.setImageResource(R.drawable.folder_icon)
 
 
             } else {
@@ -98,7 +94,7 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
                     Glide.with(context)
                             .load(appFileList[position].file)
                             .centerCrop()
-                            .into(holder.itemView.imv_history_fileIcon)
+                            .into(holder.binding.imvHistoryFileIcon)
 
 
                 } else if (appFileList[position].file.name.endsWith(".avi") ||
@@ -111,7 +107,7 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
                     Glide.with(context)
                             .load(R.drawable.video_icon)
                             .centerCrop()
-                            .into(holder.itemView.imv_history_fileIcon)
+                            .into(holder.binding.imvHistoryFileIcon)
 
 
                 }
@@ -121,7 +117,7 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
                     Glide.with(context)
                             .load(R.drawable.audio_icon)
                             .centerCrop()
-                            .into(holder.itemView.imv_history_fileIcon)
+                            .into(holder.binding.imvHistoryFileIcon)
 
 
                 }
@@ -133,7 +129,7 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
                     Glide.with(context)
                             .load(R.drawable.pdf_icon)
                             .centerCrop()
-                            .into(holder.itemView.imv_history_fileIcon)
+                            .into(holder.binding.imvHistoryFileIcon)
 
 
                 } else if (appFileList[position].file.name.endsWith(".zip") ||
@@ -143,7 +139,7 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
                     Glide.with(context)
                             .load(R.drawable.zip_icon)
                             .centerCrop()
-                            .into(holder.itemView.imv_history_fileIcon)
+                            .into(holder.binding.imvHistoryFileIcon)
 
 
                 } else if (appFileList[position].file.name.endsWith(".docx")) {
@@ -151,7 +147,7 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
                     Glide.with(context)
                             .load(R.drawable.docx_icon)
                             .centerCrop()
-                            .into(holder.itemView.imv_history_fileIcon)
+                            .into(holder.binding.imvHistoryFileIcon)
 
 
                 } else if (appFileList[position].file.name.endsWith(".ppt")) {
@@ -159,7 +155,7 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
                     Glide.with(context)
                             .load(R.drawable.ppt_icon)
                             .centerCrop()
-                            .into(holder.itemView.imv_history_fileIcon)
+                            .into(holder.binding.imvHistoryFileIcon)
 
 
                 } else if (appFileList[position].file.name.endsWith(".xlsx")) {
@@ -167,7 +163,7 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
                     Glide.with(context)
                             .load(R.drawable.xlsx_icon)
                             .centerCrop()
-                            .into(holder.itemView.imv_history_fileIcon)
+                            .into(holder.binding.imvHistoryFileIcon)
 
 
                 } else if (appFileList[position].file.name.endsWith(".apk")) {
@@ -175,32 +171,16 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
                     Glide.with(context)
                             .load(appFileList[position].drawable)
                             .centerCrop()
-                            .into(holder.itemView.imv_history_fileIcon)
+                            .into(holder.binding.imvHistoryFileIcon)
 
 
-                }  else if(Constants.isDarkMode){
-
-
-                    Glide.with(context)
-                            .load(R.drawable.ic_round_light_insert_drive_file_24)
-                            .centerCrop()
-                            .into(holder.itemView.imv_history_fileIcon)
-
-
-
-                }
-                else{
-                    Glide.with(context)
-                            .load(R.drawable.ic_round_dark_insert_drive_file_24)
-                            .centerCrop()
-                            .into(holder.itemView.imv_history_fileIcon)
-
+                }  else{
+                    holder.binding.imvHistoryFileIcon.setImageResource(R.drawable.ic_twotone_file_24)
 
                 }
 
 
             }
-        }
 
     }
 
@@ -208,5 +188,5 @@ class HistoryFilesRecyclerAdapter(val context: Context, val appFileList: ArrayLi
         return appFileList.size
     }
 
-    class HistoryViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    class HistoryViewHolder(val binding: ItemHistoryFileBinding) : RecyclerView.ViewHolder(binding.root)
 }

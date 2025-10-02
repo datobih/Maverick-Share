@@ -7,18 +7,15 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.databinding.ItemAppBinding
 import com.example.maverickfilesender.model.AppPackage
 import com.example.maverickfilesender.model.ParseFile
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.item_app.view.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.ObjectOutputStream
@@ -28,40 +25,29 @@ class AppPackageRecyclerAdapter(val context: Context,val appPackagePackageList:M
 
   var onClick=false
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app,parent,false))
+        val binding = ItemAppBinding.inflate(LayoutInflater.from(context), parent, false)
+        return MyViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-
-
-
         if(appPackagePackageList[position].onSelect){
-Constants.appSelected.add(position)
+            Constants.appSelected.add(position)
             if(Constants.clientThread==null) {
-
-
-                holder.itemView.imv_appPackageSelect.visibility = View.VISIBLE
-                if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
-                    (context as MainActivity).ll_main_send.visibility = View.VISIBLE
-                    (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
-                }
-
+                holder.binding.imvAppPackageSelect.visibility = android.view.View.VISIBLE
+                (context as MainActivity).showSendPanel()
             }
-
-           onClick=false
-            }
+            onClick=false
+        }
         else if(onClick){
             Constants.appSelected.remove(position)
-            holder.itemView.imv_appPackageSelect.visibility=View.GONE
+            holder.binding.imvAppPackageSelect.visibility = android.view.View.GONE
 
             if(Constants.tempSelectedFiles.isEmpty()){
-                (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-                (context as MainActivity).ll_main_send.visibility=View.GONE
+                (context as MainActivity).hideSendPanel()
             }
         }
 
-
-holder.itemView.ll_appItem.setOnClickListener {
+        holder.binding.llAppItem.setOnClickListener {
 onClick=true
 appPackagePackageList[position].onSelect=!appPackagePackageList[position].onSelect
 
@@ -103,16 +89,10 @@ this.appPackagePackageList[position].data=data
             Glide.with(context)
                 .load(appPackagePackageList[position].drawable)
                 .centerCrop()
+                .into(holder.binding.imv)
 
-                .into(holder.icon)
-
-//
-//          var drawable=appPackageList[position].loadIcon(context.packageManager)
-//           holder.itemView.imv.setImageDrawable(drawable)
-
-
-val name=appPackagePackageList[position].applicationInfo.loadLabel(context.packageManager).toString()
-            holder.appName.text=name
+            val name=appPackagePackageList[position].applicationInfo.loadLabel(context.packageManager).toString()
+            holder.binding.tvAppName.text=name
             val sizeKb= (File(appPackagePackageList[position].applicationInfo.sourceDir).length())/(1024)
             var sizeMb=sizeKb.toFloat()/1024f
             var sizeGb=sizeMb.toFloat()/1024f
@@ -122,19 +102,14 @@ val name=appPackagePackageList[position].applicationInfo.loadLabel(context.packa
 
             String.format("%.2f",sizeMb)
             if(sizeKb<1000){
-                holder.appSize.text=sizeKb.toString()+"KB"
+                holder.binding.tvAppSize.text=sizeKb.toString()+"KB"
             }
-
             else if(sizeKb>1000 && sizeMb<1000){
-                holder.appSize.text=sizeMb.toString()+"MB"
-
+                holder.binding.tvAppSize.text=sizeMb.toString()+"MB"
             }
-
             else if(sizeMb>1000){
-                holder.appSize.text=sizeGb.toString()+"GB"
+                holder.binding.tvAppSize.text=sizeGb.toString()+"GB"
             }
-
-
         }
 
     override fun getItemCount(): Int {
@@ -167,13 +142,5 @@ val canvas=Canvas(bitmap)
 
 
 
-    class MyViewHolder(view:View):RecyclerView.ViewHolder(view){
-
-        val appName=view.tv_appName
-        val appSize=view.tv_appSize
-        val icon=view.imv
-
-
-    }
-
+    class MyViewHolder(val binding: ItemAppBinding) : RecyclerView.ViewHolder(binding.root)
 }

@@ -13,14 +13,16 @@ import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.adapters.AudioFileRecyclerAdapter
 import com.example.maverickfilesender.handlers.MediaHandler
 import com.example.maverickfilesender.model.Music
-import kotlinx.android.synthetic.main.fragment_music.*
-import kotlinx.android.synthetic.main.fragment_music.view.*
-import kotlinx.android.synthetic.main.item_music.*
+import com.example.maverickfilesender.databinding.FragmentMusicBinding
 
 
 class MusicFragment : Fragment() {
+
+    private var _binding: FragmentMusicBinding? = null
+    private val binding get() = _binding!!
+
 var mContext:Context?=null
-    var adapter:AudioFileRecyclerAdapter?=null
+    var adapter: AudioFileRecyclerAdapter? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -31,13 +33,8 @@ var mContext:Context?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-
-
-        return inflater.inflate(R.layout.fragment_music, container, false)
-
-
-
+        _binding = FragmentMusicBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 
@@ -56,8 +53,8 @@ var mContext:Context?=null
 
                   (mContext as MainActivity).runOnUiThread {
                       adapter = AudioFileRecyclerAdapter(mContext!!, audioList)
-                      view.rv_audio.layoutManager = LinearLayoutManager(mContext)
-                      view.rv_audio.adapter = adapter
+                      binding.rvAudio.layoutManager = LinearLayoutManager(mContext)
+                      binding.rvAudio.adapter = adapter
                   }
               }
 
@@ -76,6 +73,11 @@ var mContext:Context?=null
 
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

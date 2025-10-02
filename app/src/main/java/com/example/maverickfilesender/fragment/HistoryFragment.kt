@@ -18,9 +18,7 @@ import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.adapters.HistoryFilesRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.AppFile
-import kotlinx.android.synthetic.main.fragment_history.*
-import kotlinx.android.synthetic.main.fragment_history.view.*
-import kotlinx.android.synthetic.main.fragment_videos.*
+import com.example.maverickfilesender.databinding.FragmentHistoryBinding
 import java.io.Console
 import java.io.File
 import java.lang.Exception
@@ -29,6 +27,10 @@ import kotlin.collections.ArrayList
 
 
 class HistoryFragment : Fragment() {
+
+    private var _binding: FragmentHistoryBinding? = null
+    private val binding get() = _binding!!
+
 var mContext:Context?=null
     var mSharedPreferences : SharedPreferences?=null
     override fun onAttach(context: Context) {
@@ -40,8 +42,8 @@ var mContext:Context?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history, container, false)
+        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 
@@ -50,11 +52,11 @@ var mContext:Context?=null
         (context as MainActivity).historyFragment=this
         mSharedPreferences= mContext!!.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
-        ll_fileHistory_mode.setOnClickListener {
+        binding.llFileHistoryMode.setOnClickListener {
 
             if(!Constants.isMedia){
-                tv_fileHistory_mode.text="Media Files"
-           imb_fileHistory_mode.setImageResource(R.drawable.ic_media_icon)
+                binding.tvFileHistoryMode.text="Media Files"
+           binding.imbFileHistoryMode.setImageResource(R.drawable.ic_media_icon)
 fetchMediaFiles()
             Constants.isMedia=true
 
@@ -62,8 +64,8 @@ fetchMediaFiles()
             }
 
             else{
-                tv_fileHistory_mode.text="General Files"
-                imb_fileHistory_mode.setImageResource(R.drawable.file_icon)
+                binding.tvFileHistoryMode.text="General Files"
+                binding.imbFileHistoryMode.setImageResource(R.drawable.file_icon)
 fetchGeneralFiles()
                 Constants.isMedia=false
 
@@ -122,7 +124,7 @@ catch (e:Exception){
         val receivedFiles=fileDir.listFiles()
         val receivedAppFile=ArrayList<AppFile>()
 
-        progress_history.visibility=View.VISIBLE
+        binding.progressHistory.visibility=View.VISIBLE
 
         val fetchThread = Thread {
 
@@ -139,7 +141,7 @@ catch (e:Exception){
                             if (it.name.endsWith(".apk")) {
                                 val packageManager = mContext!!.packageManager
                                 val packageInfo = packageManager.getPackageArchiveInfo(it.path, 0)
-                                val drawable = packageInfo!!.applicationInfo.loadIcon(packageManager)
+                                val drawable = packageInfo?.applicationInfo?.loadIcon(packageManager)
                                 receivedAppFile.add(AppFile(it, drawable, null, null))
                             } else {
                                 receivedAppFile.add(AppFile(it, null, null, null))
@@ -160,20 +162,20 @@ catch (e:Exception){
 
 
         if(receivedAppFile.isEmpty()){
-            tv_history_noFiles.visibility=View.VISIBLE
-            rv_history.visibility=View.GONE
+            binding.tvHistoryNoFiles.visibility=View.VISIBLE
+            binding.rvHistory.visibility=View.GONE
         }
 
         else {
-            rv_history.visibility=View.VISIBLE
-            tv_history_noFiles.visibility=View.GONE
+            binding.rvHistory.visibility=View.VISIBLE
+            binding.tvHistoryNoFiles.visibility=View.GONE
 
 
             val adapter = HistoryFilesRecyclerAdapter(mContext!!, receivedAppFile)
-            rv_history.layoutManager = LinearLayoutManager(mContext)
-            rv_history.adapter = adapter
+            binding.rvHistory.layoutManager = LinearLayoutManager(mContext)
+            binding.rvHistory.adapter = adapter
         }
-        progress_history.visibility=View.GONE
+        binding.progressHistory.visibility=View.GONE
     }
 
     fun fetchMediaFiles(){
@@ -204,7 +206,7 @@ catch (e:Exception){
         val receivedFiles=fileDir.listFiles()
         val receivedAppFile=ArrayList<AppFile>()
 
-        progress_history.visibility=View.VISIBLE
+        binding.progressHistory.visibility=View.VISIBLE
 
         val fetchThread = Thread {
 
@@ -221,7 +223,7 @@ catch (e:Exception){
                             if (it.name.endsWith(".apk")) {
                                 val packageManager = mContext!!.packageManager
                                 val packageInfo = packageManager.getPackageArchiveInfo(it.path, 0)
-                                val drawable = packageInfo!!.applicationInfo.loadIcon(packageManager)
+                                val drawable = packageInfo?.applicationInfo?.loadIcon(packageManager)
                                 receivedAppFile.add(AppFile(it, drawable, null, null))
                             } else {
                                 receivedAppFile.add(AppFile(it, null, null, null))
@@ -242,20 +244,20 @@ catch (e:Exception){
 
 
         if(receivedAppFile.isEmpty()){
-            tv_history_noFiles.visibility=View.VISIBLE
-            rv_history.visibility=View.GONE
+            binding.tvHistoryNoFiles.visibility=View.VISIBLE
+            binding.rvHistory.visibility=View.GONE
         }
 
         else {
-            rv_history.visibility=View.VISIBLE
-            tv_history_noFiles.visibility=View.GONE
+            binding.rvHistory.visibility=View.VISIBLE
+            binding.tvHistoryNoFiles.visibility=View.GONE
 
 
             val adapter = HistoryFilesRecyclerAdapter(mContext!!, receivedAppFile)
-            rv_history.layoutManager = LinearLayoutManager(mContext)
-            rv_history.adapter = adapter
+            binding.rvHistory.layoutManager = LinearLayoutManager(mContext)
+            binding.rvHistory.adapter = adapter
         }
-        progress_history.visibility=View.GONE
+        binding.progressHistory.visibility=View.GONE
     }
 
     fun getSDirectory(path: String): String {
@@ -299,6 +301,11 @@ catch (e:Exception){
       refreshUI()
 
         super.onResume()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

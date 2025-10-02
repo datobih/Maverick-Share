@@ -6,20 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.databinding.ItemQueueFilesBinding
 import com.example.maverickfilesender.model.FileMetaData
-import kotlinx.android.synthetic.main.item_queue_files.view.*
 import java.io.File
 import java.text.DecimalFormat
 
-class QueueFileRecyclerAdapter(val context: Context,val fileMetaDataList:ArrayList<FileMetaData>,val isSender:Boolean) :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-return MyQueueViewHolder(LayoutInflater.from(context).inflate(R.layout.item_queue_files,parent,false))
+class QueueFileRecyclerAdapter(val context: Context,val fileMetaDataList:ArrayList<FileMetaData>,val isSender:Boolean) :RecyclerView.Adapter<QueueFileRecyclerAdapter.MyQueueViewHolder>(){
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyQueueViewHolder {
+        val binding = ItemQueueFilesBinding.inflate(LayoutInflater.from(context), parent, false)
+        return MyQueueViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(holder is MyQueueViewHolder){
+    override fun onBindViewHolder(holder: MyQueueViewHolder, position: Int) {
         if(fileMetaDataList[position].bitmap!=null){
-            holder.itemView.imv_queue_file.setImageBitmap(fileMetaDataList[position].bitmap)
+            holder.binding.imvQueueFile.setImageBitmap(fileMetaDataList[position].bitmap)
         }
             else{
 
@@ -27,19 +27,16 @@ return MyQueueViewHolder(LayoutInflater.from(context).inflate(R.layout.item_queu
 
 
             if(isSender){
-                holder.itemView.tv_item_queueFile_status.text="Sending"
+                holder.binding.tvItemQueueFileStatus.text="Sending"
             }
             else{
-                holder.itemView.tv_item_queueFile_status.text="Received"
+                holder.binding.tvItemQueueFileStatus.text="Received"
             }
 
 
-            holder.itemView.tv_item_queueFile_name.text=fileMetaDataList[position].name
+            holder.binding.tvItemQueueFileName.text=fileMetaDataList[position].name
 
-            holder.itemView.tv_item_queueFile_totalSize.text=deriveUnits(fileMetaDataList[position].size.toInt())
-
-
-        }
+            holder.binding.tvItemQueueFileTotalSize.text=deriveUnits(fileMetaDataList[position].size.toInt())
 
 
     }
@@ -84,6 +81,6 @@ return fileMetaDataList.size
 
 
 
-    class MyQueueViewHolder(view: View):RecyclerView.ViewHolder(view)
+    class MyQueueViewHolder(val binding: ItemQueueFilesBinding):RecyclerView.ViewHolder(binding.root)
 
 }

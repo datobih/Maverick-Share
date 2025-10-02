@@ -19,14 +19,10 @@ import com.bumptech.glide.request.target.Target
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.databinding.ItemImageBinding
 import com.example.maverickfilesender.model.Image
 import com.example.maverickfilesender.model.ParseFile
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.fragment_images.view.*
-import kotlinx.android.synthetic.main.item_app.view.*
-import kotlinx.android.synthetic.main.item_image.view.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.ObjectOutputStream
@@ -35,47 +31,31 @@ import java.nio.ByteBuffer
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ImageFileRecyclerAdapter(val context: Context, val imageList: ArrayList<Image>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
-        val view = LayoutInflater.from(context).inflate(R.layout.item_image, parent, false)
-
-
-        return ImageViewHolder(view)
-
+class ImageFileRecyclerAdapter(val context: Context, val imageList: ArrayList<Image>) : RecyclerView.Adapter<ImageFileRecyclerAdapter.ImageViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
+        val binding = ItemImageBinding.inflate(LayoutInflater.from(context), parent, false)
+        return ImageViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ImageViewHolder) {
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        Glide.with(context)
+            .load(imageList[position].uri)
+            .centerCrop()
+            .into(holder.binding.imvItemImage)
 
+        if (imageList[position].onSelect) {
+            Constants.imagesSelected.add(position)
+            holder.binding.imvImgSelect.visibility = android.view.View.VISIBLE
+        } else {
+            Constants.imagesSelected.remove(position)
+            holder.binding.imvImgSelect.visibility = android.view.View.GONE
+        }
 
-
-            Glide.with(context)
-
-                    .load(imageList[position].uri)
-                    .centerCrop()
-
-                    .into(holder.itemView.imv_itemImage)
-
+        holder.binding.imvItemImage.setOnClickListener {
+            imageList[position].onSelect = !imageList[position].onSelect
 
             if (imageList[position].onSelect) {
-                Constants.imagesSelected.add(position)
-                holder.itemView.imv_imgSelect.visibility = View.VISIBLE
-
-            } else {
-                Constants.imagesSelected.remove(position)
-                holder.itemView.imv_imgSelect.visibility = View.GONE
-
-
-            }
-
-
-            holder.itemView.imv_itemImage.setOnClickListener {
-
-                imageList[position].onSelect = !imageList[position].onSelect
-
-                if (imageList[position].onSelect) {
-var bitmap:Bitmap?=getBitmapFromDrawable(holder.itemView.imv_itemImage.drawable)
+                var bitmap:Bitmap?=getBitmapFromDrawable(holder.binding.imvItemImage.drawable)
 
 //                   if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
 //                       val source= ImageDecoder.createSource(context.contentResolver,imageList[position].uri)
@@ -100,31 +80,22 @@ var bitmap:Bitmap?=getBitmapFromDrawable(holder.itemView.imv_itemImage.drawable)
 
                     Constants.sendCount++
                     if(Constants.clientThread==null) {
-
-
-                        if ((context as MainActivity).ll_main_send.visibility != View.VISIBLE) {
-                            (context as MainActivity).ll_main_send.visibility = View.VISIBLE
-                            (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).animationMoveUp)
-                        }
-
+                        (context as MainActivity).showSendPanel()
                     }
 
-                } else {
+                } else{
 
 
                    val did= Constants.tempSelectedFiles.remove(ParseFile(File(imageList[position].path),imageList[position].data,imageList[position].path,null))
                     Constants.sendCount--
 
                     if (Constants.tempSelectedFiles.isEmpty()) {
-                        (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-                        (context as MainActivity).ll_main_send.visibility = View.GONE
+                        (context as MainActivity).hideSendPanel()
                     }
                 }
 
                 notifyItemChanged(position)
             }
-
-        }
     }
 
     override fun getItemCount(): Int {
@@ -142,7 +113,5 @@ var bitmap:Bitmap?=getBitmapFromDrawable(holder.itemView.imv_itemImage.drawable)
 
     }
 
-    class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view)
-
-
+    class ImageViewHolder(val binding: ItemImageBinding) : RecyclerView.ViewHolder(binding.root)
 }

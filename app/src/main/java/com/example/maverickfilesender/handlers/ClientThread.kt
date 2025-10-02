@@ -19,9 +19,6 @@ import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.constants.Constants
 import com.example.maverickfilesender.model.FileMetaData
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_transfer.*
-import kotlinx.android.synthetic.main.content_main.*
 import java.io.*
 import java.lang.Exception
 import java.net.InetSocketAddress
@@ -81,9 +78,9 @@ socket!!.soTimeout=1000000000
                 socket!!.close()
             }
             handler.post {
-                (context as MainActivity).civ_connected_profile.visibility=View.GONE
-                (context as MainActivity).tv_connected_userName.visibility=View.GONE
-                (context as MainActivity).tv_connection_status.visibility=View.VISIBLE
+                (context as MainActivity).getContentBinding().civConnectedProfile.visibility=View.GONE
+                (context as MainActivity).getContentBinding().tvConnectedUserName.visibility=View.GONE
+                (context as MainActivity).getContentBinding().tvConnectionStatus.visibility=View.VISIBLE
                 (context as MainActivity).setupUIdisconnected()
                 q=true
             }
@@ -98,7 +95,7 @@ socket!!.soTimeout=1000000000
 
 
         handler.post {
-            (context as MainActivity).ll_loading.visibility=View.GONE
+            (context as MainActivity).getContentBinding().llLoading.visibility=View.GONE
 
         }
 
@@ -155,11 +152,11 @@ inputStream.readFully(tempByteArray,0,tempByteArray.size)
             media.start()
 
             handler!!.post {
-                mainContext.tv_connection_status.visibility=View.GONE
-                mainContext.civ_connected_profile.visibility=View.VISIBLE
-                mainContext.civ_connected_profile.setImageBitmap(userBitmap)
-                mainContext.tv_connected_userName.visibility=View.VISIBLE
-                mainContext.tv_connected_userName.text = "Connected to $userName"
+                mainContext.getContentBinding().tvConnectionStatus.visibility=View.GONE
+                mainContext.getContentBinding().civConnectedProfile.visibility=View.VISIBLE
+                mainContext.getContentBinding().civConnectedProfile.setImageBitmap(userBitmap)
+                mainContext.getContentBinding().tvConnectedUserName.visibility=View.VISIBLE
+                mainContext.getContentBinding().tvConnectedUserName.text = "Connected to $userName"
                 (context as MainActivity).setupUIconnected()
             }
 
@@ -313,7 +310,7 @@ val byteBuffer=ByteArray((1024*500)+1)
 
 
                         handler!!.post {
-                            mainContext.ll_transfering.visibility = View.VISIBLE
+                            mainContext.getContentBinding().llTransfering.visibility = View.VISIBLE
 
                         }
 var timer=0
@@ -333,19 +330,19 @@ Log.d("TRANSFER",bytesReceived.toString())
                             if(Constants.transferActivity!=null){
                                 (context as MainActivity).runOnUiThread {
 
-                                    if(Constants.transferActivity?.vf_transfer_state?.displayedChild==0){
+                                    if(Constants.transferActivity?.getBinding()?.vfTransferState?.displayedChild==0){
                                         Constants.transferActivity?.transferViewModel?.isFileTransferring?.value=true
-                                        Constants.transferActivity!!.pb_incoming_file.max = fileTotalSize
-                                        Constants.transferActivity?.imv_incoming_file?.setImageBitmap(bitmap)
-                                        Constants.transferActivity?.tv_incomingFile_name?.text =fileName
-                                        Constants.transferActivity?.tv_item_incomingFile_totalSize?.text = "$fileSizeUnit"
-                                        Constants.transferActivity!!.tv_transfer_toolbar_status.text = "Receiving $filesRemaining remaining files"
+                                        Constants.transferActivity!!.getBinding().pbIncomingFile.max = fileTotalSize
+                                        Constants.transferActivity?.getBinding()?.imvIncomingFile?.setImageBitmap(bitmap)
+                                        Constants.transferActivity?.getBinding()?.tvIncomingFileName?.text =fileName
+                                        Constants.transferActivity?.getBinding()?.tvItemIncomingFileTotalSize?.text = "$fileSizeUnit"
+                                        Constants.transferActivity!!.getBinding().tvTransferToolbarStatus.text = "Receiving $filesRemaining remaining files"
 
                                     }
 
 
                                     if(timer%10==0) {
-                                        Constants.transferActivity?.tv_item_incomingFile_currentSize?.text = deriveUnits(bytesReceived)
+                                        Constants.transferActivity?.getBinding()?.tvItemIncomingFileCurrentSize?.text = deriveUnits(bytesReceived)
 
 
                                         Constants.transferActivity!!.transferViewModel!!.mutableLiveData!!.value=bytesReceived
@@ -383,7 +380,7 @@ var done=true
                                     bytesReceived=0
                                     fileTotalSize=0
                                     if(filesRemaining=="0"){
-                                        Constants.transferActivity!!.tv_transfer_toolbar_status.text = "No files remaining"
+                                        Constants.transferActivity!!.getBinding().tvTransferToolbarStatus.text = "No files remaining"
                                     }
 done=true
                                 }
@@ -453,9 +450,9 @@ outputStream.writeUTF("done")
                         socket!!.close()
                     }
                     handler.post {
-                        (context as MainActivity).civ_connected_profile.visibility=View.GONE
-                        (context as MainActivity).tv_connected_userName.visibility=View.GONE
-                        (context as MainActivity).tv_connection_status.visibility=View.VISIBLE
+                        (context as MainActivity).getContentBinding().civConnectedProfile.visibility=View.GONE
+                        (context as MainActivity).getContentBinding().tvConnectedUserName.visibility=View.GONE
+                        (context as MainActivity).getContentBinding().tvConnectionStatus.visibility=View.VISIBLE
                         (context as MainActivity).setupUIdisconnected()
 q=true
                     }
@@ -519,14 +516,16 @@ while(!q){
 
 
     fun noFiles(){
-        Constants.transferActivity?.ll_transfer_stack?.visibility=View.INVISIBLE
-        Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.VISIBLE
-        Constants.transferActivity?.tv_fileTransfer_status?.text="No Files Incoming"
+        // These views are now managed by ViewFlipper in TransferActivity
+        // Constants.transferActivity?.ll_transfer_stack?.visibility=View.INVISIBLE
+        // Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.VISIBLE
+        // Constants.transferActivity?.tv_fileTransfer_status?.text="No Files Incoming"
     }
 
     fun filesSending(){
-        Constants.transferActivity?.ll_transfer_stack?.visibility=View.VISIBLE
-        Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.INVISIBLE
+        // These views are now managed by ViewFlipper in TransferActivity
+        // Constants.transferActivity?.ll_transfer_stack?.visibility=View.VISIBLE
+        // Constants.transferActivity?.tv_fileTransfer_status?.visibility=View.INVISIBLE
 
     }
 

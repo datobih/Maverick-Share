@@ -18,10 +18,9 @@ import com.example.maverickfilesender.R
 import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.adapters.DevicePeerListRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.databinding.DialogHotspotReceiverBinding
 import com.example.maverickfilesender.handlers.ClientThread
 import com.example.maverickfilesender.handlers.ServerThread
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.dialog_hotspot_receiver.*
 import java.net.ServerSocket
 
 class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2pManager.Channel,val activity: MainActivity):BroadcastReceiver() {
@@ -70,13 +69,14 @@ class WifiDirectBroadcastReceiver(val manager:WifiP2pManager,val channel:WifiP2p
 
                                 val dialog = Dialog(context!!)
                                 Constants.ssidDialog=dialog
-                                dialog.setContentView(R.layout.dialog_hotspot_receiver)
+                                val dialogBinding = DialogHotspotReceiverBinding.inflate(activity.layoutInflater)
+                                dialog.setContentView(dialogBinding.root)
                                 val adapter = DevicePeerListRecyclerAdapter(context, devices)
-                                dialog.rv_receiver_ssid.layoutManager = LinearLayoutManager(context)
+                                dialogBinding.rvReceiverSsid.layoutManager = LinearLayoutManager(context)
 
-                                dialog.rv_receiver_ssid.adapter = adapter
+                                dialogBinding.rvReceiverSsid.adapter = adapter
 
-context.ll_loading.visibility=View.GONE
+                                context.hideLoading()
                                 dialog.show()
 
                                 dialog.setOnDismissListener {
@@ -128,7 +128,7 @@ if(networkInfo!!.isConnected){
 
 
             } else if (info.groupFormed) {
-                (context as MainActivity).ll_loading.visibility = View.GONE
+                (context as MainActivity).hideLoading()
                 if (Constants.clientThread == null) {
                     Constants.clientThread = ClientThread(context!!, groupOwnerAddress!!)
                     Constants.clientThread!!.start()

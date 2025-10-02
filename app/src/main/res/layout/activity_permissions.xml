@@ -43,7 +43,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_storagePermission"
 
-        android:src="@drawable/mv_storage_logo"></ImageView>
+        ></ImageView>
 
 
     <TextView

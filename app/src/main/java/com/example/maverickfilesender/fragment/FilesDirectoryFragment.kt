@@ -16,17 +16,12 @@ import com.example.maverickfilesender.activities.MainActivity
 import com.example.maverickfilesender.adapters.FilesRecyclerAdapter
 import com.example.maverickfilesender.adapters.RelativePathRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.databinding.FragmentFilesDirectoryBinding
 import com.example.maverickfilesender.listeners.FileOnClickListener
 import com.example.maverickfilesender.listeners.RelativePathOnClickListener
 import com.example.maverickfilesender.model.AppFile
 import com.example.maverickfilesender.model.ParseFile
 import com.example.maverickfilesender.model.RelativePath
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.fragment_files_directory.*
-import kotlinx.android.synthetic.main.fragment_files_directory.view.*
-import kotlinx.android.synthetic.main.fragment_videos.*
-import kotlinx.android.synthetic.main.item_file.view.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.file.Files
@@ -34,6 +29,8 @@ import java.nio.file.Files
 
 class FilesDirectoryFragment : Fragment() {
 
+    private var _binding: FragmentFilesDirectoryBinding? = null
+    private val binding get() = _binding!!
 
     var mContext: Context?=null
     override fun onAttach(context: Context) {
@@ -48,8 +45,8 @@ class FilesDirectoryFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_files_directory, container, false)
+        _binding = FragmentFilesDirectoryBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 
@@ -78,22 +75,22 @@ Constants.mRelativePath=relativePathList
 
 
 
-view.rv_relativePath.layoutManager=LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false)
+binding.rvRelativePath.layoutManager=LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false)
 
 
         mRelativePathOnClickListener=object :RelativePathOnClickListener{
 
             override fun onClick(appFileList:ArrayList<AppFile>,position:Int) {
-var list=((view.rv_relativePath.adapter) as RelativePathRecyclerAdapter).relativePathList
+var list=((binding.rvRelativePath.adapter) as RelativePathRecyclerAdapter).relativePathList
 
 if(position!=(list.lastIndex)){
 
 list=removeElementsFrom(list,position)
-   view.rv_relativePath.adapter!!.notifyDataSetChanged()
+   binding.rvRelativePath.adapter!!.notifyDataSetChanged()
 
     filesAdapter= FilesRecyclerAdapter(mContext!!,appFileList)
     filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
-rv_files.adapter=filesAdapter
+binding.rvFiles.adapter=filesAdapter
 
 
 while(true){
@@ -128,8 +125,7 @@ while(true){
 
     if((Constants.heirarchyFiles.isEmpty())||(Constants.heirarchyFiles.lastIndex==position-1)){
         if(Constants.tempSelectedFiles.isEmpty()){
-            (mContext as MainActivity).ll_main_send.startAnimation((mContext as MainActivity).transitionDown)
-            (mContext as MainActivity).ll_main_send.visibility=View.GONE
+            (mContext as MainActivity).hideSendPanel()
         }
         break
     }
@@ -143,7 +139,7 @@ while(true){
         }
         relativePathAdapter.setOnClickListener(mRelativePathOnClickListener!!)
 
-view.rv_relativePath.adapter=relativePathAdapter
+binding.rvRelativePath.adapter=relativePathAdapter
 
 
          filesAdapter=FilesRecyclerAdapter(mContext!!,relativePathList[0].appFileList)
@@ -164,7 +160,7 @@ Constants.mRelativePath=relativePathList
 
 relativePathAdapter.setOnClickListener(mRelativePathOnClickListener!!)
 
-                view.rv_relativePath.adapter=relativePathAdapter
+                binding.rvRelativePath.adapter=relativePathAdapter
 
 
                 val mFiles=file.listFiles()
@@ -177,7 +173,7 @@ relativePathAdapter.setOnClickListener(mRelativePathOnClickListener!!)
 
 Constants.countList.add(0)
                 Constants.heirarchyFiles.add(ArrayList<ParseFile>())
-                view.rv_files.adapter=filesAdapter
+                binding.rvFiles.adapter=filesAdapter
             }
 
 
@@ -186,8 +182,8 @@ Constants.countList.add(0)
 
         filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
 
-        view.rv_files.layoutManager=LinearLayoutManager(mContext)
-        view.rv_files.adapter=filesAdapter
+        binding.rvFiles.layoutManager=LinearLayoutManager(mContext)
+        binding.rvFiles.adapter=filesAdapter
 
 
 
@@ -212,7 +208,7 @@ Constants.countList.add(0)
                 val packageInfo=packageManager.getPackageArchiveInfo(i.path,0)
 var icon:Drawable?=null
 try {
-    icon= packageInfo!!.applicationInfo.loadIcon(packageManager)
+    icon= packageInfo?.applicationInfo?.loadIcon(packageManager)
 }
 catch (e:Exception){
     continue
@@ -251,7 +247,7 @@ return list
         relativePathList.removeAt(relativePathList.lastIndex)
         Constants.mRelativePath=relativePathList
 
-        rv_relativePath.adapter!!.notifyItemRemoved(relativePathList.lastIndex+1)
+        binding.rvRelativePath.adapter!!.notifyItemRemoved(relativePathList.lastIndex+1)
 
 
         val appFileList=relativePathList[relativePathList.lastIndex].appFileList
@@ -287,14 +283,12 @@ return list
         }
 
 
-        if(Constants.tempSelectedFiles.isEmpty() && (context as MainActivity).ll_main_send.visibility==View.VISIBLE){
-
-            (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-            (context as MainActivity).ll_main_send.visibility=View.GONE
+        if(Constants.tempSelectedFiles.isEmpty() && (context as MainActivity).isSendPanelVisible()){
+            (context as MainActivity).hideSendPanel()
         }
 filesAdapter=FilesRecyclerAdapter(mContext!!,appFileList)
         filesAdapter!!.setOnClickListener(mFileOnClickListener!!)
-rv_files.adapter=filesAdapter
+binding.rvFiles.adapter=filesAdapter
 
     }
 
@@ -332,15 +326,18 @@ Constants.parentFiles.removeAt(Constants.parentFiles.lastIndex)
        }
 
 
-       if(Constants.tempSelectedFiles.isEmpty() && (context as MainActivity).ll_main_send.visibility==View.VISIBLE){
+       if(Constants.tempSelectedFiles.isEmpty() && (context as MainActivity).isSendPanelVisible()){
 
            Constants.sendCount=0
-
-           (context as MainActivity).ll_main_send.startAnimation((context as MainActivity).transitionDown)
-           (context as MainActivity).ll_main_send.visibility=View.GONE
+           (context as MainActivity).hideSendPanel()
 
        }
 
    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
 }

@@ -10,14 +10,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.maverickfilesender.R
 import com.example.maverickfilesender.adapters.QueueFileRecyclerAdapter
 import com.example.maverickfilesender.constants.Constants
+import com.example.maverickfilesender.databinding.ActivityTransferBinding
 import com.example.maverickfilesender.model.FileMetaData
 import com.example.maverickfilesender.viewmodels.TransferViewModel
-import kotlinx.android.synthetic.main.activity_transfer.*
-import kotlinx.android.synthetic.main.fragment_history.*
 import java.io.File
 import java.text.DecimalFormat
 
 class TransferActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityTransferBinding
+    
+    // Expose binding for handler classes
+    fun getBinding() = binding
+    
     var adapter:QueueFileRecyclerAdapter?=null
 
 var transferViewModel:TransferViewModel?=null
@@ -26,21 +30,22 @@ var transferViewModel:TransferViewModel?=null
 
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_MaverickFileSender)
-        setContentView(R.layout.activity_transfer)
+        binding = ActivityTransferBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
 
 
 
          transferViewModel=ViewModelProvider(this).get(TransferViewModel::class.java)
         transferViewModel!!.mutableLiveData!!.observe(this,{
-     tv_item_incomingFile_currentSize?.text = deriveUnits(it)
-           pb_incoming_file.progress = it
+     binding.tvItemIncomingFileCurrentSize?.text = deriveUnits(it)
+           binding.pbIncomingFile.progress = it
         })
         transferViewModel!!.isFileTransferring!!.observe(this,{
 
             if(it==true){
 
-                vf_transfer_state.displayedChild=1
+                binding.vfTransferState.displayedChild=1
 
 //             ll_transfer_stack?.visibility=View.VISIBLE
 //                tv_fileTransfer_status?.visibility=View.INVISIBLE
@@ -48,7 +53,7 @@ var transferViewModel:TransferViewModel?=null
             }
             else{
 
-                vf_transfer_state.displayedChild=0
+                binding.vfTransferState.displayedChild=0
 //                ll_transfer_stack?.visibility= View.INVISIBLE
 //
 //              tv_fileTransfer_status?.visibility= View.VISIBLE
@@ -69,11 +74,11 @@ var transferViewModel:TransferViewModel?=null
         else {
             adapter = QueueFileRecyclerAdapter(this,Constants.onSelectedMetaData, isSender)
         }
-            rv_queue.layoutManager=LinearLayoutManager(this)
-        rv_queue.adapter=adapter
+            binding.rvQueue.layoutManager=LinearLayoutManager(this)
+        binding.rvQueue.adapter=adapter
 
 
-        imv_transfer_back.setOnClickListener {
+        binding.imvTransferBack.setOnClickListener {
 
             onBackPressed()
 

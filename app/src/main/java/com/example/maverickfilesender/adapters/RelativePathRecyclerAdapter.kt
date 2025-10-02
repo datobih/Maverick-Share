@@ -6,46 +6,36 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.maverickfilesender.R
+import com.example.maverickfilesender.databinding.ItemRelativePathBinding
 import com.example.maverickfilesender.listeners.RelativePathOnClickListener
 import com.example.maverickfilesender.model.RelativePath
-import kotlinx.android.synthetic.main.item_relative_path.view.*
 
-class RelativePathRecyclerAdapter(val context: Context,val relativePathList:ArrayList<RelativePath>) :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class RelativePathRecyclerAdapter(val context: Context,val relativePathList:ArrayList<RelativePath>) :RecyclerView.Adapter<RelativePathRecyclerAdapter.RelativePathViewHolder>(){
 
 var mRelativePathOnClickListener:RelativePathOnClickListener?=null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-return RelativePathViewHolder(LayoutInflater.from(context).inflate(R.layout.item_relative_path,parent,false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RelativePathViewHolder {
+        val binding = ItemRelativePathBinding.inflate(LayoutInflater.from(context), parent, false)
+        return RelativePathViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RelativePathViewHolder, position: Int) {
 
-        if(holder is RelativePathViewHolder) {
-
-            holder.itemView.tv_item_pathName.text = relativePathList[position].name
+            holder.binding.tvItemPathName.text = relativePathList[position].name
 
 
 
 
             if(position==relativePathList.lastIndex){
-                holder.itemView.imv_arrow.visibility=View.GONE
+                holder.binding.imvArrow.visibility=View.GONE
 
             }
 
-holder.itemView.ll_relative_path.setOnClickListener {
+holder.binding.llRelativePath.setOnClickListener {
 
     mRelativePathOnClickListener!!.onClick(relativePathList[position].appFileList,position)
 
 }
-
-
-        }
-
-
-
-
-
-
 
     }
 
@@ -60,6 +50,6 @@ holder.itemView.ll_relative_path.setOnClickListener {
     }
 
 
-    class RelativePathViewHolder(view: View):RecyclerView.ViewHolder(view)
+    class RelativePathViewHolder(val binding: ItemRelativePathBinding):RecyclerView.ViewHolder(binding.root)
 
 }
