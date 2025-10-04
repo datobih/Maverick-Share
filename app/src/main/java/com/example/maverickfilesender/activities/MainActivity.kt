@@ -639,9 +639,15 @@ contentBinding.llMainSend.startAnimation(transitionDown)
                     startActivity(intent)
 
                 } else {
+                    // Request appropriate permission based on Android version
+                    val permissionToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        Manifest.permission.NEARBY_WIFI_DEVICES
+                    } else {
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    }
                     ActivityCompat.requestPermissions(
                             this,
-                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                            arrayOf(permissionToRequest),
                             Constants.RQ_LOCATION_PERMISSION
                     )
                 }
@@ -805,9 +811,15 @@ findPeers()
                     startActivity(intent)
 
                 } else {
+                    // Request appropriate permission based on Android version
+                    val permissionToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        Manifest.permission.NEARBY_WIFI_DEVICES
+                    } else {
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    }
                     ActivityCompat.requestPermissions(
                             this,
-                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                            arrayOf(permissionToRequest),
                             Constants.RQ_LOCATION_PERMISSION
                     )
                 }
@@ -886,18 +898,19 @@ contentBinding.tvConnectionStatus.text="Not Connected"
 
 
     fun verifyLocation(): Boolean {
-        if (ContextCompat.checkSelfPermission(
+        // Android 13+ uses NEARBY_WIFI_DEVICES instead of location for Wi-Fi Direct
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.NEARBY_WIFI_DEVICES
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            // Android 12 and below use ACCESS_FINE_LOCATION for Wi-Fi Direct
+            return ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
-        ) {
-
-            return true
-
         }
-        return false
-
-
     }
 
     fun getSDirectory(path: String): String {
